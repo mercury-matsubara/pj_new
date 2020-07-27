@@ -16,6 +16,9 @@ class GetsuziExecuteSQL extends BaseLogicExecuter
             
             if($message === true)
             {
+                    //トランザクションコミットまたはロールバック
+                    commitTransaction($message, $con);
+                    
                     $id = 0;
                     $step = 0;
                     $message = "";
@@ -383,7 +386,8 @@ class GetsuziExecuteSQL extends BaseLogicExecuter
                             $judge = false;
                     }
                     deletedate_change();
-                    return true;
+                    $message = true;
+                    return $message;
             }
             else
             {
