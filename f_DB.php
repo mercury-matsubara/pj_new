@@ -1649,11 +1649,7 @@ function getCode($filename,$post="")
     {
         $code = "1CODE";
     }
-    else if($filename === "EDABANMASTER_1")         //枝番マスタ登録時
-    {
-        $code = "2CODE";
-    }
-    else if($filename === "EDABANMASTER_3")         //枝番マスタ編集時
+    else if($filename === "EDABANMASTER_1" || $filename === "EDABANMASTER_3")         //枝番マスタ登録,枝番マスタ編集
     {
         $code = "2CODE";
     }
@@ -1664,6 +1660,10 @@ function getCode($filename,$post="")
     else if($filename === "PJEND_1" || $filename === "PJCANCEL_1" || $filename === "PJICHIRAN_1")    //PJ終了,PJ終了キャンセル,PJ一覧
     {
         $code = "5CODE";
+    }
+    else if($filename === "PJSHINTYOKU_1")  //PJ進捗（仮）
+    {
+        $code = "2CODE";
     }
 
     return $code;

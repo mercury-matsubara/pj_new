@@ -149,9 +149,12 @@ error_reporting(E_ALL);
 				//リスト画面作成
 				//$_SESSION['step'] = 0;
 				$step = STEP_NONE;
-				$filename = $_SESSION['filename'];
-				$pre_url = explode('_',$filename);
-				$_SESSION['filename'] = $pre_url[0]."_"."2";
+                                if($_SESSION['filename'] !== "NENZI_5")
+                                {
+                                    $filename = $_SESSION['filename'];
+                                    $pre_url = explode('_',$filename);
+                                    $_SESSION['filename'] = $pre_url[0]."_"."2";
+                                }				
 			}
 			else if($key == 'delete')//データ削除時
 			{

@@ -77,7 +77,7 @@ class NenziExecuteSQL extends BaseLogicExecuter
 			echo $list;
 		}
 		echo "</div><br><br>";
-		echo '<form action="nenziJump.php" method="post" >';
+		echo '<form action="main.php" method="post" >';
 		echo '<input type="submit" name = "cancel" value = "戻る" class = "free">';
 		echo "</div>";
 		echo "</form></center>";
