@@ -1,0 +1,316 @@
+
+/*印刷時A4サイズ*/
+	div.printpage,div.printpage2,div.printpage3 {
+		width: 210mm;
+		height: 320mm; /* */
+		/*width: 172mm;
+		height: 251mm;/**/
+		border: solid 1px black;		/*ボックス線 消す予定*/
+		margin:0px auto;
+                background-color: #FFF;
+	}
+	
+	/*日付、見積No*/
+	div.firstDateBox,div.secondDateBox,div.thirdDateBox{
+		/*border: solid 1px black;		/*ボックス線 消す予定*/
+		position: relative;
+		left: 75%;
+		top: 2%;/**/            
+	}
+	/*日付、見積No*/
+        
+	table.date{
+		font-size: 13px;
+	}
+
+	/*見積書*/
+	h2{
+            text-align: center;			/*文字位置*/
+            font-weight:bold;
+            font-size:32px;
+            letter-spacing: 50px;
+            /*                margin: 20px;*/
+            margin: 35px 0px -5px 20px;
+	}
+        
+        p.hikae{
+            position: relative;
+            height:0px;
+            margin-left: 61%;
+            margin-top: -44px;
+            font-size: 28px;
+        }
+        
+        div.midashi{
+            float: left;
+            height: 12%;
+            width: 100%;
+        }
+        
+        div.kigyo{
+            width: 80%;
+            float: left;
+            border-bottom: 2px solid black;
+            height: 5%;
+            font-size: 20px;
+            font-weight: bold;
+/*            line-height: 45px;*/
+            margin-left: 2%;
+            padding-left: 2%;
+        }
+        
+        
+        div.kotei{
+            width: 9%;
+            font-weight: bold;
+            border-bottom: 2px solid black;
+            float: left;
+            height: 5%;
+            text-align: right;
+/*            line-height: 45px;*/
+            font-size: 20px;
+            margin-right: 2%;
+            padding-right: 5%;
+        }
+        
+        div.kenmei{
+            width: 70%;
+            font-weight: bold;
+/*            border-bottom: 2px solid black;*/
+            height: 5%;
+/*            text-align: right;*/
+            line-height: 80px;
+            font-size: 20px;
+            margin-left: 2%;
+            padding-left: 2%;
+            float: left;
+        }
+
+	/*****************************金額計、有効期限、自社情報、印鑑*********************************************************/
+        .png {
+            /*width: 120px;*/
+            width: 40%;
+            margin-top: -5%;
+            margin-left: -17%;
+        }
+
+        /*納品書の印鑑*/
+        .pngNouhinsyo{              
+            width: 40%;
+            margin-top: 0%;
+            margin-left: -17%;
+        }
+	
+        div.hanko,div.hanko2,div.hanko3 {
+            position: relative;
+            width: 30%;
+            height: 1px;
+            left: 85%;
+            top: 2%;
+        }
+        
+        div.box{
+            margin-top: -9%;
+            float: left;
+            width: 100%;
+            height: 10%;
+	}
+	
+	/*金額計、有効期限*/
+	div.goukeibox{
+            float: left;
+            width: 50%;
+            margin-left: 2%;
+            height: 19%; 
+            margin-top: 10%;
+	}
+	
+
+	  /*合計金額　有効期限*/
+          div.kingaku{
+              	margin-top: 5%;
+/*                height: 135%;*/
+                border-bottom: 2px solid black;
+                font-weight: bold;
+                font-size: 20px;
+/*                line-height: 28px;*/
+                padding-left: 5%;
+          }
+	div.kigen{
+		margin-top: 4%;
+/*                height: 135%;*/
+                border-bottom: 2px solid black;
+                font-weight: bold;
+                font-size: 14px;
+/*                line-height: 28px;*/
+                padding-left: 5%;
+	}
+	
+	/*住所、印鑑部分*/
+	div.addressBox{
+                text-align: left;
+                float: left;
+                font-size: 12px;
+                width: 40%;
+                margin-left: -5%;
+                margin-top: 11%;
+	}
+	
+	/*自社情報*/
+	p.name{
+		font-weight: bold;						/*太字*/
+		font-size:16px;
+		margin-top: 0;
+		margin-bottom: 1px;
+                margin-left: 60px;       
+	}
+        p.address{
+            margin:0px;
+            margin-left: 60px;
+        }
+        
+        p.tantousya{
+                margin: 0px;
+                margin-left: 92px;
+        }
+        
+	/*印鑑入力部分*/
+        
+        div.kaishahanko{
+            margin-top: 5%;
+        }
+        
+	table.inkan{
+		border-collapse: collapse;
+		border: 1px solid black;
+		margin-top: 2%;
+		margin-right: 7.5%;
+	}
+	
+        div.meiaibox{
+            float: left;
+            margin-top: 12%;
+            width: 100%;
+        }
+        
+        /*納品書の明細*/
+        div.meiaiboxNouhinsyo{
+            float: left;
+            margin-top: 2%;
+            width: 100%;
+        }
+        
+	/*明細部分*/
+	table.meisai{
+		
+		border-collapse: collapse;
+                border-color: black;
+                border: none;
+                font-size: 11px;
+                /* position: relative; */
+                /* top: -180px; */
+                border: 1px solid black;
+                /* z-index: 100; */
+	}
+	
+	/**背景色?**/
+	 tr.color{
+		background-color: #C0C0C0;
+	}
+	td.color{
+		background-color: #C0C0C0;
+	}
+        tr.backcolor{
+		background-color: #fff;
+	}
+	td.backcolor{
+		background-color: #fff;
+	}
+	table.goukei td{
+		width: 120px;
+	}
+        table.goukei td.color{
+                width: 546px;
+        }
+        
+	table.goukei{
+		/*position: relative; */
+                /* left: 213px; */
+                /* top: -180px; */
+                border-collapse: collapse;
+                border-color: black;
+                border: none;
+                border-bottom: 1px solid black;
+                border-left: 1px solid black;
+                border-right: 1px solid black;
+                font-size: 11px;
+                /* z-index: 10; */
+                margin-right: 7.6%;
+                margin-top: -0.03%;
+	}
+	
+        /*お振込のご案内*/
+        div.goannaiBox{
+            	text-align: left;
+                border: solid 2px black;
+                width: 84%;
+                height: 10%;
+                float: left;
+                margin-left: 8%;
+                margin-top: 2%;
+                font-size:14px;
+        }
+        
+        p.title{
+                margin-top:0;
+                margin-left:3%;
+                margin-bottom:0;
+                text-decoration: underline;
+        }
+        
+        p.naiyou{
+                margin-top:0;
+                margin-left:3%;
+                margin-bottom:0;            
+        }
+        
+        p.kouza{
+                margin-top:0;
+                margin-left:35%;
+                margin-bottom:0;    
+        }
+        
+        /*備考部分*/
+	div.bikouBox{
+		text-align: left;
+                border: solid 2px black;
+/*                width: 660px;							
+		height: 150px;*/
+                width: 84%;
+                height: 120px;
+                /* position: relative; */
+                /* left: 60px; */
+                /* bottom: 180px; */
+                float: left;
+                margin-left: 8%;
+                margin-top: 2%;
+	}
+        
+        p.bikou{
+                margin-top:0;
+                margin-bottom:0;
+                font-size: 12px;
+                letter-spacing: 5px;
+        }
+/*	div.bikou{
+		border: solid 2px black;				
+		width: 84%;
+                height: 12%;						
+		position: relative;
+		left:10px;
+		bottom:-15px;
+	}*/
+        
+
+        
+	

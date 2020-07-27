@@ -1,0 +1,76 @@
+/*カレンダーCSS*/
+
+.container {
+    font-family: 'Noto Sans JP', sans-serif;
+    width: 80%;
+    margin-left: 12%;
+}
+h3 {
+    margin-top: 10%;
+    margin-bottom: 1%;
+}
+.month{
+    float: left;
+}
+.totaltime {
+    float: right; 
+}
+/*テーブル背景色*/
+.container table {
+    background-color: white;
+}
+/*カレンダー枠線*/
+.container table,.container td,.container th {
+    border-collapse: collapse;
+    border: 2px solid #829bbd;
+
+}
+
+/*カレンダー大きさ*/
+.calendar{
+    width: 100%;
+}
+
+tr.youbi{
+    background-color: #b0c4de;
+}
+th.youbiColor {
+    width: 10%;
+    height: 30px;
+    text-align: center;
+}
+td {
+    height: 100px;
+}
+/*本日背景色*/
+.today {
+    background: #f0f8ff;
+}
+th.youbiColor:nth-of-type(1), td:nth-of-type(1) {
+    color: red;
+}
+th.youbiColor:nth-of-type(7), td:nth-of-type(7) {
+    color: blue;
+}
+
+/*日にち*/
+span.dayof {
+   font-weight: bold;
+   margin-left: 3%;
+}
+
+/*勤務時間、残業時間*/
+span.worktime,span.overtime{
+    display: block;
+    border-bottom: 1px solid #b8b8b8;
+    height: 30%;
+    text-align: right;
+    margin: 0% 4% 0% 4%;
+    padding-top: 4%;
+}
+
+
+
+
+
+

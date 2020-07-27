@@ -1,0 +1,46 @@
+
+/**ポップアップCSS**/
+.modal{
+    display: none;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 99%;
+    z-index: 2;
+}
+.modal__bg{
+    background: rgba(0,0,0,0.8);
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+}
+.modal__content{
+    background: #EEEEEE;
+    left: 50%;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 70%;
+    height: 80%;
+}
+
+/**ポップアップ　ボタンエリア**/
+.buttonArea{
+    position: relative;
+    top: 72vh;
+    text-align: center;
+}
+
+/*th、tr大きさ*/
+.popupcontent{
+    width: 100%;
+}
+tr.text{
+    background-color: #b0c4de;
+}
+th.topth {
+    width: 10%;
+    height: 30px;
+    text-align: center;
+}

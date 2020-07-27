@@ -1,0 +1,98 @@
+/*印刷用css START*/
+
+#print{display:none;}
+
+body{
+    background-color: #FFF;
+    -webkit-print-color-adjust: exact;
+}
+        div.printpage,div.printpage2,div.printpage3 {
+            width: 210mm;
+            height: 296mm;  
+/*            width: 172mm;
+            height: 251mm;*/
+            border: none;
+            margin:0px auto;
+            page-break-after: always;
+	}
+        
+	/*日付、見積No*/
+	div.firstDateBox{
+            position: absolute;
+            left: 75%;
+            top:0%
+	}
+        div.secondDateBox{
+            position: absolute;
+            left: 75%;
+            top:100%
+        }
+        div.thirdDateBox{
+            position: absolute;
+            left: 75%;
+            top:200%
+        }
+        p.hikae{
+            position: absolute;
+            margin-left: 61%;
+            margin-top: -40px;
+            font-size: 28px;
+        }
+        
+	.png {
+            width: 100px;
+        }
+        
+         div.hanko {
+            width: 10px;
+            position: absolute;
+            left: 80%;
+            top: 10%;
+        }
+        
+        div.hanko2{
+            width: 10px;
+            position: absolute;
+            left: 80%;
+            top: 110%;
+        }
+        
+        div.hanko3{
+            width: 10px;
+            position: absolute;
+            left: 80%;
+            top: 210%;
+        }
+        
+        div.meiaibox{
+            float: left;
+            margin-top: 15%;
+            width: 100%;
+        }
+        
+/*        table.goukei td.color{
+                width: 546px;
+        }*/
+        
+        table.goukei{
+                border-collapse: collapse;
+                border-color: black;
+                border: none;
+                border-bottom: 1px solid black;
+                border-left: 1px solid black;
+                border-right: 1px solid black;
+                font-size: 11px;
+                /* z-index: 10; */
+/*                margin-top: 0.1%;*/
+                /*margin-right: 7.7%;*/
+/*                margin-top: 0%;*/
+	}
+        
+        
+        
+        
+        
+        
+        
+        
+        

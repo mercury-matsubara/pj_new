@@ -1,0 +1,729 @@
+body {
+    background-color: #EEEEEE;
+}
+
+a
+{
+    padding: 0px 4px;
+    font-family:"Palatino Linotype”";
+}
+
+
+tr.stripe
+{
+    background-color: #B0E0E6;	/* 背景色設定 */
+}
+
+tr.stripe_none
+{
+    background-color: #FFFFFF;	/* 背景色設定 */
+}
+
+table.list tr:hover {
+    background-color: #FFFFCC; /* マウスオーバー時の行の背景色 */
+}
+
+table.mail th
+{
+    background-color: #1E90FF;	/* 背景色設定 */
+    border: 2px #000000 solid;	/* テーブル枠の設定 */
+}
+
+table.mail td
+{
+    border: 2px #000000 solid;	/* テーブル枠の設定 */
+}
+
+table.mail td#stripe
+{
+    background-color: #B0E0E6;	/* 背景色設定 */
+}
+
+table.mail td#stripe_none
+{
+    background-color: #FFFFFF;																							/* 背景色設定 */
+}
+
+table.label th
+{
+    background-color: #1E90FF;																								/* 背景色設定 */
+    border: 2px #000000 solid;																								/* テーブル枠の設定 */
+}
+
+table.label td
+{
+    border: 2px #000000 solid;																								/* テーブル枠の設定 */
+}
+
+table.label td#stripe
+{
+    background-color: #B0E0E6;																								/* 背景色設定 */
+}
+
+table.label td#stripe_none
+{
+    background-color: #FFFFFF;																								/* 背景色設定 */
+}
+
+td.center
+{
+    text-align: center;																										/* 背景色設定 */
+}
+td.sequence
+{
+    text-align: center;
+    width: 20px
+}
+td.edit
+{
+    text-align: center;
+    width: 20px
+}
+td.right
+{
+    text-align: right;																										/* 背景色設定 */
+}
+td.left
+{
+    text-align: left;																										/* 背景色設定 */
+}
+td.top
+{
+    vertical-align:top;
+}
+table.mail_result td.radio
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a.title_list,a.title_edit{
+    font-weight: bold;
+    position: relative;
+    background: #f4f4f4;
+    padding: 2px 5px 2px 20px;
+    font-size: 25px;
+    color: #474747;
+    border-radius: 0 10px 10px 0;
+}
+
+a.title_list:before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f03a";
+    display: inline-block;
+    line-height: 40px;
+    position: absolute;
+    padding: 0em;
+    color: white;
+    background: #6363FF;
+    width: 40px;
+    text-align: center;
+    vertical-align: middle;
+    height: 40px;
+    line-height: 40px;
+    left: -1.35em;
+    top: 50%;
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.29);
+}
+a.title_edit:before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f303";
+    display: inline-block;
+    line-height: 40px;
+    position: absolute;
+    padding: 0em;
+    color: white;
+    background: #6363FF;
+    width: 40px;
+    text-align: center;
+    vertical-align: middle;
+    height: 40px;
+    line-height: 40px;
+    left: -1.35em;
+    top: 50%;
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.29);
+}
+
+a.large {
+    color:#000;
+    padding:15px 17px;
+    font-size: xx-large;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 100%;
+    overflow: hidden;
+    text-transform: uppercase;
+    margin-right: 15px;
+    border-radius: 50px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+}
+
+a.error {
+    color:#F00;
+    font-size: small;
+}
+
+.pad
+{
+    padding: 15px;
+}
+
+.readOnly
+{
+    background-color: #cccccc;
+}
+
+td,th
+{
+    white-space:nowrap;
+}
+
+td.year1
+{
+    background-color:#F0FFFF;
+    padding: 2px 10px;
+}
+td.year2
+{
+    background-color:#E0FFFF;
+    padding: 2px 10px;
+}
+td.year3
+{
+    background-color:#F0F8FF;
+    padding: 2px 10px;
+}
+td.year4
+{
+    background-color:#F8F8FF;
+    padding: 2px 10px;
+}
+td.year5
+{
+    background-color:#FFF0F5;
+    padding: 2px 10px;
+}
+td.year6
+{
+    background-color:#FFDAB9;
+    padding: 2px 10px;
+}
+a.kensakuyear
+{
+    color: #111111;
+}
+a.kensaku
+{
+    color: #111111;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+input[type="text"]:focus, select:focus, textarea:focus {
+    background-color: #ffefd5;
+}
+
+input.free
+{
+    border-radius: 10%/30%;
+    width : 140px;
+    height: 40px;
+}
+input.free:hover {
+    background-color: #FFDAB9;
+}
+input.button:hover {
+    background-color: #FFDAB9;
+}
+input.free:disabled {
+    background-color: #E6E6FA;
+}
+input[type="text"][disabled]:focus {
+    background-color: #E6E6FA;
+}
+
+input.button:disabled {
+    background-color: #E6E6FA;
+}
+
+input[type="submit"],input[type="button"]
+{
+    margin-right: 1%;
+}
+
+div.left
+{
+    display: inline-block; 
+    height:30px;
+    width:30%;
+}
+
+table.list input[type="text"]
+{
+    height: 20px;
+}
+
+body
+{
+    /*background-color: #EEEEEE;*/
+}
+
+.titlebox:after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+
+.titlebox{
+    width: 100%;
+    /*border-bottom: solid 0px #dddddd;*/
+}
+
+.main_title{
+    float: left; 
+    width: 70%;
+}
+
+.main_title h1{
+    text-decoration: #000000;
+    font-size: 30px;
+}
+
+h1{
+    position: relative;
+    padding: 0.25em 0;
+}
+h1:after {
+    content: "";
+    display: block;
+    height: 4px;
+    background: -moz-linear-gradient(to right, rgb(230, 90, 90), transparent);
+    background: -webkit-linear-gradient(to right, rgb(230, 90, 90), transparent);
+    background: linear-gradient(to right, rgb(230, 90, 90), transparent 80%);
+}
+
+
+.mlogo{
+    float: left;
+    width: 30%;
+    text-align:right;
+}
+.logo{
+/*    float: left;*/
+    width: 50%;
+/*    text-align:right;*/
+}
+
+.pkg_contents:after{
+    content: "";
+    clear: both;
+}
+
+.main_menu{
+    /*float: left;*/ 
+    width: 260px;
+    position: absolute;
+    z-index:1;   
+}
+
+div.center
+{
+    /*float: left;*/
+    position: relative;
+    left : 190px;
+    /*text-align : center;*/
+    margin-left: 50px;
+    width: 75%;
+
+}
+
+.pad{
+    /*float: left;*/
+    position: relative;
+    top: 0px;
+    left : 190px;
+    width: 75%;
+
+}
+
+.edit_table{
+    position: relative;
+    top: 0px;
+    left : 190px;
+    width: 75%;
+    text-align: left;
+}
+
+.function_buttons{
+    position: relative;
+    display: inline-block; 
+
+    width: 75%; 
+}
+
+.txtmode1
+{
+    ime-mode: active;   /* 全角モード */
+}
+.txtmode2
+{
+    ime-mode: inactive;   /* 半角モード */
+}
+.txtmode3
+{
+    ime-mode: inactive;   /* 半角モード */
+    text-align: right;
+    margin-right: 5%;
+    float: left;
+}
+
+.tab_wrap{position: relative; top: 0px; left : 190px; width: 75%; height: 600px;}
+.tab_area{font-size:0; margin:0 65px;}
+.tab_area label{width:100px; margin:0 5px; display:inline-block; transition:ease 0.2s border-radius, ease 0.2s; vertical-align:bottom; padding:14px 0 12px; color:#fff; background:#90c9cc; text-align:center; font-size:13px; cursor:pointer; border-top-left-radius:10px; border-top-right-radius:10px; box-sizing:border-box;}
+.tab_area label:hover{opacity:0.5;}
+.tab_panel{width:100%; height:80%; padding:80px 0; opacity:0; display:none; background:#fff; border-radius:0 0 20px 20px;}
+.tab_panel p{font-size:14px; letter-spacing:1px; text-align:center;}
+.panel_area{position:relative; height:auto;  display:inline-block; background:#fff; border-radius:15px 15px 15px 15px; border:double 1px #ff0;}
+
+.tab_area label.active{background:#fff; color:#000;}
+.tab_panel.active{display:block;}
+#tab_area .glossarytab-item.glossarytab-selected { background-color: #fff; color: #000; font-weight:bold; }
+.tab_wrap2{position: relative; top: 0px; left : 240px; width: 100%; height: 300px;}
+
+.btn-radius {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #91b5fb;
+    border-radius: 15px 15px 15px 15px;
+    transition: .4s;
+}
+
+.btn-radius:hover {
+    background: #a180dc;
+}
+
+.hidden_row {
+    display: none;
+}
+
+.cp_ipselect {
+    overflow: hidden;
+    /*margin: 2em auto;*/
+    text-align: center;
+    position: relative;
+    border-radius: 2px;
+    border: 2px solid #4169e1;
+    border-radius: 50px;
+    /*	background: #ffffff;*/
+}
+.cp_ipselect select {
+    padding-right: 1em;
+    cursor: pointer;
+    text-indent: 0.01px;
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    background: transparent;
+    background-image: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 8px 38px 8px 8px;
+    color: #4169e1;
+}
+.cp_ipselect select::-ms-expand {
+    display: none;
+    padding: 8px 38px 8px 8px;
+    color: #4169e1;
+}
+
+.cp_ipselect::before {
+    position: absolute;
+    /*top: 0.8em;
+    right: 0.8em;*/
+    width: 0;
+    height: 0;
+    padding: 0;
+    content: '';
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #4169e1;
+    pointer-events: none;
+}
+#panel_area-current{
+    margin-left: 17px;
+    margin-right: 17px;
+}
+#panel_area-next{
+    margin-left: 17px;
+    margin-right: 17px;
+}
+
+
+
+
+
+
+.main_menu-toggle {
+    margin-left: -240px;
+}
+.main_menu {
+    width: 140px;
+    height: auto;
+    /*background: #444444;*/  /* グレー */
+    background: #000044;      /*黒より青*/      
+    position: absolute;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+/*    z-index: 100;*/
+}
+.main_menu #contents ul,
+.main_menu #contents ul ul {
+    margin: -2px 0 0;
+    padding: 0;
+}
+.main_menu #contents ul li {
+    list-style-type: none;
+    /*border-bottom: 2px solid rgba(255, 255, 255, 0.05);*/
+    border-bottom: 1px solid rgba(255, 255, 255,0.5);
+}
+.main_menu #contents ul li.active > a {
+    color: #1abc9c;
+}
+.main_menu #contents ul li.active ul {
+    display: block;
+}
+.main_menu #contents ul li a {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: block;
+    padding: 18px 0 18px 25px;
+    font-size: 14px;
+    outline: 0;
+    -webkit-transition: all 200ms ease-in;
+    -moz-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    -ms-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+}
+.main_menu #contents ul li a:hover {
+    /*color: #1abc9c;*/
+    color:#FFFF00;
+}
+.main_menu #contents ul li a span {
+    display: inline-block;
+}
+.main_menu #contents ul li a i {
+    width: 20px;
+}
+.main_menu #contents ul li a i .fa-angle-left,
+.main_menu #contents ul li a i .fa-angle-right {
+    padding-top: 3px;
+}
+.main_menu #contents ul ul {
+    display: none;
+}
+/*アコーディオン背景*/
+.main_menu #contents ul ul li {
+    /*background: #666666;*/  /*灰色*/
+    background: #708090;      /*グレイ*/
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    /*border-bottom: none;*/
+    border-bottom:1px solid rgba(255, 255, 255,0.1);
+}
+.main_menu #contents ul ul li a {
+    font-size: 12px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    color: #FFFFFF;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    display: none;
+
+}
+
+button.free{
+    border-radius: 10%/30%;
+
+    height: 30px;
+}
+
+div.message{
+    position: relative;
+    left: 190px;
+    margin-left: 50px;
+    width: 75%;
+    height: 10px;
+    margin-top: -10px;
+}
+
+/*table.list th.textoverflow{
+    width: 400px;
+}
+    table.list td.textoverflow{
+    width: 400px;
+    text-overflow: ellipsis;
+}*/
+
+table.list,table.mail,table.label
+{
+    border: 2px #000000 solid;
+    border-collapse: collapse;
+    width: auto;
+}
+table.list td.td2
+{
+    width: 60px;
+}
+
+table.list th
+{
+    color: #FFFFFF;
+    background-color: #0000EE;	/* 背景色設定 */
+    border-width: 1px 1px; /* 上下だけ引く */
+    border-color: lightgrey;   /* 線色：緑 */
+    border-style: solid;   /* 線種：実線 */
+    height: 25px;
+}
+
+
+table.list td
+{
+    border-width: 0px 1px; /* 上下だけ引く */
+    border-color: lightgrey;   /* 線色：緑 */
+    border-style: solid;   /* 線種：実線 */
+    height: 25px;
+}
+
+div.print 
+{
+    position: absolute;
+    top: 505px;
+    white-space: nowrap;
+}
+input.print
+{
+    border-radius: 10%/30%;
+    width: 140px;
+    height: 40px;
+    /*background-color: #777777;*/
+}
+/*担当名表示*/
+.tantomei 
+{
+    width: 200px;
+    position: relative;
+    top: -60px;
+    left: 550px;
+}
+/*印刷画面チェックボックス*/
+input[type=checkbox] 
+{
+    transform: scale(1.5);
+    margin-bottom: 20%;
+    margin-left: 25%;
+}
+/*印刷画面文言*/
+.checkbox
+{
+    font-size: 18px;
+    margin-left: 8%;
+}
+/* 画面非表示クラス*/
+.dispNone
+{
+    display: none;
+}
+/**********************プルダウン*************************/
+.pullbutton{
+    float: left;
+}
+
+.pull
+{
+    float: left;
+    display: none;
+    width: 30%;
+    padding-left: 2%;
+}
+/******************************************************/
+
+/*********************プラスマイナスアイコン******************/
+.icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 50%;
+  float: left;
+  margin-right: 2%;
+}
+/*疑似要素*/
+.icon--minus::before, .icon--plus::after {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  content: '';
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border-top: 2px solid #fff;
+  transform: translateX(-50%);
+}
+
+.icon--plus:after {
+  top: 3px;
+  left: -3px;
+  transform: rotate(90deg);
+}
+/******************************************************/
+
+/*ダイアログボックスのボタン*/
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+     float: none; 
+}
+
+.ui-dialog .ui-dialog-buttonpane button {
+    margin-left: 1em;
+    cursor: pointer;
+    width: 40%;
+}
+/*Datepickerのカレンダーアイコン*/
+.ui-datepicker-trigger{
+/*    width: 4%;*/
+    margin-bottom: -1%;
+    margin-left: 1%;
+}
+/*Datepickerのカレンダーアイコン（年月）*/
+/*.datecarender
+{
+    width: 9%;
+    margin-bottom: -2%;
+}*/
+
+
+.colorChange{
+    background-color: #F00 !important;
+}

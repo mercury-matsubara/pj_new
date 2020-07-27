@@ -1,0 +1,117 @@
+﻿[SAISINANKEN_2]
+SQL_01="SELECT DISTINCT ank.*, usr.HYOJIMEI AS TANTO, hyo.HLABEL AS STATUSLABEL,  "
+SQL_02="(SELECT COUNT(*) FROM seikyuuinfo sky WHERE ank.ANKID = sky.ANKID ) AS SCOUNT,  "
+SQL_03="(SELECT COUNT(*) FROM seikyuuinfo sky INNER JOIN nyuukininfo nyu ON sky.SEHID = nyu.SEHID WHERE ank.ANKID = sky.ANKID  ) AS NCOUNT  "
+SQL_04="FROM ankeninfo ank  "
+SQL_05="LEFT JOIN loginuserinfo usr ON ank.USRID = usr.USRID  "
+SQL_06="LEFT JOIN (SELECT * FROM hanyoumaster WHERE HKEY = 'STATUS') hyo ON ank.STATUS = hyo.HVALUE  "
+COUNT_SQL="SELECT COUNT(*) FROM ankeninfo "
+
+[MITSUMORIINFO_2]
+SQL_01="SELECT ankeninfo.*, loginuserinfo.HYOJIMEI AS TANTO, kokyakumaster.KOKYAKUMEI "
+SQL_02="FROM (SELECT * FROM ankeninfo WHERE STATUS=2) AS ankeninfo "
+SQL_03="LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID "
+SQL_04="LEFT JOIN kokyakumaster ON ankeninfo.KYAID = kokyakumaster.KYAID "
+COUNT_SQL="SELECT COUNT(*) FROM (SELECT * FROM ankeninfo WHERE STATUS=2) AS ankeninfo "
+
+[MISEIKYUINFO_2]
+SQL_01="SELECT ankeninfo.*, loginuserinfo.HYOJIMEI AS TANTO, kokyakumaster.KOKYAKUMEI "
+SQL_02="FROM (SELECT * FROM ankeninfo WHERE STATUS>2 AND JISSIBI < current_date() AND NOT EXISTS (SELECT * FROM seikyuuinfo WHERE seikyuuinfo.ANKID = ankeninfo.ANKID)) AS ankeninfo "
+SQL_03="LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID "
+SQL_04="LEFT JOIN kokyakumaster ON ankeninfo.KYAID = kokyakumaster.KYAID "
+COUNT_SQL="SELECT COUNT(*) FROM (SELECT * FROM ankeninfo WHERE STATUS>2 AND JISSIBI < current_date() AND NOT EXISTS (SELECT * FROM seikyuuinfo WHERE seikyuuinfo.ANKID = ankeninfo.ANKID)) AS ankeninfo LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID LEFT JOIN kokyakumaster ON ankeninfo.KYAID = kokyakumaster.KYAID "
+
+[MINYUKININFO_2]
+SQL_01="SELECT ankeninfo.*, loginuserinfo.HYOJIMEI AS TANTO, kokyakumaster.KOKYAKUMEI, seikyuuinfo.SEHID, seikyuuinfo.SIHARAIKIGEN, seikyuuinfo.KINGAKUKEI, seikyuuinfo.SEIKYUBI, seikyuuinfo.KENMEI "
+SQL_02="FROM (SELECT * FROM ankeninfo WHERE STATUS=4) AS ankeninfo "
+SQL_03="INNER JOIN (SELECT * FROM seikyuuinfo WHERE NOT EXISTS (SELECT * FROM nyuukininfo WHERE nyuukininfo.SEHID = seikyuuinfo.SEHID)) seikyuuinfo ON ankeninfo.ANKID = seikyuuinfo.ANKID "
+SQL_04="LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID "
+SQL_05="LEFT JOIN kokyakumaster ON ankeninfo.KYAID = kokyakumaster.KYAID "
+COUNT_SQL="SELECT COUNT(*) FROM (SELECT * FROM ankeninfo WHERE STATUS=4) AS ankeninfo INNER JOIN (SELECT * FROM seikyuuinfo WHERE NOT EXISTS (SELECT * FROM nyuukininfo WHERE nyuukininfo.SEHID = seikyuuinfo.SEHID)) seikyuuinfo ON ankeninfo.ANKID = seikyuuinfo.ANKID LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID LEFT JOIN kokyakumaster ON ankeninfo.KYAID = kokyakumaster.KYAID "
+
+[ANKENINFO_2]
+SQL_01="SELECT ankeninfo.*, loginuserinfo.HYOJIMEI AS TANTO, kya.KOKYAKUMEI, hyo.HLABEL AS STATUSLABEL "
+SQL_02="FROM ankeninfo "
+SQL_03="LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID  "
+SQL_04="LEFT JOIN kokyakumaster kya ON ankeninfo.KYAID = kya.KYAID "
+SQL_05="LEFT JOIN (SELECT * FROM hanyoumaster WHERE HKEY = 'STATUS') hyo ON ankeninfo.STATUS = hyo.HVALUE  "
+COUNT_SQL="SELECT COUNT(*) FROM ankeninfo LEFT JOIN loginuserinfo ON ankeninfo.USRID = loginuserinfo.USRID  "
+
+[ANKMITSUMORI_2]
+SQL_01="SELECT *, if(SAIYO=1, '○', '') AS SAIYOLABEL "
+SQL_02="FROM mitsumoriinfo "
+COUNT_SQL="SELECT COUNT(*) FROM mitsumoriinfo "
+
+[ANKSEIKYU_2]
+SQL_01="SELECT seikyuuinfo.*,  if(nyuukininfo.NYKID IS NULL, '未入金', '入金済み') AS STATUSLABEL "
+SQL_02="FROM seikyuuinfo "
+SQL_03="LEFT JOIN nyuukininfo ON seikyuuinfo.SEHID = nyuukininfo.SEHID "
+COUNT_SQL="SELECT COUNT(*) FROM  seikyuuinfo "
+
+[MISTUMORISEL_2]
+SQL_01="SELECT *, if(SAIYO=1, '○', '') AS SAIYOLABEL "
+SQL_02="FROM mitsumoriinfo "
+COUNT_SQL="SELECT COUNT(*) FROM mitsumoriinfo "
+
+[MITSUMORICOPY_2]
+SQL_01="SELECT DISTINCT ankeninfo.* "
+SQL_02="FROM ankeninfo INNER JOIN mitsumoriinfo ON ankeninfo.ANKID = mitsumoriinfo.ANKID "
+COUNT_SQL="SELECT COUNT(DISTINCT ankeninfo.ANKID) AS 'COUNT(*)' FROM ankeninfo INNER JOIN mitsumoriinfo ON ankeninfo.ANKID = mitsumoriinfo.ANKID "
+
+[MITSUMORICOPY_2_M]
+SQL_01="SELECT *, (CONCAT(MMHID,'　', KENMEI)) AS MCOPY, '見積書表示' AS MSHO FROM mitsumoriinfo "
+COUNT_SQL=""
+
+
+[MITSUMORIHOSOKU_2]
+SQL_01="SELECT * FROM mitsumorihosokuinfo "
+COUNT_SQL="SELECT COUNT(*) FROM  mitsumorihosokuinfo "
+
+[SEIKYUCOPY_2]
+SQL_01="SELECT DISTINCT ankeninfo.* "
+SQL_02="FROM ankeninfo INNER JOIN seikyuuinfo ON ankeninfo.ANKID = seikyuuinfo.ANKID "
+COUNT_SQL="SELECT COUNT(DISTINCT ankeninfo.ANKID) AS 'COUNT(*)' FROM ankeninfo INNER JOIN seikyuuinfo ON ankeninfo.ANKID = seikyuuinfo.ANKID "
+
+[SEIKYUCOPY_2_M]
+SQL_01="SELECT *, (CONCAT(SEHUCODE,'　', KENMEI)) AS SCOPY, '請求書表示' AS SSHO FROM seikyuuinfo "
+COUNT_SQL=""
+
+
+[SEIKYUNYUKIN_2]
+SQL_01="SELECT seikyuuinfo.*, ifnull(NYUKINBI, '-') AS NYUKINBI, (CASE WHEN NYKID IS null THEN '未' ELSE '済' END) AS NYKHANTEI "
+SQL_02="FROM seikyuuinfo "
+SQL_03="LEFT JOIN nyuukininfo ON seikyuuinfo.SEHID = nyuukininfo.SEHID "
+COUNT_SQL="SELECT COUNT(*) FROM mitsumoriinfo "
+
+[URIAGEPRINT_5]
+SQL_01="SELECT DATE_FORMAT(SEIKYUBI,'%Y/%m') AS SEIKYUYM, SUM(KINGAKUKEI) AS KINGAKU "
+SQL_02="FROM seikyuuinfo "
+SQL_03="WHERE DATE_FORMAT(SEIKYUBI,'%Y/%m') >= '@01' "
+SQL_04="GROUP BY DATE_FORMAT(SEIKYUBI,'%Y/%m') "
+COUNT_SQL="SELECT COUNT(*) FROM seikyuuinfo "
+
+[NYUKINPRINT_5]
+SQL_01="SELECT ANK.ANKID, ANKENMEI, SEI01.KINGAKU AS KINGAKU01, SEI02.KINGAKU AS KINGAKU02, SEI03.KINGAKU AS KINGAKU03, SEI04.KINGAKU AS KINGAKU04, SEI05.KINGAKU AS KINGAKU05, SEI06.KINGAKU AS KINGAKU06 "
+SQL_02="FROM (SELECT DISTINCT ANKID FROM seikyuuinfo WHERE SIHARAIKIGEN BETWEEN '@01' AND '@02') AS ANK "
+SQL_03="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@03' GROUP BY ANKID) SEI01 ON ANK.ANKID = SEI01.ANKID "
+SQL_04="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@04' GROUP BY ANKID) SEI02 ON ANK.ANKID = SEI02.ANKID "
+SQL_05="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@05' GROUP BY ANKID) SEI03 ON ANK.ANKID = SEI03.ANKID "
+SQL_06="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@06' GROUP BY ANKID) SEI04 ON ANK.ANKID = SEI04.ANKID "
+SQL_07="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@07' GROUP BY ANKID) SEI05 ON ANK.ANKID = SEI05.ANKID "
+SQL_08="LEFT JOIN (SELECT ANKID, SUM(KINGAKUKEI) AS KINGAKU FROM seikyuuinfo WHERE DATE_FORMAT(SIHARAIKIGEN,'%Y/%m') = '@08' GROUP BY ANKID) SEI06 ON ANK.ANKID = SEI06.ANKID "
+SQL_09="LEFT JOIN ankeninfo ON ANK.ANKID = ankeninfo.ANKID "
+SQL_10="ORDER BY ANK.ANKID "
+COUNT_SQL="SELECT COUNT(*) FROM seikyuuinfo "
+
+[SOUSALIST_2]
+SQL_01="SELECT SSRID,GAMEN,SOUSA,LEFT(SYOUSAI,70) AS SYOUSAI,sousarireki.UPDATETIME,sousarireki.UPDATEUSER, loginuserinfo.HYOJIMEI "
+SQL_02="FROM sousarireki "
+SQL_03="LEFT JOIN loginuserinfo ON sousarireki.UPDATEUSER = loginuserinfo.USRID "
+COUNT_SQL="SELECT COUNT(*) FROM sousarireki "
+
+[USERMASTER_2]
+SQL_01="SELECT loginuserinfo.*, hanyou.HLABEL AS KENGENLABEL "
+SQL_02="FROM loginuserinfo "
+SQL_03="LEFT JOIN (SELECT * FROM hanyoumaster WHERE HKEY = 'AUTH') AS hanyou ON KENGEN=hanyou.HVALUE "
+COUNT_SQL="SELECT COUNT(*) FROM loginuserinfo "
+
