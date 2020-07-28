@@ -789,7 +789,7 @@ class BasePage extends BaseObject
 				}
 			}
                         //参照指定がある場合、参照用項目を作成
-			if($refrer_value != '' )
+			if($refrer_value != '' && $sp == '' )
 			{
 				$javascript_str .= "updateAutocompleteValue('#$element_id','$refrer_value');";
 			}

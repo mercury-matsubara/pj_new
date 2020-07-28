@@ -38,7 +38,7 @@
 	$whereSql = "";
 	if( $key != "" )
 	{
-            $whereSql .= " WHERE " .$key_column.(str_replace("@param", $key, $key_param));
+            $whereSql .= " WHERE " .$key_column.(str_replace("@param","'$key'", $key_param));
 	}
 	else if ( $search != "" )
 	{
@@ -53,16 +53,13 @@
         
         //枝番の時　GROUP BY
         $group_by = "";
-        if($search01_column === "EDABAN" || $search01_column === "PROJECTNUM")
-        {
-                $group_by = " GROUP BY " .$search01_column;
-        }
+//        if($search01_column === "EDABAN" || $search01_column === "PROJECTNUM")
+//        {
+//                $group_by = " GROUP BY " .$search01_column;
+//        }
 
 	//SQL文
 	$sql = $select_sql. $whereSql. $group_by. $order_by. " LIMIT " .$limit;
-        
-//$file = 'C:/Apache24/htdocs/log.txt';
-//file_put_contents($file, $sql."\n", FILE_APPEND);
 
 	// db接続関数実行
 	$con = dbconect();

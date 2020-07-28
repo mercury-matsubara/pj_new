@@ -43,6 +43,7 @@ function inputcheck(name,size,type,isnotnull,isJust){
 			$("#"+name).addClass('colorChange');
 			judge = false;
 			window.alert('値を入力してください');
+                        return judge;
 		}
 		else if(judge)
 		{
