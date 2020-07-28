@@ -25,7 +25,7 @@ class PjendExecuteSQL extends BaseLogicExecuter
             $step = 0;
             if($message)
             {       
-                $this->PageJump($filename,$id,$step,"","",$message);                       //message消してください
+                $this->PageJump($filename,$id,$step,"","");                      
             }
             else
             {

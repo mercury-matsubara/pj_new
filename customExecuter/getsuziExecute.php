@@ -15,13 +15,11 @@ class GetsuziExecuteSQL extends BaseLogicExecuter
             $message = $this->getuzi($_GET['month_0'],$_GET['period_0'],$con);
             
             if($message === true)
-            {
-                    //トランザクションコミットまたはロールバック
-                    commitTransaction($message, $con);
-                    
+            {                    
                     $id = 0;
                     $step = 0;
                     $message = "";
+                    $jadge = true;
 //                    echo "<center>";
 //                    echo "<a class = 'title'>月次処理完了</a>";
 //                    echo "<br><br><a>月次処理が完了しました。 </a>";
@@ -41,6 +39,7 @@ class GetsuziExecuteSQL extends BaseLogicExecuter
             {
                     $id = 0;
                     $step = 0;
+                    $jadge = false;
 //                    if($message == '月次処理にてエラーが発生しました。')
 //                    {
 //                            $list = $this->makeList_error($_SESSION['error']);
@@ -66,7 +65,7 @@ class GetsuziExecuteSQL extends BaseLogicExecuter
             }
             
             //トランザクションコミットまたはロールバック
-            commitTransaction($message,$con);
+            commitTransaction($jadge,$con);
             
             $this->PageJump($filename,$id,$step,"","",$message);
     }

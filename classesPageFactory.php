@@ -66,6 +66,10 @@ class PageFactory
                 {
                     $page = new Pjinsert($container);
                 }
+                else if($filename === 'PROGRESSINFO_1')
+                {
+                    $page = new Progress($container);
+                }
                 if($page !== null)
 		{
 			return $page;

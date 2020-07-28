@@ -276,3 +276,21 @@ function updateAutocompleteValue(ctrlname, identifier)
         $(this).autocomplete('search', '');
     });
 }
+/*
+ * 検索条件クリア
+ */
+function clearSearch(filename)
+{
+    var i;
+    var len = 0;
+    
+    var searchForms = $('#clear_'+ filename).val();
+    var searchForm = searchForms.split(",");
+    
+    len = searchForm.length;
+    
+    for(i=0; i<len; i++)
+    {
+        $('#form_'+ searchForm[i] +'_0').val("");
+    }    
+}

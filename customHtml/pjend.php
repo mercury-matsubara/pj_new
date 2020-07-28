@@ -65,7 +65,9 @@ class Pjend extends ListPage
 
             //--2019/06/06追加　filename取得　
             $filename = $this->prContainer->pbFileName;        
-            $html .='</fieldset></td><td valign="bottom"><input type="submit" name="serch_'.$filename.'" value = "表示" class="free" ></td></tr></table>';
+            $html .='<input type="hidden" id="clear_'.$filename.'" value = "'.$this->prContainer->pbPageSetting['sech_form_num'].'" >';
+            $html .='</fieldset></td><td valign="bottom"><input type="submit" name="serch_'.$filename.'" value = "表示" class="free" ></td>';
+            $html .='</fieldset></td><td valign="bottom"><input type="button" value = "クリア" class="free" onclick="clearSearch(\''.$filename.'\')"></td></tr></table>';
             $html .= $list;
             $html .= '</form>';
 
