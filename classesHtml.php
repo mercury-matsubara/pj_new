@@ -83,6 +83,22 @@ class ListPage extends BasePage
 			$_SESSION['list'] = array();
 		}
 		//検索フォーム作成,日付フォーム作成
+                if(isset($_SESSION['search']['flg']))
+                {
+                    if($_SESSION['search']['flg'] === 1)
+                    {
+                        $this->prContainer->pbInputContent = $_SESSION['search']['input'];
+                        $_SESSION['search']['flg'] = 0;
+                    }
+                    else
+                    {
+                        $this->setSearchSession($this->prContainer->pbInputContent);
+                    }
+                }
+                else
+                {
+                    $this->setSearchSession($this->prContainer->pbInputContent);
+                }
 		$formStrArray = $this->makeformSearch_setV2( $this->prContainer->pbInputContent, 'form' );
 		$form = $formStrArray[0];			//0はフォーム用HTML
 		$this->prInitScript = $formStrArray[1];	//1は構築用スクリプト

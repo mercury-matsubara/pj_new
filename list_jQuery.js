@@ -292,5 +292,6 @@ function clearSearch(filename)
     for(i=0; i<len; i++)
     {
         $('#form_'+ searchForm[i] +'_0').val("");
+        $('#form_'+ searchForm[i] +'_1').val("");
     }    
 }

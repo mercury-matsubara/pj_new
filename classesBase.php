@@ -2388,7 +2388,17 @@ class BasePage extends BaseObject
             }
             return ($errorinfo);
         }
-    
+        
+    /*
+     * 検索条件をSESSIONに入れる関数
+     */
+    function setSearchSession($inputContent)
+    {
+        $_SESSION['search']['input'] = $inputContent;
+        $_SESSION['search']['flg'] = 0;
+        
+        return;
+    }
         
     /**
      * カレンダー作成

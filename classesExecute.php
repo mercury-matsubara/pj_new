@@ -155,20 +155,17 @@ class BaseLogicExecuter extends BasePage
 	
 	function refreshSession($filename, $id, $step)
 	{
-//	   $keep['USRID'] = $_SESSION['USRID'];
-//	   $keep['USERMEI'] = $_SESSION['USERMEI'];
-//	   $keep['KENGEN'] = $_SESSION['KENGEN'];
-//	   $keep['HYOJIMEI'] = $_SESSION['HYOJIMEI'];
-//	   $keep['COLOR'] = $_SESSION['COLOR'];
-//	   $keep['STAMPNAME'] = $_SESSION['STAMPNAME'];
-//	   $keep['PSUKEY'] = $_SESSION['PSUKEY'];
-//	   $keep['userid'] = $_SESSION['userid'];
 	   $keep['4CODE'] = $_SESSION['4CODE'];
            $keep['STAFFID'] = $_SESSION['STAFFID'];
            $keep['STAFFNAME'] = $_SESSION['STAFFNAME'];
            $keep['STAFFVALUE'] = $_SESSION['STAFFVALUE'];
            $keep['STAFFPASS'] = $_SESSION['STAFFPASS'];
-	   
+           
+           if(isset($_SESSION['search']))
+           {
+                $keep['search'] = $_SESSION['search'];
+           }
+           
 	   //SESSION初期化
 	   $_SESSION = array();
 	   $_SESSION = $keep;

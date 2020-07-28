@@ -60,7 +60,6 @@ error_reporting(E_ALL);
 						$list_id = $_GET['edit_list_id'];
 						$_SESSION['list'] = array();
 						$step = STEP_EDIT;
-						
 					}
 					else if(isset($_SESSION['list']['id']))
 					{
@@ -95,6 +94,12 @@ error_reporting(E_ALL);
 						$_SESSION['list']['id'] = 1;					
 					}
 					$step = STEP_EDIT;
+                                        
+                                        //検索保持20200728
+                                        if(isset($_SESSION['search']['flg']))
+                                        {
+                                            $_SESSION['search']['flg'] = 1;
+                                        }
 				}
 				else if($pre_url[1] == 6)
 				{
