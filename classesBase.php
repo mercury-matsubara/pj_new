@@ -1865,7 +1865,7 @@ class BasePage extends BaseObject
 		{
                         $code = getCode($this->prFileNameInsert);
 			$rowHtml .= "<td class='".$class_origin." edit' valign='top'><input type='submit' name='edit_".
-							$result_row[$code]."' value = '編集' ".$disabled."></td>";
+							$result_row[$code]."_MoneySet' value = '編集' ".$disabled."></td>";
 		}
 
 		return $rowHtml;

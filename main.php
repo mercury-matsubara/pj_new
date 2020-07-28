@@ -190,7 +190,10 @@ error_reporting(E_ALL);
 					$_SESSION['filename'] = $filename_array[0].'_'.'1';
 					break;
 				}
-				
+                                else if($idarray[2] == "MoneySet")
+                                {
+                                    
+                                }				
 			}
 			else if(strstr($key, 'print'))//印刷画面
 			{
