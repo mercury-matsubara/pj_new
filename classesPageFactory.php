@@ -167,7 +167,7 @@ class PageFactory
                         {
                                 $executer = new PjtourokuExecuteSQL($container);
                         }
-                        else if($filename === 'PROGRESSINFO_1')
+                        else if($filename === 'PROGRESSINFO_1' || $filename === 'PROGRESSINFO_3')
                         {
                                 $executer = new ProgressExecuteSQL($container);
                         }

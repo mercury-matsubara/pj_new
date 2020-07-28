@@ -189,14 +189,7 @@ error_reporting(E_ALL);
 			}
 			else if(strstr($key, 'print'))//印刷画面
 			{
-				if( $keyarray[0] ==='MITSUMORIINFO_1' || $_SESSION['filename'] == 'MITSUMORIINFO_1')
-				{
-					$_SESSION['filename'] = 'MITSUMORIPRINT_5';
-				}
-				else if($keyarray[0] ==='SEIKYUINFO_1' || $_SESSION['filename'] == "SEIKYUINFO_1")
-				{
-					$_SESSION['filename'] = 'SEIKYUPRINT_5';
-				}	
+
 				//$_SESSION['step'] = 5;
 				$step = STEP_PRINT;
 			}
@@ -217,13 +210,6 @@ error_reporting(E_ALL);
 		{
 			$filename = $_SESSION['filename'];
 			
-//			if( $filename !== "USERMASTER_1" && isPermission($filename) === false)	{
-//				$_SESSION['filename'] = 'TOP_5';
-//				
-//				 header("location:".(empty($_SERVER['HTTPS'])? "http://" : "https://")
-//			   .$_SERVER['HTTP_HOST'].dirname($_SERVER["REQUEST_URI"])."/main.php?TOP_5");
-//				exit();	
-//			}	
 		}
                 else
                 {
