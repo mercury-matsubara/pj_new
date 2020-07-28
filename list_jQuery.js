@@ -1,57 +1,4 @@
 
-//// 
-//$(document).ready(function () {
-//    // 印刷画面チェックボックス変更時
-//    $('#copy').change(function () {
-//        if ($(this).prop("checked") === true) {
-//            $("#copyprint").removeClass("dispNone");
-//            // 納品書class確認
-//            if ($('#thirdDateBox').attr("class") === "secondDateBox") {
-//                classChange("#thirdDateBox","secondDateBox","thirdDateBox");
-//                classChange("#hanko3","hanko2","hanko3");
-//            }
-//        } else {
-//            // 画面表示
-//            $("#copyprint").addClass("dispNone");
-//            // 納品書チェックボックス確認
-//            if ($('#delively').prop("checked") === true) {
-//                classChange("#thirdDateBox","thirdDateBox","secondDateBox");
-//                classChange("#hanko3","hanko3","hanko2");
-//            }
-//        }
-//    });
-//    // 納品書チェックボックス変更時
-//    $('#delively').change(function () {
-//        if ($(this).prop("checked") === true) {
-//            $("#delivelyprint").removeClass("dispNone");
-//
-//            if ($('#copy').prop("checked") !== true) {
-//                classChange("#thirdDateBox","thirdDateBox","secondDateBox");
-//                classChange("#hanko3","hanko3","hanko2");
-//            }
-//
-//        } else {
-//            $("#delivelyprint").addClass("dispNone");
-//        }
-//    });
-//
-//    // プラスマイナスアイコンクリック時
-//    $('.icon').click(function () {
-//
-//        // メニュー表示/非表示
-//        $(this).next('div').animate({
-//            width: 'toggle'
-//        }, 'fast');
-//
-//        // プラスマイナスアイコン動作
-//        if ($(this).hasClass('icon--plus')) {
-//            $(this).removeClass('icon--plus');
-//        } else {
-//            $(this).addClass("icon--plus");
-//        }
-//    });
-//
-//});
 
 /**
  * クラスチェンジ
@@ -247,6 +194,54 @@ function updateAutocompleteByID(ctrl_auto, ctrl_id, identifier)
                                 data: {
                                     key: $(ctrl_id).val(),
                                     search: '',
+                                    table_id: identifier
+                                },
+                                dataType: 'json',
+                                timeout: 5000,
+                                cache: false,
+                                success: function (data)
+                                {
+                                    var dataArray = data.results;
+                                    var arrayData = [];
+                                    var counter = 0;
+                                    $.each(dataArray, function (i)
+                                    {
+                                        var hashData = {};
+                                        hashData['label'] = dataArray[i].LABEL;
+                                        hashData['value'] = dataArray[i].VALUE;
+                                        hashData['code'] = dataArray[i].KEY;
+                                        arrayData[counter] = hashData;
+                                        counter++;
+                                    });
+                                    response(arrayData);
+                                }
+
+                            });
+                },
+                autoFocus: true,
+                delay: 100,
+                minLength: 0,
+                select: function (e, ui)
+                {
+                }
+            }).focus(function () {
+        $(this).autocomplete('search', '');
+    });
+}
+
+function updateAutocompleteValue(ctrlname, identifier)
+{
+    $(ctrlname).autocomplete(
+            {
+                source: function (request, response) {
+                    $.ajax(
+                            {
+                                url: 'json.php',
+                                scriptCharset: 'utf-8',
+                                type: 'GET',
+                                data: {
+                                    key: '',
+                                    search: $(ctrlname).val(),
                                     table_id: identifier
                                 },
                                 dataType: 'json',

@@ -38,19 +38,11 @@
 	$whereSql = "";
 	if( $key != "" )
 	{
-		$whereSql .= " WHERE " .$key_column.(str_replace("@param", $key, $key_param));
+            $whereSql .= " WHERE " .$key_column.(str_replace("@param", $key, $key_param));
 	}
 	else if ( $search != "" )
 	{
-		//$search = mb_convert_encoding($search, "SJIS", "UTF-8");
-                if(($search01_column === "EDABAN" && $suggest_id !== "EPJ" && $suggest_id !== "EDA1") || ($search01_column === "PROJECTNUM" && $suggest_id !== "EPJ" && $suggest_id !== "PJN1") || $search01_column === "STAFFID" || $search01_column === "STAFFNAME")
-                {
-                    $whereSql .= " AND " .$search01_column. " ".str_replace("@param", $search, $search01_param);
-                }
-                else
-                {
-                    $whereSql .= " WHERE " .$search01_column. " ".str_replace("@param", $search, $search01_param);
-                }
+            $whereSql .= " WHERE " .$search01_column. " ".str_replace("@param", $search, $search01_param);
 	}
 	
 	//ORDER BY指定

@@ -678,6 +678,7 @@ class BasePage extends BaseObject
 			$form_isJust = $form_ini[$colum]['isJust'];
 			$form_delimiter = $form_ini[$colum]['form1_delimiter'];
 			$refrer = $form_ini[$colum]['ref_key_input'];
+                        $refrer_value = $form_ini[$colum]['ref_value_copy'];
 			$table_num = $form_ini[$colum]['table_num'];
 			$align = $form_ini[$colum]['list_align'];
 			$check_js = '';
@@ -786,6 +787,11 @@ class BasePage extends BaseObject
 					$readonly_attribute = 'readonly';
 					$readonly_class .= ' readOnly';
 				}
+			}
+                        //参照指定がある場合、参照用項目を作成
+			if($refrer_value != '' )
+			{
+				$javascript_str .= "updateAutocompleteValue('#$element_id','$refrer_value');";
 			}
 			$form_element_str .= $form_delimiter.'<input type ="'.$input_type.'" name = "'.$element_name.'" id = "'.$element_id.'" class = "'.$readonly_class.'" value = "'.$form_value.'" size = "'.$form_size.'" '.$readonly_attribute.$required.' '.$onKeyUp.' '.$check_js. ' >';
 			$form_element_str .= $temp_element_str;
