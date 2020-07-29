@@ -6,6 +6,7 @@
  */
 class StaffMoneySet extends ListPage
 {
+    protected $data;
     /**
      * 関数名: makeBoxContentMain
      *   メインの機能提供部分の上部に表示されるHTML文字列を作成する
@@ -15,23 +16,42 @@ class StaffMoneySet extends ListPage
      */
     function makeBoxContentMain()
     {
+            //DB接続、トランザクション開始
+            $con = beginTransaction();
+            
             if(!isset($_SESSION['list']))
             {
                     $_SESSION['list'] = array();
             }
             //検索フォーム作成,日付フォーム作成
-            $this->getInfo($this->prContainer->pbInputContent);
+            $this->getInfo($this->prContainer->pbInputContent,$con);
             $this->setSearchSession($this->prContainer->pbInputContent);
             $formStrArray = $this->makeformSearch_setV2( $this->prContainer->pbInputContent, 'form' );
             $form = $formStrArray[0];			//0はフォーム用HTML
             $this->prInitScript = $formStrArray[1];	//1は構築用スクリプト
             
+            //社員別金額取得
+            $data_sql = "";
+            $judge = false;
+            $count = 0;
+            $data_sql = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
+                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjt5CODE_0'].";";
+            $data_reply = $con->query($data_sql) or ($judge = true);																		// クエリ発行
+            if($judge)
+            {
+                    error_log($con->error,0);
+            }
+            while($result_row = $data_reply->fetch_array(MYSQLI_ASSOC))
+            {
+                    $this->data[$count]['STAFFID'] =  $result_row['STAFFID'];
+                    $this->data[$count]['DETALECHARGE'] = $result_row['DETALECHARGE'];
+                    $count++;
+            }
+            //トランザクションコミットまたはロールバック
+            commitTransaction($data_reply,$con);
+            
             //検索SQL
             $sql = array();
-//            $sql[] = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
-//                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjt5CODE_0'].";";
-//            $sql[] = "SELECT COUNT(*) FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
-//                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjt5CODE_0'].";";
             $sql[] = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
                     . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE) AS syaininfo GROUP BY STAFFID;";
             $sql[] = "SELECT COUNT(*) FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
@@ -52,8 +72,16 @@ class StaffMoneySet extends ListPage
             $html .= $form;								//検索項目表示
 
             $html .= '</table></form>';
-            $html .= '<div>合計金額：<input type = text></div>';
+            
+            //合計金額計算
+            $total = 0;
+            for($i=0;$i<count($this->data);$i++)
+            {
+                $total += $this->data[$i]['DETALECHARGE']; 
+            }
+            $html .= '<div>合計金額：<input type = text value = "'.$total.'"></div>';
             $html .= $list;
+            $html .= '</form></br>';
             
             return $html;
     }
@@ -74,31 +102,23 @@ class StaffMoneySet extends ListPage
                     // ボタン設定読込み
                     $button_ini = parse_ini_file("./ini/button.ini",true);	// ボタン基本情報格納.iniファイル
             }
-            //新規作成ページに指定されているIDがbutton.iniにあるか？
-//            if( array_key_exists( $this->prFileNameInsert, $button_ini ) === true )
-//            {
-//                    $html .= '<input type ="submit" value = "新規作成" class = "free" name = "'.$this->prFileNameInsert.'_button">';
-//            }
-//            //CSVボタン
-//            $is_csv = $this->prContainer->pbPageSetting['isCSV'];
-//            if( $is_csv === '1' )
-//            {
-//                    $html .='　<a href="csv_out.php?id='.$this->prContainer->pbFileName.'&'.$_SERVER['QUERY_STRING'].'" target="_blank" class="btn-radius">CSV出力</a>';
-//            }
-            $html = '</form></div>';
+            
+            $html .= '<input type ="submit" value = "設定" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+            $html .= '<input type ="submit" value = "クリア" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+            $html .= '<input type ="submit" value = "プロジェクト削除" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+            
+            $html .= '</form></div>';
 
             return $html;
     }
     /*
      * プロジェクトナンバ、枝番、製版・案件名取得
      */
-    function getInfo($post)
+    function getInfo($post,$con)
     {
         $judge = false;
         $result = true;
         
-        //DB接続、トランザクション開始
-        $con = beginTransaction();
         
         $pjnum_sql = "SELECT PROJECTNUM FROM projectnuminfo WHERE 1CODE = ".$post['form_pjt1CODE_0'].";";
         $pjnum_reply = $con->query($pjnum_sql) or ($judge = true);																		// クエリ発行
@@ -124,9 +144,6 @@ class StaffMoneySet extends ListPage
                 $this->prContainer->pbInputContent['form_pjtEDABAN_0'] = $result_row['EDABAN'] ;
                 $this->prContainer->pbInputContent['form_pjtPJNAME_0'] = $result_row['PJNAME'] ;
         }
-        
-        //トランザクションコミットまたはロールバック
-        commitTransaction($result,$con);
     }    
     /*
      * function makeTableTd($sql,$post)
@@ -256,8 +273,15 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type = text value = >";
-                        //$value = "<input type = text value = ".$result_row['DETALECHARGE'].">";
+                        $value = "<input type = text>";
+                        
+                        for($j=0;$j<count($this->data);$j++)
+                        {                            
+                            if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
+                            {
+                                $value = "<input type = text value = '".$this->data[$j]['DETALECHARGE']."'>";
+                            }
+                        }
                     }
                     //書き込み
                     $rowHtml .="<td class='".$class."'".$td_width." ><a class ='body'>".$value."</a></td>";
