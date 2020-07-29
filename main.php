@@ -190,9 +190,13 @@ error_reporting(E_ALL);
 					$_SESSION['filename'] = $filename_array[0].'_'.'1';
 					break;
 				}
-                                else if($idarray[2] == "MoneySet")
+                                else if($idarray[2] == "MoneySet")      //社員別金額設定画面
                                 {
-                                    
+                                        $list_id = $idarray[1];
+					$step = STEP_EDIT;
+
+					$_SESSION['filename'] = "STAFFMONEYSET_2";
+					break;
                                 }				
 			}
 			else if(strstr($key, 'print'))//印刷画面

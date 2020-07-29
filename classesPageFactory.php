@@ -70,6 +70,10 @@ class PageFactory
                 {
                     $page = new Progress($container);
                 }
+                else if($filename === 'STAFFMONEYSET_2')
+                {
+                    $page = new StaffMoneySet($container);
+                }
                 if($page !== null)
 		{
 			return $page;
@@ -171,7 +175,7 @@ class PageFactory
                         {
                                 $executer = new ProgressExecuteSQL($container);
                         }
-                        
+
                         if($executer !== null)
 			{
 				return $executer;

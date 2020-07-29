@@ -677,7 +677,7 @@ function make_post($pbInputContent,$main_codeValue){
 	//$_SESSION['edit'][$code] = $main_codeValue;//編集するID
 	//$container->pbInputContent[$code] = $main_codeValue;//編集するID
 	$pbInputContent[$code] = $main_codeValue;//編集するID
-	$sql = idSelectSQL($main_codeValue,$tablenum,$code);
+    	$sql = idSelectSQL($main_codeValue,$tablenum,$code);
 	$result = $con->query($sql) or ($judge = true);																		// クエリ発行
 	if($judge)
 	{
@@ -1657,7 +1657,7 @@ function getCode($filename,$post="")
     {
         $code = "3CODE";
     }
-    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1" || $filename === "PJICHIRAN_1")    //PJ終了,PJ終了キャンセル,PJ一覧
+    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1" || $filename === "PJICHIRAN_1" || $filename === "STAFFMONEYSET_2")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
     {
         $code = "5CODE";
     }

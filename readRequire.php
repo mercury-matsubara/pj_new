@@ -26,5 +26,6 @@ function readRequire()
     $php[] = "./customHtml/pjcancel.php";
     $php[] = "./customHtml/pjinsert.php";
     $php[] = "./customHtml/progress.php";
+    $php[] = "./customHtml/staffMoneySet.php";
     return $php;
 }
