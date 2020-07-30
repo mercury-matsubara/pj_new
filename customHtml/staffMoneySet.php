@@ -26,6 +26,20 @@ class StaffMoneySet extends ListPage
 
     }
     /**
+     * 関数名: makeStylePart
+     *   CSS定義文字列(HTML)を作成する関数
+     * (基本的にはCSSファイルへのリンクを作成)
+     * 
+     * @retrun HTML文字列
+     */
+    function makeStylePart() {
+        $html = '<link rel="stylesheet" type="text/css" href="./css/list_css.css">';
+        $html .= '<link rel="stylesheet" type="text/css" href="./css/popup.css">';
+        $html .= '<link rel="stylesheet" type="text/css" href="./customCSS/staffMoneySet.css">';
+
+        return $html;
+    }
+    /**
      * 関数名: makeBoxContentMain
      *   メインの機能提供部分の上部に表示されるHTML文字列を作成する
      *   機能名の表示など
@@ -72,8 +86,7 @@ class StaffMoneySet extends ListPage
             $sql = array();
             $sql[] = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
                     . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE) AS syaininfo GROUP BY STAFFID;";
-            $sql[] = "SELECT COUNT(*) FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
-                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE) AS syaininfo GROUP BY STAFFID;";
+            $sql[] = "SELECT COUNT(*) FROM syaininfo ;";
             $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
             $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
 
@@ -85,7 +98,7 @@ class StaffMoneySet extends ListPage
 
             //出力HTML作成
             $html ='<div class = "pad" >';
-            $html .='<form name ="form" action="main.php" method="get"onsubmit = "return check(\''.$checkList.'\');">';
+            $html .='<form name ="form" action="main.php?STAFFMONEYSET_1=" method="post"id="staffMoneySet" onsubmit = "return check(\''.$checkList.'\');">';
             $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
             $html .= $form;								//検索項目表示
 
@@ -97,7 +110,7 @@ class StaffMoneySet extends ListPage
             {
                 $total += $this->data[$i]['DETALECHARGE']; 
             }
-            $html .= '<div>合計金額：<input type = text id = "total" value = "'.$total.'" readonly></div>';
+            $html .= '<div>合計金額：<input type=text class="readOnly" id="total" value="'.$total.'" readonly></div>';
             $html .= $list;
             $html .= '</form></br>';
             
@@ -112,7 +125,18 @@ class StaffMoneySet extends ListPage
      */
     function makeBoxContentBottom()
     {
-            $html = '<div class = "left" style = "HEIGHT : 30px"><form action="main.php" method="get">';
+            //ダイアログ
+            $html = '<div id="set_dialog" title="処理確認" style="display:none;">
+                                    <p></p>
+                                    </div>';
+            $html .= '<div id="clear_dialog" title="処理確認" style="display:none;">
+                                    <p>社員別金額情報をクリアしますか？</p>
+                                    </div>';
+            $html .= '<div id="delete_dialog" title="処理確認" style="display:none;">
+                                    <p>プロジェクトを削除しますか？</p>
+                                    </div>';
+        
+            $html .= '<div class = "left" style = "HEIGHT : 30px"><form action="main.php" method="get">';
             //新規作成ボタン作成
             global $button_ini;
             if( $button_ini === null)
@@ -121,9 +145,9 @@ class StaffMoneySet extends ListPage
                     $button_ini = parse_ini_file("./ini/button.ini",true);	// ボタン基本情報格納.iniファイル
             }
             
-            $html .= '<input type ="submit" value = "設定" class = "free" name = "'.$this->prFileNameInsert.'_button">';
-            $html .= '<input type ="submit" value = "クリア" class = "free" name = "'.$this->prFileNameInsert.'_button">';
-            $html .= '<input type ="submit" value = "プロジェクト削除" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+            $html .= '<input type ="button" value = "設定" class = "free" name="Comp" onclick="setMoney()">';
+            $html .= '<input type ="button" value = "クリア" class = "free" name="Comp" onclick="clearMoney()" >';
+            $html .= '<input type ="button" value = "プロジェクト削除" class = "free" name="Comp" onclick="deletePj()">';
             
             $html .= '</form></div>';
 
@@ -291,13 +315,13 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type = text id = 'money_".$rowNo."' size = '8' style = 'text-align:right' onchange = 'calculateReturn()' >";
+                        $value = "<input type=text class='money' onchange='calculateReturn()' >";
                         
                         for($j=0;$j<count($this->data);$j++)
                         {                            
                             if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
                             {
-                                $value = "<input type = text id = 'money_".$rowNo."' value = '".$this->data[$j]['DETALECHARGE']."' size = '8' style = 'text-align:right' onchange = 'calculateReturn()' >";
+                                $value = "<input type=text class='money' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn()' >";
                             }
                         }
                     }
@@ -388,23 +412,16 @@ class StaffMoneySet extends ListPage
                     }
                     else
                     {
-                            $form_input_type = ' class = "txtmode2"';
+                            $form_input_type = ' class = "readOnly txtmode2"';
                     }
 
                     if( $form_format > 4 )
                     {
-                            $form_input_type = ' class = "txtmode1"';
+                            $form_input_type = ' class = "readOnly txtmode1"';
                     }
 
                     $serch_str .= $form_delimiter.'<input type ="'.$input_type.'" name = "'.$element_name.'" id = "'.$element_name.'" value = "'.$form_value.
                                                     '" size = "'.$form_size.'" '.$check_js.$form_input_type.' readonly >';
-
-                    //参照指定がある場合は、オートコンプリート
-                    $refrer = $form_ini[$column]['ref_search'];
-                    if($refrer != "")
-                    {
-                            $after_script .= "updateAutocomplete('#" .$element_name. "','" .$refrer. "');";
-                    }
             }
 
             $result_array = array();

@@ -175,7 +175,10 @@ class PageFactory
                         {
                                 $executer = new ProgressExecuteSQL($container);
                         }
-
+                        else if($filename === 'STAFFMONEYSET_2')
+                        {
+                                $executer = new StaffMoneySetExecuteSQL($container);
+                        }
                         if($executer !== null)
 			{
 				return $executer;
