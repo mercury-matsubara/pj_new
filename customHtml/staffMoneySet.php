@@ -7,6 +7,24 @@
 class StaffMoneySet extends ListPage
 {
     protected $data;
+    
+    /**
+     * 関数名: makeScriptPart
+     *   JavaScript文字列(HTML)を作成する関数
+     *   HEADタグ内に入る
+     *   使用するスクリプトへのリンクや、スクリプトの直接記述文字列を作成
+     * 
+     * @retrun HTML文字列
+     */
+    function makeScriptPart()
+    {
+        $html = parent::makeScriptPart();
+
+        $html .= '<script src="./customJS/staffMoneySet.js"></script>';
+
+        return $html;
+
+    }
     /**
      * 関数名: makeBoxContentMain
      *   メインの機能提供部分の上部に表示されるHTML文字列を作成する
@@ -79,7 +97,7 @@ class StaffMoneySet extends ListPage
             {
                 $total += $this->data[$i]['DETALECHARGE']; 
             }
-            $html .= '<div>合計金額：<input type = text value = "'.$total.'"></div>';
+            $html .= '<div>合計金額：<input type = text id = "total" value = "'.$total.'" readonly></div>';
             $html .= $list;
             $html .= '</form></br>';
             
@@ -273,13 +291,13 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type = text>";
+                        $value = "<input type = text id = 'money_".$rowNo."' size = '8' style = 'text-align:right' onchange = 'calculateReturn()' >";
                         
                         for($j=0;$j<count($this->data);$j++)
                         {                            
                             if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
                             {
-                                $value = "<input type = text value = '".$this->data[$j]['DETALECHARGE']."'>";
+                                $value = "<input type = text id = 'money_".$rowNo."' value = '".$this->data[$j]['DETALECHARGE']."' size = '8' style = 'text-align:right' onchange = 'calculateReturn()' >";
                             }
                         }
                     }
@@ -294,7 +312,107 @@ class StaffMoneySet extends ListPage
                     $rowHtml .= "<td class='".$class_origin." edit' valign='top'><input type='submit' name='edit_".
                                                     $result_row[$code]."_MoneySet' value = '編集' ".$disabled."></td>";
             }
-
             return $rowHtml;
+    }
+    /*
+     * function makeformSearch_setV2($post,$form_name)
+     * 
+     * 引数	$post
+     * 戻り値	なし
+     */
+    function makeFormSearchElement( $column, &$form_ini, $post, $element_name, $main_form_name )
+    {
+            //
+            $serch_str = '';
+            $after_script = '';
+            $check_column_str = '';
+
+
+            $form_format_type = $form_ini[$column]['form1_type'];
+
+            //POSTされた値があるか
+            $form_value = "";
+            if(isset($post[$element_name]))
+            {
+                    $form_value = $post[$element_name];
+            }
+
+            // 判定基準入れ替え
+            if($form_format_type == 3)
+            {
+                    //日付コントロール
+                    $datepickerArray = datepickerDate_set( $element_name, $post );
+                    $serch_str.= $datepickerArray[0];
+                    $after_script.= $datepickerArray[1];
+            }
+            else if($form_format_type == 4)
+            {
+                    /********** 日時コントロール **********/
+                    $serch_str .= '<input type ="text" name = "'.$element_name.'" id = "'.$element_name.'" value = "'.$form_value.'" size = "'.$form_ini[$column]['form1_size'].'"  >';
+                    $after_script .= "$('#".$element_name."').datetimepicker();";
+            }
+            else if($form_format_type == 9)
+            {
+                if(isset($form_ini[$column]['sp']))
+                {
+                    //HTMLを取得
+                    $serch_str.= $this->pulldown_setV3($element_name, $post, "", "form", 0);
+                }
+                else
+                {
+                    //プルダウン指定を取得
+                    $pulldpwn = $form_ini[$column]['pul_num'];
+                    //HTMLを取得
+                    $serch_str.= $this->pulldown_setV2($pulldpwn, $element_name, $form_value, false, $main_form_name, false, true);
+                }
+            }
+            else
+            {
+                    //その他テキスト
+
+                    //INI設定値
+                    $form_size = $form_ini[$column]['form1_size'];
+                    $form_format = $form_ini[$column]['form1_format'];
+                    $form_length = $form_ini[$column]['form1_length'];
+                    $form_delimiter = $form_ini[$column]['form1_delimiter'];
+                    $form_align = $form_ini[$column]['list_align'];
+
+                    $input_type = 'text';
+                    $check_js = 'onChange = " return inputcheck(\''.$element_name.'\','.$form_length.','.$form_format.',false,2)"';
+                    $check_column_str .= $element_name."~".$form_length."~".$form_format."~".false."~2,";
+
+                    //IME制御
+                    if($form_align === 2)
+                    {
+                            $form_input_type = ' class = "txtmode3"';
+                    }
+                    else
+                    {
+                            $form_input_type = ' class = "txtmode2"';
+                    }
+
+                    if( $form_format > 4 )
+                    {
+                            $form_input_type = ' class = "txtmode1"';
+                    }
+
+                    $serch_str .= $form_delimiter.'<input type ="'.$input_type.'" name = "'.$element_name.'" id = "'.$element_name.'" value = "'.$form_value.
+                                                    '" size = "'.$form_size.'" '.$check_js.$form_input_type.' readonly >';
+
+                    //参照指定がある場合は、オートコンプリート
+                    $refrer = $form_ini[$column]['ref_search'];
+                    if($refrer != "")
+                    {
+                            $after_script .= "updateAutocomplete('#" .$element_name. "','" .$refrer. "');";
+                    }
+            }
+
+            $result_array = array();
+
+            $result_array[0] = $serch_str;
+            $result_array[1] = $after_script;
+            $result_array[2] = $check_column_str;
+
+            return $result_array;
     }
 }
