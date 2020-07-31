@@ -12,7 +12,14 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
             //DB接続、トランザクション開始
             $con = beginTransaction();
             
-            $message = $this->pjdelete($post,$con);
+            if($this->prContainer->pbInputContent['Comp'] === "del")
+            {
+                $message = $this->pjdelete($post,$con);
+            }
+            else if($this->prContainer->pbInputContent['Comp'] === "set")
+            {
+                $messeage = $this->moneySet($post,$con);
+            }
             
             //トランザクションコミットまたはロールバック
             commitTransaction($message,$con);   
@@ -90,5 +97,70 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
                     $judge = false;
             }
             return true;
+    }
+    /*
+     * 社員別金額設定
+     */
+    function moneySet($post,$con)
+    {
+        $keyarray = array_keys($_SESSION['list']);
+	foreach($keyarray as $key)
+	{
+		if (strstr($key, 'kobetu'))
+		{
+			$name_arrsy = explode('_',$key);
+			$CODE4 = $name_arrsy[1];
+			$row_num = 0 ;
+			$judge = false;
+			$SQL = "SELECT COUNT(*) FROM projectditealinfo WHERE 4CODE = ".$CODE4." AND 5CODE = ".$CODE5." ;";
+			$result = $con->query($SQL) or ($judge = true);																	// クエリ発行
+			if($judge)
+			{
+				error_log($con->error,0);
+				$judge = false;
+			}
+			while($result_row = $result->fetch_array(MYSQLI_ASSOC))
+			{
+				$row_num = $result_row['COUNT(*)'];
+			}
+			if($row_num == 0 && $_SESSION['list'][$key] != '')
+			{
+				$judge = false;
+				$SQL = "INSERT INTO projectditealinfo (4CODE,5CODE,DETALECHARGE) VALUES(".$CODE4.",".$CODE5.",".$_SESSION['list'][$key].");";
+				$con->query($SQL) or ($judge = true);																	// クエリ発行
+				if($judge)
+				{
+					error_log($con->error,0);
+					$judge = false;
+				}
+			}
+			else if($row_num == 1)
+			{
+				$judge = false;
+				if($_SESSION['list'][$key] == '')
+				{
+					$_SESSION['list'][$key] = 0;
+				}
+				$SQL = "UPDATE projectditealinfo SET DETALECHARGE = ".$_SESSION['list'][$key]." WHERE 4CODE = ".$CODE4." AND 5CODE  = ".$CODE5." ;";
+				$con->query($SQL) or ($judge = true);																	// クエリ発行
+				if($judge)
+				{
+					error_log($con->error,0);
+					$judge = false;
+				}
+			}
+		}
+		else if($key == 'chage')
+		{
+			$judge = false;
+			$SQL = "UPDATE projectinfo SET CHARGE = ".$_SESSION['list'][$key]." WHERE  5CODE  = ".$CODE5." ;";
+			$con->query($SQL) or ($judge = true);																	// クエリ発行
+			if($judge)
+			{
+				error_log($con->error,0);
+				$judge = false;
+			}
+		}
+	}
     }
 }

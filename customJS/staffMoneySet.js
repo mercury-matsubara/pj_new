@@ -20,30 +20,42 @@ function calculateReturn()
 //社員別金額設定
 function setMoney()
 {
-    if(document.getElementById('total').value == document.getElementById('form_pjtCHARGE_0').value)
+    var id = "";
+    if($('#total').val() === $('#form_pjtCHARGE_0').val())
     {
-            if(confirm("入力内容正常確認。\n記入金額で個別金額を設定しますがよろしいですか？"))
-            {
-                    return true;
-            }
-            else
-            {
-                    return false;
-            }
+        id = "#set_dialog_1";
     }
     else
     {
-            if(confirm("入力内容正常確認。\nプロジェクト金額と合計金額が異なります。\n合計金額でプロジェクト金額を変更しますがよろしいですか？"))
-            {
-                    return true;
-            }
-            else
-            {
-                    return false;
-            }
+        id = "#set_dialog_2";
     }
+    //ダイアログ作成
+    $(id).dialog({
+        //×ボタン隠す
+        open: $(".ui-dialog-titlebar-close").hide(),
+        autoOpen: true,
+        buttons:
+        {
+            "ＯＫ": function ()
+            {
+                $('<input>').attr({
+                                    type: 'hidden',
+                                    name: 'Comp',
+                                    value: 'set'
+                                }).appendTo('.list');
+                $('#staffMoneySet').submit();
+            },
+            "キャンセル": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+}
+//社員別金額クリア
+function clearMoney()
+{
 //    //ダイアログ作成
-//    $("#set_dialog").dialog({
+//    $("#clear_dialog").dialog({
 //        //×ボタン隠す
 //        open: $(".ui-dialog-titlebar-close").hide(),
 //        autoOpen: true,
@@ -51,38 +63,18 @@ function setMoney()
 //                {
 //                    "ＯＫ": function ()
 //                    {
-//                        $(this).dialog("close");
+                        $('.kingaku').each(function() {
+                                $(this).val("");
+                        });
+                        //金額合計セット
+                        $('#total').val(0);
+                        $(this).dialog("close");
 //                    },
 //                    "キャンセル": function () {
 //                        $(this).dialog("close");
 //                    }
 //                }
 //            });
-}
-//社員別金額クリア
-function clearMoney()
-{
-    //ダイアログ作成
-    $("#clear_dialog").dialog({
-        //×ボタン隠す
-        open: $(".ui-dialog-titlebar-close").hide(),
-        autoOpen: true,
-        buttons:
-                {
-                    "ＯＫ": function ()
-                    {
-                        $('.money').each(function() {
-                                $(this).val("");
-                        });
-                        //金額合計セット
-                        $('#total').val(0);
-                        $(this).dialog("close");
-                    },
-                    "キャンセル": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
 }
 //プロジェクト削除
 function deletePj(code)
@@ -100,12 +92,13 @@ function deletePj(code)
                                     type: 'hidden',
                                     name: '5CODE',
                                     value: code
-                        }).appendTo('.list');
-                        $('<input>').attr({
-                            type: 'hidden',
-                            name: 'Comp'
-                        }).appendTo('.list');
-                $('#staffMoneySet').submit();
+                                }).appendTo('.list');
+                                $('<input>').attr({
+                                    type: 'hidden',
+                                    name: 'Comp',
+                                    value: 'del'
+                                }).appendTo('.list');
+                        $('#staffMoneySet').submit();
                     },
                     "キャンセル": function () {
                         $(this).dialog("close");

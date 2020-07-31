@@ -126,12 +126,15 @@ class StaffMoneySet extends ListPage
     function makeBoxContentBottom()
     {
             //ダイアログ
-            $html = '<div id="set_dialog" title="処理確認" style="display:none;">
-                                    <p></p>
+            $html = '<div id="set_dialog_1" title="処理確認" style="display:none;">
+                                    <p>入力内容正常確認。<br>記入金額で個別金額を設定しますがよろしいですか？</p>
                                     </div>';
-            $html .= '<div id="clear_dialog" title="処理確認" style="display:none;">
-                                    <p>社員別金額情報をクリアしますか？</p>
+            $html .= '<div id="set_dialog_2" title="処理確認" style="display:none;">
+                                    <p>入力内容正常確認。<br>プロジェクト金額と合計金額が異なります。<br>合計金額でプロジェクト金額を変更しますがよろしいですか？</p>
                                     </div>';
+//            $html .= '<div id="clear_dialog" title="処理確認" style="display:none;">
+//                                    <p>社員別金額情報をクリアしますか？</p>
+//                                    </div>';
             $html .= '<div id="delete_dialog" title="処理確認" style="display:none;">
                                     <p>プロジェクトを削除しますか？</p>
                                     </div>';
