@@ -4,3 +4,10 @@
     width: 90px;
     text-align: right; 
 }
+
+div.left
+{
+    display: inline-block;
+    height: 5.5vh;
+    width: 47%;
+}

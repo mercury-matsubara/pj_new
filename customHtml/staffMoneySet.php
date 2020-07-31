@@ -102,7 +102,7 @@ class StaffMoneySet extends ListPage
             $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
             $html .= $form;								//検索項目表示
 
-            $html .= '</table></form>';
+            $html .= '</table>';
             
             //合計金額計算
             $total = 0;
@@ -110,7 +110,7 @@ class StaffMoneySet extends ListPage
             {
                 $total += $this->data[$i]['DETALECHARGE']; 
             }
-            $html .= '<div>合計金額：<input type=text class="readOnly" id="total" value="'.$total.'" readonly></div>';
+            $html .= '<div>合計金額：<input type=text class="readOnly money" id="total" value="'.$total.'" readonly></div>';
             $html .= $list;
             $html .= '</form></br>';
             
@@ -136,7 +136,7 @@ class StaffMoneySet extends ListPage
                                     <p>プロジェクトを削除しますか？</p>
                                     </div>';
         
-            $html .= '<div class = "left" style = "HEIGHT : 30px"><form action="main.php" method="get">';
+            $html .= '<div class = "left"><form action="main.php" method="get">';
             //新規作成ボタン作成
             global $button_ini;
             if( $button_ini === null)
@@ -145,9 +145,9 @@ class StaffMoneySet extends ListPage
                     $button_ini = parse_ini_file("./ini/button.ini",true);	// ボタン基本情報格納.iniファイル
             }
             
-            $html .= '<input type ="button" value = "設定" class = "free" name="Comp" onclick="setMoney()">';
-            $html .= '<input type ="button" value = "クリア" class = "free" name="Comp" onclick="clearMoney()" >';
-            $html .= '<input type ="button" value = "プロジェクト削除" class = "free" name="Comp" onclick="deletePj()">';
+            $html .= '<input type ="button" value = "設定" class = "free" name="set" onclick="setMoney()">';
+            $html .= '<input type ="button" value = "クリア" class = "free" name="clear" onclick="clearMoney()" >';
+            $html .= '<input type ="button" value = "プロジェクト削除" class = "free" name="del" onclick="deletePj('.$this->prContainer->pbInputContent['5CODE'].')">';
             
             $html .= '</form></div>';
 
@@ -413,6 +413,11 @@ class StaffMoneySet extends ListPage
                     else
                     {
                             $form_input_type = ' class = "readOnly txtmode2"';
+                            
+                            if($column === "pjtCHARGE")
+                            {
+                                $form_input_type = ' class = "readOnly txtmode2 money"';
+                            }
                     }
 
                     if( $form_format > 4 )

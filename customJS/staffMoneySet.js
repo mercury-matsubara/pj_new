@@ -63,7 +63,7 @@ function clearMoney()
             });
 }
 //プロジェクト削除
-function deletePj()
+function deletePj(code)
 {
     //ダイアログ作成
     $("#delete_dialog").dialog({
@@ -74,6 +74,11 @@ function deletePj()
                 {
                     "ＯＫ": function ()
                     {
+                        $('<input>').attr({
+                                    type: 'hidden',
+                                    name: '5CODE',
+                                    value: code
+                        }).appendTo('.list');
                         $('<input>').attr({
                             type: 'hidden',
                             name: 'Comp'
