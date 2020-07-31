@@ -110,7 +110,7 @@ class StaffMoneySet extends ListPage
             {
                 $total += $this->data[$i]['DETALECHARGE']; 
             }
-            $html .= '<div>合計金額：<input type=text class="readOnly money" id="total" value="'.$total.'" readonly></div>';
+            $html .= '<div>合計金額：<input type=text class="readOnly money" id="total" value="'.$total.'" readonly ></div>';
             $html .= $list;
             $html .= '</form></br>';
             
@@ -315,13 +315,13 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type=text class='money' onchange='calculateReturn()' >";
+                        $value = "<input type=text class='money kingaku' onchange='calculateReturn()' >";
                         
                         for($j=0;$j<count($this->data);$j++)
                         {                            
                             if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
                             {
-                                $value = "<input type=text class='money' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn()' >";
+                                $value = "<input type=text class='money kingaku' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn()' >";
                             }
                         }
                     }

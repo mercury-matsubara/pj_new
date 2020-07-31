@@ -3,7 +3,7 @@ function calculateReturn()
 {
     var money = 0;   
     var total = 0;
-    $('.money').each(function() {
+    $('.kingaku').each(function() {
             money = ($(this).val());
             
             if(money === "")
@@ -20,22 +20,44 @@ function calculateReturn()
 //社員別金額設定
 function setMoney()
 {
-    //ダイアログ作成
-    $("#set_dialog").dialog({
-        //×ボタン隠す
-        open: $(".ui-dialog-titlebar-close").hide(),
-        autoOpen: true,
-        buttons:
-                {
-                    "ＯＫ": function ()
-                    {
-                        $(this).dialog("close");
-                    },
-                    "キャンセル": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            });
+    if(document.getElementById('total').value == document.getElementById('form_pjtCHARGE_0').value)
+    {
+            if(confirm("入力内容正常確認。\n記入金額で個別金額を設定しますがよろしいですか？"))
+            {
+                    return true;
+            }
+            else
+            {
+                    return false;
+            }
+    }
+    else
+    {
+            if(confirm("入力内容正常確認。\nプロジェクト金額と合計金額が異なります。\n合計金額でプロジェクト金額を変更しますがよろしいですか？"))
+            {
+                    return true;
+            }
+            else
+            {
+                    return false;
+            }
+    }
+//    //ダイアログ作成
+//    $("#set_dialog").dialog({
+//        //×ボタン隠す
+//        open: $(".ui-dialog-titlebar-close").hide(),
+//        autoOpen: true,
+//        buttons:
+//                {
+//                    "ＯＫ": function ()
+//                    {
+//                        $(this).dialog("close");
+//                    },
+//                    "キャンセル": function () {
+//                        $(this).dialog("close");
+//                    }
+//                }
+//            });
 }
 //社員別金額クリア
 function clearMoney()
