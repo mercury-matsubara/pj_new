@@ -107,7 +107,7 @@ function deletePj(code)
             });
 }
 //入力チェック関数  
-function inputCheck(name){
+function moneycheck(name){
 	var judge =true;
 	var str = $(name).val();
 	
