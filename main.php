@@ -193,7 +193,7 @@ error_reporting(E_ALL);
                                 else if($idarray[2] == "MoneySet")      //社員別金額設定画面
                                 {
                                         $list_id = $idarray[1];
-					$step = STEP_EDIT;
+					$step = 0;
 
 					$_SESSION['filename'] = "STAFFMONEYSET_2";
 					break;

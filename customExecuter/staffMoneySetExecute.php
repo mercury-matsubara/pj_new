@@ -8,7 +8,7 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
     public function executeSQL()
     {
             $filename = "PJICHIRAN_2";
-            $post = $this->prContainer->pbInputContent['5CODE'];
+            $post = $_POST;
             //DB接続、トランザクション開始
             $con = beginTransaction();
             
@@ -18,7 +18,7 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
             }
             else if($this->prContainer->pbInputContent['Comp'] === "set")
             {
-                $messeage = $this->moneySet($post,$con);
+                $message = $this->moneySet($post,$con);
             }
             
             //トランザクションコミットまたはロールバック
@@ -103,10 +103,11 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
      */
     function moneySet($post,$con)
     {
-        $keyarray = array_keys($_SESSION['list']);
+        $CODE5 = $post['5CODE'];
+        $keyarray = array_keys($post);
 	foreach($keyarray as $key)
 	{
-		if (strstr($key, 'kobetu'))
+		if (strstr($key, 'money'))
 		{
 			$name_arrsy = explode('_',$key);
 			$CODE4 = $name_arrsy[1];
@@ -123,10 +124,10 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
 			{
 				$row_num = $result_row['COUNT(*)'];
 			}
-			if($row_num == 0 && $_SESSION['list'][$key] != '')
+			if($row_num == 0 && $post[$key] != '')
 			{
 				$judge = false;
-				$SQL = "INSERT INTO projectditealinfo (4CODE,5CODE,DETALECHARGE) VALUES(".$CODE4.",".$CODE5.",".$_SESSION['list'][$key].");";
+				$SQL = "INSERT INTO projectditealinfo (4CODE,5CODE,DETALECHARGE) VALUES(".$CODE4.",".$CODE5.",".$post[$key].");";
 				$con->query($SQL) or ($judge = true);																	// クエリ発行
 				if($judge)
 				{
@@ -137,11 +138,11 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
 			else if($row_num == 1)
 			{
 				$judge = false;
-				if($_SESSION['list'][$key] == '')
+				if($post[$key] == '')
 				{
-					$_SESSION['list'][$key] = 0;
+					$post[$key] = 0;
 				}
-				$SQL = "UPDATE projectditealinfo SET DETALECHARGE = ".$_SESSION['list'][$key]." WHERE 4CODE = ".$CODE4." AND 5CODE  = ".$CODE5." ;";
+				$SQL = "UPDATE projectditealinfo SET DETALECHARGE = ".$post[$key]." WHERE 4CODE = ".$CODE4." AND 5CODE  = ".$CODE5." ;";
 				$con->query($SQL) or ($judge = true);																	// クエリ発行
 				if($judge)
 				{
@@ -150,17 +151,18 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
 				}
 			}
 		}
-		else if($key == 'chage')
+		else if($key == 'charge')
 		{
 			$judge = false;
-			$SQL = "UPDATE projectinfo SET CHARGE = ".$_SESSION['list'][$key]." WHERE  5CODE  = ".$CODE5." ;";
+			$SQL = "UPDATE projectinfo SET CHARGE = ".$post['charge']." WHERE  5CODE  = ".$CODE5." ;";
 			$con->query($SQL) or ($judge = true);																	// クエリ発行
 			if($judge)
 			{
 				error_log($con->error,0);
 				$judge = false;
 			}
-		}
+		}            
 	}
+        return true;
     }
 }

@@ -101,7 +101,8 @@ class StaffMoneySet extends ListPage
             $html .='<form name ="form" action="main.php?STAFFMONEYSET_1=" method="post"id="staffMoneySet" onsubmit = "return check(\''.$checkList.'\');">';
             $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
             $html .= $form;								//検索項目表示
-
+            $html .='<input type=hidden name="5CODE" value="'.$this->prContainer->pbInputContent["form_pjt5CODE_0"].'">';
+            
             $html .= '</table>';
             
             //合計金額計算
@@ -110,9 +111,9 @@ class StaffMoneySet extends ListPage
             {
                 $total += $this->data[$i]['DETALECHARGE']; 
             }
-            $html .= '<div>合計金額：<input type=text class="readOnly money" id="total" value="'.$total.'" readonly ></div>';
+            $html .= '<div>合計金額：<input type=text class="readOnly money" name="charge" id="total" value="'.$total.'" readonly ></div>';
             $html .= $list;
-            $html .= '</form></br>';
+            $html .= '</br>';
             
             return $html;
     }
@@ -139,7 +140,7 @@ class StaffMoneySet extends ListPage
                                     <p>プロジェクトを削除しますか？</p>
                                     </div>';
         
-            $html .= '<div class = "left"><form action="main.php" method="get">';
+            $html .= '<div class = "left">';
             //新規作成ボタン作成
             global $button_ini;
             if( $button_ini === null)
@@ -318,13 +319,13 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type=text class='money kingaku' name='money_".$rowNo."' onchange='calculateReturn();inputCheck(money_".$rowNo.")' >";
+                        $value = "<input type=text class='money kingaku' name='money_".$result_row['4CODE']."' onchange='calculateReturn();inputCheck(money_".$rowNo.")' >";
                         
                         for($j=0;$j<count($this->data);$j++)
                         {                            
                             if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
                             {
-                                $value = "<input type=text class='money kingaku' name='money_".$rowNo."' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn();inputCheck('money_".$rowNo."')' >";
+                                $value = "<input type=text class='money kingaku' name='money_".$result_row['4CODE']."' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn();inputCheck('money_".$rowNo."')' >";
                             }
                         }
                     }
