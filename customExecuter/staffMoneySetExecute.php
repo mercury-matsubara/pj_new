@@ -59,7 +59,7 @@ class StaffMoneySetExecuteSQL extends BaseLogicExecuter
             //------------------------//
             //          処理          //
             //------------------------//																							// db接続関数実行
-            $id = $post;
+            $id = $post['5CODE'];
             //プロジェクト削除
             $sql = "DELETE FROM projectinfo WHERE 5CODE = ".$id.";";
             $result = $con->query($sql) or ($judge = true);																		// クエリ発行
