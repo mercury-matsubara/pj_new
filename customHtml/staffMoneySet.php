@@ -318,13 +318,13 @@ class StaffMoneySet extends ListPage
                     //テキストボックス作成
                     if($type === "8")
                     {
-                        $value = "<input type=text class='money kingaku' onchange='calculateReturn()' >";
+                        $value = "<input type=text class='money kingaku' name='money_".$rowNo."' onchange='calculateReturn();inputCheck(money_".$rowNo.")' >";
                         
                         for($j=0;$j<count($this->data);$j++)
                         {                            
                             if($result_row['STAFFID'] == $this->data[$j]['STAFFID'])
                             {
-                                $value = "<input type=text class='money kingaku' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn()' >";
+                                $value = "<input type=text class='money kingaku' name='money_".$rowNo."' value='".$this->data[$j]['DETALECHARGE']."' onchange='calculateReturn();inputCheck('money_".$rowNo."')' >";
                             }
                         }
                     }

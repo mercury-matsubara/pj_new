@@ -106,3 +106,27 @@ function deletePj(code)
                 }
             });
 }
+//入力チェック関数  
+function inputCheck(name){
+	var judge =true;
+	var str = $(name).val();
+	
+        if(str.match(/[^0-9]+/)) 
+        {
+                judge=false;
+        }
+        if(judge)
+        {
+                $(name).css({
+                        'backgroundColor' : ''
+                });
+        }
+        else
+        {
+                alert('半角数字で入力してください');
+                $(name).css({
+                        'backgroundColor' : '#ff0000'
+                });
+        }
+	return judge;
+}
