@@ -631,7 +631,7 @@ function make_post($main_codeValue)
 戻り値		なし
 ************************************************************************************************************/
 //function make_post($container,$main_codeValue){
-function make_post($pbInputContent,$main_codeValue){	
+function make_post($pbInputContent,$main_codeValue, $unique = ""){	
 	//------------------------//
 	//        初期設定        //
 	//------------------------//
@@ -651,8 +651,13 @@ function make_post($pbInputContent,$main_codeValue){
 	$master_tablenum = $form_ini[$tablenum]['seen_table_num'];
 	$list_tablenum_array = explode(',',$list_tablenum);
 	$master_tablenum_array = explode(',',$master_tablenum);
-	$uniqecolumns = $form_ini[$filename]['uniquecheck'];
-	$uniqecolumns_array = explode(',',$uniqecolumns);
+        // ユニークカラムチェック
+        if($unique === ""){
+            $uniqecolumns = "";
+        }else{
+            $uniqecolumns = $form_ini[$filename]['uniquecheck'];
+        }
+        $uniqecolumns_array = explode(',',$uniqecolumns);
 	//------------------------//
 	//          変数          //
 	//------------------------//
@@ -1645,7 +1650,7 @@ function getCode($filename,$post="")
     {
         $code = "4CODE";
     }
-    else if($filename === "PJNUMMASTER_1")          //ＰＪナンバマスタ
+    else if($filename === "PJNUMMASTER_1" || $filename === "PJNUMPOPUP_1")          //ＰＪナンバマスタ
     {
         $code = "1CODE";
     }
