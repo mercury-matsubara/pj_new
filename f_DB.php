@@ -1598,7 +1598,8 @@ function addSousarireki( $filename, $id, $sql, &$con )
     //ステートメントを作成
     $stmt = $con->prepare('INSERT INTO sousarireki(GAMEN,SOUSA,SYOUSAI,UPDATEUSER) VALUES(?,?,?,?)');
     //パラメータをバインド
-    $stmt->bind_param('sssi', $form_ini[$filename]['title'], $sousa, $sql, $_SESSION['userid']);
+//    $stmt->bind_param('sssi', $form_ini[$filename]['title'], $sousa, $sql, $_SESSION['userid']);
+    $stmt->bind_param('sssi', $form_ini[$filename]['title'], $sousa, $sql, $_SESSION['4CODE']);
     //クエリを実行
     $stmt->execute();
     //ステートメントを閉じる

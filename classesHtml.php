@@ -142,7 +142,7 @@ class ListPage extends BasePage
 	 */
 	function makeBoxContentBottom()
 	{
-		$html = '<div class = "left" style = "HEIGHT : 30px"><form action="main.php" method="get">';
+		$html = '<div class = "left" style = "HEIGHT : 30px"><form action="main.php" method="get" style="width: 140%" >';
 		//新規作成ボタン作成
 		global $button_ini;
 		if( $button_ini === null)
@@ -151,10 +151,22 @@ class ListPage extends BasePage
 			$button_ini = parse_ini_file("./ini/button.ini",true);	// ボタン基本情報格納.iniファイル
 		}
 		//新規作成ページに指定されているIDがbutton.iniにあるか？
-		if( array_key_exists( $this->prFileNameInsert, $button_ini ) === true )
+//		if( array_key_exists( $this->prFileNameInsert, $button_ini ) === true )
+//		{
+//			$html .= '<input type ="submit" value = "新規作成" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+//		}
+                if( array_key_exists( $this->prFileNameInsert, $button_ini ) === true )
 		{
-			$html .= '<input type ="submit" value = "新規作成" class = "free" name = "'.$this->prFileNameInsert.'_button">';
+                        $filename = $this->prContainer->pbFileName;
+                        $array = $button_ini[$filename];
+                        $button = explode(",", $array['set_button_bottom']);
+                        $button_name = explode(",", $array['set_button_bottom_name']);
+                        for($i=0;$i<count($button);$i++)
+                        {
+                            $html .= '<input type ="submit" value = "'.$button_name[$i].'" class = "free" name = "'.$button[$i].'_button">';
+                        }
 		}
+                
 		//CSVボタン
 		$is_csv = $this->prContainer->pbPageSetting['isCSV'];
 		if( $is_csv === '1' )

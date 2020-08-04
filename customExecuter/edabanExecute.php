@@ -67,9 +67,16 @@ class EdabanInsertExecuteSQL extends BaseLogicExecuter
 
                 //トランザクションコミットまたはロールバック
                 commitTransaction($result,$con);
-
+                
                 //指定ページへ遷移
-                $this->PageJump("EDABANMASTER_2", $edit['edit_list_id'], 2,"","");
+                if($_SESSION['history'][1] === "PJICHIRAN_2")
+                {
+                    $this->PageJump("PJICHIRAN_2", $edit['edit_list_id'], 2,"","");
+                }
+                else
+                {
+                    $this->PageJump("EDABANMASTER_2", $edit['edit_list_id'], 2,"","");
+                }
         }
     }
     
@@ -86,9 +93,9 @@ class EdabanInsertExecuteSQL extends BaseLogicExecuter
 		error_log($con->error,0);
 		$judge =false;
 	}
-	////////////////////操作履歴///////////////////////
-	addSousarireki($filename, STEP_INSERT, $insert_SQL, $con);
-	////////////////////操作履歴///////////////////////
+//	////////////////////操作履歴///////////////////////
+//	addSousarireki($filename, STEP_INSERT, $insert_SQL, $con);
+//	////////////////////操作履歴///////////////////////
         
         return $result;
     }
