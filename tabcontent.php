@@ -68,7 +68,6 @@
 	//ここでは先頭から一定の件数を読む
 	$limit = "LIMIT 0, 15";
 	$limit_start = 0;
-//	echo $sql[1];//デバック用
 
 	//指定idのコンテナを作成
 	$container = new PageContainer( $factory->pbFormIni );
