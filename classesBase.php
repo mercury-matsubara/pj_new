@@ -2193,24 +2193,32 @@ class BasePage extends BaseObject
 		//     ボタン作成処理     //
 		//------------------------//
 		for ($i = 0; $i < $button_count; $i++ )		{
-			//IDを取り、今のページと同じなら追加しない
-			$button_id = $button_num_array[$i];
-			$param_string = $add_param;
-			//有効？
-			$enable = intval($button_enable_array[$i]);
-			if( $enable == 0 || $enable == $enable_step )	{
-				//キー
-				$key_column = $button_ini[$button_id]['key_column'];
-				if($key_column !== '')	{
-					foreach( $this->prContainer->pbInputContent as $key => $value )		{
-						if( strpos( $key, $key_column ) !== false )		{
-							$param_string .= '&'.$key_column.'='.$value;
-							break;
-						}
-					}
-				}
-				$button_html .='　<a href="main.php?'.$button_id.'_button=&'.$param_string.'" class="btn-radius">'.$button_name_array[$i].'</a>';
-			}
+                    //PJ一覧の枝番から作成ボタン押下時
+                    if(end($_SESSION['history']) === "PJICHIRAN_2")
+                    {
+                        $button_id = "PJICHIRAN_2";
+                    }
+                    else
+                    {			
+                        //IDを取り、今のページと同じなら追加しない
+                        $button_id = $button_num_array[$i];
+                    }
+                    $param_string = $add_param;
+                    //有効？
+                    $enable = intval($button_enable_array[$i]);
+                    if( $enable == 0 || $enable == $enable_step )	{
+                            //キー
+                            $key_column = $button_ini[$button_id]['key_column'];
+                            if($key_column !== '')	{
+                                    foreach( $this->prContainer->pbInputContent as $key => $value )		{
+                                            if( strpos( $key, $key_column ) !== false )		{
+                                                    $param_string .= '&'.$key_column.'='.$value;
+                                                    break;
+                                            }
+                                    }
+                            }
+                            $button_html .='　<a href="main.php?'.$button_id.'_button=&'.$param_string.'" class="btn-radius">'.$button_name_array[$i].'</a>';
+                    }
 		}
 		return ($button_html);
 
