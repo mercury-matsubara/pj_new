@@ -40,6 +40,24 @@ class Pjend extends ListPage
                     $_SESSION['list'] = array();
             }
             //検索フォーム作成,日付フォーム作成
+            if(isset($_SESSION['search']['flg']))
+            {
+                if($_SESSION['search']['flg'] === 1)
+                {
+                    $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+                    $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+                    $this->prContainer->pbInputContent = $_SESSION['search']['input'];
+                    $_SESSION['search']['flg'] = 0;
+                }
+                else
+                {
+                    $this->setSearchSession($this->prContainer->pbInputContent);
+                }
+            }
+            else
+            {
+                $this->setSearchSession($this->prContainer->pbInputContent);
+            }
             $formStrArray = $this->makeformSearch_setV2( $this->prContainer->pbInputContent, 'form' );
             $form = $formStrArray[0];			//0はフォーム用HTML
             $this->prInitScript = $formStrArray[1];	//1は構築用スクリプト
@@ -48,9 +66,12 @@ class Pjend extends ListPage
             $sql = array();
             $sql = joinSelectSQL($this->prContainer->pbInputContent, $this->prMainTable, $this->prContainer->pbFileName, $this->prContainer->pbFormIni);
             $sql = SQLsetOrderby($this->prContainer->pbInputContent, $this->prContainer->pbFileName, $sql);
-            $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
-            $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
-
+            if(!isset($limit) && !isset($limit_start))
+            {
+                $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+                $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+            }
+            
             //リスト表示HTML作成
             $pagemove = intval( $this->prContainer->pbPageSetting['isPageMove'] );
             $list =  $this->makeListV2($sql, $_SESSION['list'], $limit, $limit_start, $pagemove);

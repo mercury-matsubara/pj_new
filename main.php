@@ -221,7 +221,18 @@ error_reporting(E_ALL);
 		if(isset($_SESSION['filename']))
 		{
 			$filename = $_SESSION['filename'];
-			
+			//検索保持20200814
+                        if(isset($_SESSION['search']['flg']))
+                        {
+                            if(strpos($key,"serch") === false)
+                            {
+                                $_SESSION['search']['flg'] = 1;
+                            }
+                            if(strpos($key,'button') !== false)
+                            {
+                                $_SESSION['search']['flg'] = "";
+                            }
+                        }
 		}
                 else
                 {

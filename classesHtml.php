@@ -87,6 +87,8 @@ class ListPage extends BasePage
                 {
                     if($_SESSION['search']['flg'] === 1)
                     {
+                        $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+                        $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
                         $this->prContainer->pbInputContent = $_SESSION['search']['input'];
                         $_SESSION['search']['flg'] = 0;
                     }
@@ -107,8 +109,11 @@ class ListPage extends BasePage
 		$sql = array();
 		$sql = joinSelectSQL($this->prContainer->pbInputContent, $this->prMainTable, $this->prContainer->pbFileName, $this->prContainer->pbFormIni);
 		$sql = SQLsetOrderby($this->prContainer->pbInputContent, $this->prContainer->pbFileName, $sql);
-		$limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
-		$limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+		if(!isset($limit) && !isset($limit_start))
+                {
+                    $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+                    $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+                }
 		
 		//リスト表示HTML作成
 		$pagemove = intval( $this->prContainer->pbPageSetting['isPageMove'] );
