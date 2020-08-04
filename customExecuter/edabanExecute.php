@@ -69,8 +69,10 @@ class EdabanInsertExecuteSQL extends BaseLogicExecuter
                 commitTransaction($result,$con);
                 
                 //指定ページへ遷移
-                if($_SESSION['history'][1] === "PJICHIRAN_2")
+                if($_SESSION['history'][0] === "PJICHIRAN_2" || $_SESSION['history'][1] === "PJICHIRAN_2")
                 {
+                    $_SESSION['search']['input']['form_pjtEDABAN_0'] = $this->prContainer->pbInputContent['form_edaEDABAN_0'];
+                    $_SESSION['search']['flg'] = 1;
                     $this->PageJump("PJICHIRAN_2", $edit['edit_list_id'], 2,"","");
                 }
                 else
