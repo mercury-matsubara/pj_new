@@ -78,6 +78,10 @@ class PageFactory
                 {
                     $page = new PjInsertPopup($container);
                 }
+                else if($filename === "KOUSU_1")
+                {
+                    $page = new Kousu($container);
+                }
                 if($page !== null)
 		{
 			return $page;

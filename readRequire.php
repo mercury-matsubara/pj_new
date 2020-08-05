@@ -28,5 +28,6 @@ function readRequire()
     $php[] = "./customHtml/pjinsert.php";
     $php[] = "./customHtml/progress.php";
     $php[] = "./customHtml/staffMoneySet.php";
+    $php[] = "./customHtml/kousu.php";
     return $php;
 }
