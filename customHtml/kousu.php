@@ -32,9 +32,12 @@ class Kousu extends InsertPage
                 $errorinfo = $_SESSION['error'];
                 $_SESSION['error'] = "";
             }
-
+//            if(isset($_POST['date']))
+//            {
+//                $date = $_POST['date'];
+//            }
             //日付
-            $day = '<input type="text" name="day" class="top_text day" value="選択した日">';
+            $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
             //登録ボタン、戻るボタン
             $button = '<input type="button" name = "insert" value = "登録" class="free" onClick = "Regist()">';
             $button .= '<a href="main.php?TOP_5_button=&"><input type="button" name = "back" value = "戻る" class="free"></a>';
