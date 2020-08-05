@@ -1,4 +1,4 @@
-
+/*上のボタン部分*/
 .top_text
 {
     width: 120px;
@@ -21,4 +21,38 @@ input.free
 .time
 {
     float: right;
+}
+
+/*テーブル部分*/
+table.list
+{
+    border: 2px #000000 solid;
+    border-collapse: collapse;
+    width: auto;
+    margin-top: 1%;
+}
+
+td
+{
+    padding: 1px;
+}
+
+.pjnum
+{
+    width: 95%;
+}
+
+.eda,.kouid,kouname  
+{
+    width: 91%;
+}
+
+.pjname
+{
+    width: 93%; 
+}
+
+.teizi,.zangyo
+{
+        width: 89%;
 }

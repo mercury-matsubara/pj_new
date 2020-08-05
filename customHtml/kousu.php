@@ -34,57 +34,32 @@ class Kousu extends InsertPage
             }
 
             //日付
-            $day = '<div class = "pad">';
-            $day .= '<input type="text" name="day" class="top_text day" value="選択した日">';
+            $day = '<input type="text" name="day" class="top_text day" value="選択した日">';
             //登録ボタン、戻るボタン
             $button = '<input type="button" name = "insert" value = "登録" class="free" onClick = "Regist()">';
             $button .= '<a href="main.php?TOP_5_button=&"><input type="button" name = "back" value = "戻る" class="free"></a>';
             //定時時間、残業時間
             $time = '<input type="text" class="top_text time" value="定時">';
             $time .= '<input type="text" class="top_text time" value="残業">';
-            $time .= '</div>';
-            //入力項目作成
-            $form_array = $this->makeformInsert_setV2($this->prContainer->pbInputContent, $errorinfo, '', "insert", $this->prContainer);
-            $form = $form_array[0];
-            $this->prInitScript =  $form_array[1];
-
-            //----明細入力作成----//
-            $header_array = $this->makeList_itemV2('', $this->prContainer->pbSecondInputContent);
-            if(isset($header_array))
+            //テーブル作成
+            $filename = $this->prContainer->pbFileName;
+            $column = explode(",",$this->prContainer->pbFormIni[$filename]['page_columns']);
+            for($i=0;$i<count($column);$i++)
             {
-                    $header = $header_array[0];
-                    $this->prInitScript .=  $header_array[1];
+                $columnName[] = $this->prContainer->pbParamSetting[$column[$i]]['item_name'];
             }
-
-            //--tab作成--//
-            $tabarray = $this->makeTabHtml($this->prContainer->pbFileName, $this->prContainer->pbFormIni, $this->prContainer->pbInputContent);
-            $tab = $tabarray[0];
-            $this->prInitScript .= $tabarray[1];
-
-            $checkList = $_SESSION['check_column'];
-            $notnullcolumns = $_SESSION['notnullcolumns'];
-            $notnulltype = $_SESSION['notnulltype'];
-
-            //2019/03/25パラメーター追加
-            //hidden作成
-            $hidden = $this->makeHiddenParam($this->prContainer->pbListId,$this->prContainer->pbStep, $this->prContainer->pbFileName);
-
-            $send = '<form name ="insert" action="main.php?'.$this->prContainer->pbFileName.'=" method="post" autocomplete="off" id="send" enctype="multipart/form-data" 
-                            onsubmit = "return check(\''.$checkList.
-                            '\',\''.$notnullcolumns.'\',\''.$notnulltype.'\');">';
-
+            $table = $this->createTable($columnName,$column);
+            
             //出力HTML
             $html = '<br>';
+            $html .= '<form name="form">';
+            $html .= '<div class = "pad">';
             $html .= $day;
             $html .= $button;
             $html .= $time;
-            $html .= $send;
-            $html .= '<div class = "edit_table">';
-            $html .= $form;
-            $html .= $hidden;
-            $html .= $header;
+            $html .= $table;
             $html .= '</div>';
-            $html .= $tab;
+            $html .= '</form>';
 
             return $html;
     }
@@ -125,5 +100,50 @@ class Kousu extends InsertPage
             $html .='</div>';
             $html .= '</form>';
             return $html;
+    }
+    /*
+     * テーブル作成
+     */
+    function createTable($post,$column)
+    {
+        $html = "<table class='list'>";
+        $html .="   <thead>";
+        $html .="       <tr>";
+        $html .="           <th >$post[0]</th>";
+        $html .="           <th >$post[1]</th>";
+        $html .="           <th >$post[2]</th>";
+        $html .="           <th ></th>";        
+        $html .="           <th >$post[3]</th>";
+        $html .="           <th >$post[4]</th>";
+        $html .="           <th ></th>";        
+        $html .="           <th >$post[5]</th>";
+        $html .="           <th >$post[6]</th>";
+        $html .="       </tr>";
+        $html .="   </thead>";
+        $html .="   <tbody>";
+        for($i=0;$i<9;$i++)
+        {
+            if($i%2 === 1)
+            {
+                $html .="       <tr class='stripe'>";
+            }
+            else
+            {
+                $html .="       <tr class='stripe_none'>";
+            }
+            $html .="           <td ><input type='text' class='pjnum' name='form_".$column[0]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='eda' name='form_".$column[1]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='pjname' name='form_".$column[2]."_".$i."'></td>";
+            $html .="           <td ><input type='button' name='4' value='プロジェクト・枝番選択'></td>";        
+            $html .="           <td ><input type='text' class='kouid' name='form_".$column[3]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='kouname' name='form_".$column[4]."_".$i."'></td>";
+            $html .="           <td ><input type='button' name='7' value='工程選択'></td>";        
+            $html .="           <td ><input type='text' class='teizi' name='form_".$column[5]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='zangyo' name='form_".$column[6]."_".$i."'></td>";
+            $html .="       </tr>";
+        }
+        $html .="   </tbody>";
+        $html .="</table>";
+        return $html;
     }
 }
