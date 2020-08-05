@@ -14,8 +14,6 @@ $(function(){
         month = month.slice(2,-3);
         var day = $(this).text();
         var date = month+"/"+day;
-//        $.post("./main.php?KOUSU_1_button","date="+date)
-//        window.location.href = "./main.php?KOUSU_1_button";
         location.href = "./main.php?KOUSU_1_button?date="+date;
     });
 

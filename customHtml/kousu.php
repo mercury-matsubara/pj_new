@@ -1,6 +1,23 @@
 <?php
 class Kousu extends InsertPage
 {
+    /**
+     * 関数名: makeScriptPart
+     *   JavaScript文字列(HTML)を作成する関数
+     *   HEADタグ内に入る
+     *   使用するスクリプトへのリンクや、スクリプトの直接記述文字列を作成
+     * 
+     * @retrun HTML文字列
+     */
+    function makeScriptPart()
+    {
+        $html = parent::makeScriptPart();
+
+        $html .= '<script src="./customJS/kousu.js"></script>';
+
+        return $html;
+
+    }
      /**
      * 関数名: makeStylePart
      *   CSS定義文字列(HTML)を作成する関数
@@ -32,18 +49,20 @@ class Kousu extends InsertPage
                 $errorinfo = $_SESSION['error'];
                 $_SESSION['error'] = "";
             }
-//            if(isset($_POST['date']))
-//            {
-//                $date = $_POST['date'];
-//            }
             //日付
             $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
             //登録ボタン、戻るボタン
             $button = '<input type="button" name = "insert" value = "登録" class="free" onClick = "Regist()">';
             $button .= '<a href="main.php?TOP_5_button=&"><input type="button" name = "back" value = "戻る" class="free"></a>';
             //定時時間、残業時間
-            $time = '<input type="text" class="top_text time" value="定時">';
-            $time .= '<input type="text" class="top_text time" value="残業">';
+            $zangyoTotal = "0.00";
+            $teiziTotal = "0.00";
+//            for($i=0;$i<count($this->data);$i++)
+//            {
+//                $zangyoTotal += $this->data[$i]['DETALECHARGE']; 
+//            }
+            $time = '<input type="text" class="top_text time" id="zangyo_total" value="'.$zangyoTotal.'">';
+            $time .= '<input type="text" class="top_text time" id="teizi_total" value="'.$teiziTotal.'">';
             //テーブル作成
             $filename = $this->prContainer->pbFileName;
             $column = explode(",",$this->prContainer->pbFormIni[$filename]['page_columns']);
@@ -141,8 +160,8 @@ class Kousu extends InsertPage
             $html .="           <td ><input type='text' class='kouid' name='form_".$column[3]."_".$i."'></td>";
             $html .="           <td ><input type='text' class='kouname' name='form_".$column[4]."_".$i."'></td>";
             $html .="           <td ><input type='button' name='7' value='工程選択'></td>";        
-            $html .="           <td ><input type='text' class='teizi' name='form_".$column[5]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='zangyo' name='form_".$column[6]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='teizi' name='form_".$column[5]."_".$i."' onchange='calculateReturnTeizi()'></td>";
+            $html .="           <td ><input type='text' class='zangyo' name='form_".$column[6]."_".$i."' onchange='calculateReturnZangyo()'></td>";
             $html .="       </tr>";
         }
         $html .="   </tbody>";
