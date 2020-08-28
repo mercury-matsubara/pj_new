@@ -1,7 +1,7 @@
 <?php
 
 // 定数
-const APPLICATION_NAME = "PJ管理";
+const APPLICATION_NAME = "プロジェクト管理";
 const STEP_INSERT = 1;
 const STEP_EDIT = 2;
 const STEP_DELETE = 3;

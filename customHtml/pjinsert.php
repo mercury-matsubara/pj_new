@@ -16,7 +16,7 @@ class Pjinsert extends InsertPage {
     */
     function makeScriptPart() {
         $html = parent::makeScriptPart();
-        $html .= '<script src="./customJS/pjinsert.js"></script>';
+        $html .= '<script src="./customJS/popup.js"></script>';
         return $html;
     }
 

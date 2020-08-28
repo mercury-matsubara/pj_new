@@ -33,7 +33,7 @@
 }
 
 /*th、tr大きさ*/
-.popupcontent{
+/*.popupcontent{
     width: 100%;
 }
 tr.text{
@@ -43,4 +43,22 @@ th.topth {
     width: 10%;
     height: 30px;
     text-align: center;
+}*/
+
+.popup_content{
+    position: relative;
+    width: 75%;
 }
+.list_content{
+    height: 55vh;
+    overflow-y: scroll;
+    display: -webkit-inline-box;
+}
+
+table.list{
+    border: 2px #000000 solid;
+    border-collapse: collapse;
+    width: auto;
+    margin-left: 0.3vw;
+}
+

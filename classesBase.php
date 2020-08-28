@@ -671,9 +671,11 @@ class BasePage extends BaseObject
 		}
                 else if($form_type === 11)
                 {
-                    //リンク設定を取得
+                    //ポップアップ対象のファイル名取得
                     $link = $this->prContainer->pbParamSetting[$colum]['link_to'];
-                    $form_element_str = '<input type="button" id="popup" value="'.$form_value.'" data-action="pjinsertAjax.php?id='.$link.'">';
+                    //ポップアップ登録押下時の反映ID取得
+                    $popupKey = $this->prContainer->pbParamSetting[$colum]['link_key'];
+                    $form_element_str = '<input type="button" id="popup" value="'.$form_value.'" popup-key="'.$popupKey.'" data-action="popupAjax.php?id='.$link.'">';
                 }
 		else
 		{
@@ -2525,7 +2527,7 @@ class BasePage extends BaseObject
         $html .=$this->createPopUpContent();
         $html .="</div><!--modal__content-->";
         $html .="<div class='buttonArea'>";
-        $html .='<input type="button" name = "insert" value = "登録" class="free">';
+        $html .='<input type="button" id="insert" value = "登録" class="free">';
         $html .='<input type="button" value = "戻る" class="free js-modal-close">';
         $html .="</div><!--buttonArea-->";
         $html .="</div><!--modal-->";

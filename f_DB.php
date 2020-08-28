@@ -1655,7 +1655,7 @@ function getCode($filename,$post="")
     {
         $code = "1CODE";
     }
-    else if($filename === "EDABANMASTER_1" || $filename === "EDABANMASTER_3")         //枝番マスタ登録,枝番マスタ編集
+    else if($filename === "EDABANMASTER_1" || $filename === "EDABANMASTER_3" || $filename === "EDABANPOPUP_1")         //枝番マスタ登録,枝番マスタ編集
     {
         $code = "2CODE";
     }
