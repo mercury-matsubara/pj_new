@@ -1667,7 +1667,7 @@ function getCode($filename,$post="")
     {
         $code = "5CODE";
     }
-    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3")  //PJ進捗
+    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3" || $filename === "PROGRESSPOPUP_1")  //PJ進捗
     {
         $code = "7CODE";
     }
