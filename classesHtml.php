@@ -3,9 +3,6 @@
 //require_once("classesPageContainer.php");
 //require_once("classesBase.php");
 
-
-
-
 /**
  * リストぺージ用Pageクラス
  */

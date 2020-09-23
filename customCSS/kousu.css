@@ -49,10 +49,37 @@ td
 
 .pjname
 {
-    width: 93%; 
+    width: 98.5%; 
 }
 
 .teizi,.zangyo
 {
-        width: 89%;
+    width: 89%;
+    text-align: right;
+}
+
+.pjday{
+    margin-bottom: 1%;
+    margin-top: -1%;
+}
+.zangyobox, .teizibox{
+
+}
+
+/*コピー*/
+.copytime{
+    margin-left: 10%;
+    border-radius: 5%/10%;
+    width: 100px;
+    height: 20px;
+}
+
+.ui-datepicker-trigger {
+    width: 1.5%;
+    margin-bottom: -0.5%;
+    margin-left: 0.5%;
+}
+.copybutton{
+    margin-right: 3%;
+    margin-left: 1%;
 }

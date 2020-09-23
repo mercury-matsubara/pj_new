@@ -122,7 +122,6 @@ class TopPage extends BasePage
 
         $sql = getSelectSQL("",$this->prContainer->pbFileName);
         
-        
         //指定値を置換(スタッフID、年月)
         $sql[0] = str_replace('@01', $_SESSION['STAFFID'], $sql[0]);
         $sql[0] = str_replace('@02', $month, $sql[0]);

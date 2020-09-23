@@ -570,7 +570,7 @@ function insert($filename, &$post,&$con){
 		$judge =false;
 	}
 	////////////////////操作履歴///////////////////////
-	addSousarireki($filename, STEP_INSERT, $sql, $con);
+	// addSousarireki($filename, STEP_INSERT, $sql, $con);
 	////////////////////操作履歴///////////////////////
 	//----------------------//
 	//	ヘッダー明細登録	//
@@ -942,7 +942,7 @@ function update($filename, $post,&$con){
 		error_log($con->error,0);
 	}
 	////////////////////操作履歴///////////////////////
-	addSousarireki($filename, STEP_EDIT, $sql, $con);
+	// addSousarireki($filename, STEP_EDIT, $sql, $con);
 	////////////////////操作履歴///////////////////////
 	//----------------------//
 	//	ヘッダー明細登録		//
@@ -1219,7 +1219,7 @@ function delete($filename,$post,$data,&$con){
 		}
 	}
 	////////////////////操作履歴///////////////////////
-	addSousarireki($filename, STEP_DELETE, $sql[0], $con);
+	// addSousarireki($filename, STEP_DELETE, $sql[0], $con);
 	////////////////////操作履歴///////////////////////
 	
 	$delete_path = "";
@@ -1651,7 +1651,7 @@ function getCode($filename,$post="")
     {
         $code = "4CODE";
     }
-    else if($filename === "PJNUMMASTER_1" || $filename === "PJNUMPOPUP_1")          //ＰＪナンバマスタ
+    else if($filename === "PJNUMMASTER_1" || $filename === "PJNUMPOPUP_1" || $filename === "PJICHIRAN_1")          //ＰＪナンバマスタ
     {
         $code = "1CODE";
     }
@@ -1659,17 +1659,21 @@ function getCode($filename,$post="")
     {
         $code = "2CODE";
     }
-    else if($filename === "KOUTEIMASTER_1")         //工程マスタ
+    else if($filename === "KOUTEIMASTER_1" || $filename === "KOUTEIPOPUP_1")         //工程マスタ
     {
         $code = "3CODE";
     }
-    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1" || $filename === "PJICHIRAN_1" || $filename === "STAFFMONEYSET_2")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
+    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1"  || $filename === "STAFFMONEYSET_2")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
     {
         $code = "5CODE";
     }
-    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3" || $filename === "PROGRESSPOPUP_1")  //PJ進捗
+    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3")  //PJ進捗
     {
         $code = "7CODE";
+    }
+    else if($filename === "PROGRESSPOPUP_1" || $filename === "TOPPOPUP_1")
+    {
+        $code = "6CODE";
     }
 
     return $code;

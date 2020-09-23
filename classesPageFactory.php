@@ -74,7 +74,8 @@ class PageFactory
                 {
                     $page = new StaffMoneySet($container);
                 }
-                else if($filename === "PJNUMPOPUP_2" || $filename === "EDABANPOPUP_2" || $filename === "PROGRESSPOPUP_2" )
+                else if($filename === "PJNUMPOPUP_2" || $filename === "EDABANPOPUP_2" || $filename === "PROGRESSPOPUP_2" 
+                        || $filename === "KOUTEIPOPUP_2"  || $filename === "TOPPOPUP_2")
                 {
                     $page = new PjInsertPopup($container);
                 }

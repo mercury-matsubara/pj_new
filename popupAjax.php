@@ -27,12 +27,14 @@ require_once("./popup/pjinsertPopup.php");
     // 検索か判定するフラグ
     $flg = false;
     //ページにテーブルを作ってもらう
-    $page_move = PAGE_NONE;
+    $page_move = PAGE_COUNT_ONLY;
+    //リスト作成判定
+    $popup = 1;
     //SQLを取得
     $sql = getSelectSQL($post, $page_id);
     // where文作成
     $where = '';
-    if($key !== false){
+    if($key !== false) {
 	foreach($search as $column  =>  $value)	{
             // value値がない場合スキップ
             if ($value === ""){
@@ -55,6 +57,8 @@ require_once("./popup/pjinsertPopup.php");
         $sql[0] .= ' WHERE ' . $where . ' ';
         $sql[1] .= ' WHERE ' . $where . ' ';
     }
+    // スタッフID置換
+    $sql[0] = str_replace('@01', $_SESSION['STAFFID'], $sql[0]);
     // 並び順取得
     $sqlv2 = setSQLOrderby($page_id, $form_ini, $sql);
     //指定idのコンテナを作成
@@ -66,7 +70,7 @@ require_once("./popup/pjinsertPopup.php");
     //検索フォーム作成
     $form = $page->createSearchForm( $page_id, 'form', $flg );
     //データリスト作成
-    $list = $page->makeListV2( $sqlv2, $post, $limit, $limit_start, $page_move );
+    $list = $page->makeListV2( $sqlv2, $post, $limit, $limit_start, $page_move,$popup );
     
     if($flg === false){
         //初期表示
@@ -74,7 +78,7 @@ require_once("./popup/pjinsertPopup.php");
         $html .= "<div class='list_content'>";
         $html .= $list;
         $html .= "</div>";
-    }else{
+    } else {
         //表示ボタン押下時
         $html = $list;
     }

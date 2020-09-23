@@ -1,64 +1,11 @@
 
 /**PJ進捗ポップアップCSS**/
-.modal{
-    display: none;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    width: 99%;
-    z-index: 2;
-}
-.modal__bg{
-    background: rgba(0,0,0,0.8);
-    height: 100vh;
-    position: absolute;
-    width: 100%;
-}
-.modal__content{
-    background: #EEEEEE;
-    left: 50%;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    width: 70%;
-    height: 80%;
-}
 
-/**ポップアップ　ボタンエリア**/
-.buttonArea{
-    position: relative;
-    top: 85vh;
-    text-align: center;
-}
-
-/*th、tr大きさ*/
-/*.popupcontent{
-    width: 100%;
-}
-tr.text{
-    background-color: #b0c4de;
-}
-th.topth {
-    width: 10%;
-    height: 30px;
-    text-align: center;
-}*/
-
-.popup_content{
-    position: relative;
-    width: 75%;
-}
 .list_content{
-    height: 55vh;
-    overflow-y: scroll;
-    display: -webkit-inline-box;
+    height: 50vh;
+/*    overflow-y: scroll;
+    display: -webkit-inline-box;*/
 }
 
-table.list{
-    border: 2px #000000 solid;
-    border-collapse: collapse;
-    width: auto;
-    margin-left: 0.3vw;
-}
+
 

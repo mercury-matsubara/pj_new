@@ -24,6 +24,9 @@ class PjInsertPopup extends ListPage
         // code取得時必要
         $filename_insert = $filename_array[0] . "_1";
         $this->prFileNameInsert = $filename_insert;
+        $column = $this->prContainer->pbPageSetting['page_columns'];
+        $head = $this->prContainer->pbPageSetting['use_maintable_num'];
+        $pop_array = str_replace($head,"pop",$column);
         // 表示ボタン押下時
         if($flg === true){
             return;
@@ -33,8 +36,10 @@ class PjInsertPopup extends ListPage
         $search = $formStrArray[0];			//0はフォーム用HTML
         $html = "";
         $html .='<div class = "popup_content" >';
-        $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
         $html .='<input type="hidden" id="clear_'.$filename.'" value = "'.$this->prContainer->pbPageSetting['sech_form_num'].'" >';
+        $html .='<input type="hidden" id="pop_column" value = "'.$pop_array.'" >';
+        $html .='<input type="hidden" id="pop_filename" value = "'.$page_id.'" >';
+        $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
         $html .= $search;
         $html .='</fieldset></td><td valign="bottom">';
         $html .='<input type="button" id="search_'.$page_id.'" value = "表示" class="free" data-action="popupAjax.php?id='.$page_id.'" onclick="ajaxSearch(\''.$page_id.'\')"></td>';

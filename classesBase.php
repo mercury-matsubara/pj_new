@@ -675,7 +675,7 @@ class BasePage extends BaseObject
                     $link = $this->prContainer->pbParamSetting[$colum]['link_to'];
                     //ポップアップ登録押下時の反映ID取得
                     $popupKey = $this->prContainer->pbParamSetting[$colum]['link_key'];
-                    $form_element_str = '<input type="button" id="popup" value="'.$form_value.'" popup-key="'.$popupKey.'" data-action="popupAjax.php?id='.$link.'">';
+                    $form_element_str = '<input type="button" id="popup" value="'.$form_value.'" itemnum="0" popup-key="'.$popupKey.'" data-action="popupAjax.php?id='.$link.'">';
                 }
 		else
 		{
@@ -1441,7 +1441,7 @@ class BasePage extends BaseObject
 
 	戻り値	list_html					リストhtml
 	************************************************************************************************************/
-	function makeListV2( $sql, &$post, $limit, $limitstart, $page_mode )
+	function makeListV2( $sql, &$post, $limit, $limitstart, $page_mode, $popup = 0 )
 	{	
 		//          変数          //
 		$columns_array = explode(',',$this->prContainer->pbPageSetting['page_columns']);
@@ -1532,11 +1532,15 @@ class BasePage extends BaseObject
 		{
 			if ($totalcount == $limitstart )
 			{
-				$list_html .= $totalcount."件中 ".($limitstart)."件〜".($limitstart + $listcount)."件 表示中";	// 件数表示作成
+                            // 件数表示作成
+                            //$list_html .= $totalcount."件中 ".($limitstart)."件〜".($limitstart + $listcount)."件 表示中";
+                            $list_html .= "<div>".$totalcount . "件中 " . ($limitstart) . "件〜" . ($limitstart + $listcount) . "件 表示中</div>";
 			}
 			else
 			{
-				$list_html .= $totalcount."件中 ".($limitstart + 1)."件〜".($limitstart + $listcount)."件 表示中";	// 件数表示作成
+                            // 件数表示作成
+                            // $list_html .= $totalcount."件中 ".($limitstart + 1)."件〜".($limitstart + $listcount)."件 表示中";
+                            $list_html .= "<div>".$totalcount . "件中 " . ($limitstart + 1) . "件〜" . ($limitstart + $listcount) . "件 表示中</div>"; // 件数表示作成
 			}
 		}
 		if($page_mode === PAGE_COUNT_ONLY){
@@ -1600,7 +1604,12 @@ class BasePage extends BaseObject
 			{
 				$list_html .='<tr  class="' .$class. '">';	//行開始
 			}
-			$list_html .= $this->makeTableTd('', $columns_array, $column_width_array, $herf_link_array, $result_row, $table_id, $uniqueCount);
+                        if($popup === 0) {
+                            $list_html .= $this->makeTableTd('', $columns_array, $column_width_array, $herf_link_array, $result_row, $table_id, $uniqueCount);
+                        } else {
+                            $list_html .= $this->createPopupTableTd('', $columns_array, $column_width_array,  $result_row, $table_id, $uniqueCount);
+                        }
+			
 			$list_html .= "</tr>\n";
 			
 			//******************** アコーディオン ************************
@@ -2636,4 +2645,210 @@ class BasePage extends BaseObject
             }
             return $pulldown;
     }
+    
+    
+    /**
+    * ポップアップリスト作成関数
+    */
+   function createPopupList($sql, &$post, $limit, $limitstart, $page_mode) {
+
+        //          変数          //
+        $columns_array = explode(',', $this->prContainer->pbPageSetting['page_columns']);
+        $isCheckBox = $this->prContainer->pbPageSetting['isCheckBox'];
+        $isNo = $this->prContainer->pbPageSetting['isNo'];
+        $main_table = $this->prContainer->pbPageSetting['use_maintable_num'];
+        $table_id = mb_strtoupper($main_table);
+        $column_width_array = explode(',',$this->prContainer->pbPageSetting['column_width']);
+        $herf_link_array = explode(',',$this->prContainer->pbPageSetting['herf_link']);
+        
+        $list_html = "";
+        $counter = 1;
+        $class = "";
+        $totalcount = 0;
+        $listcount = 0;
+        $result = array();
+        $judge = false;
+
+        //------------------------//
+        //          処理          //
+        //------------------------//
+        // db接続関数実行
+        $con = dbconect();
+
+        // クエリ発行(カウント文)
+        if ($page_mode !== PAGE_NONE) {
+            $result = $con->query($sql[1]) or ( $judge = true);
+            if ($judge) {
+                error_log($con->error, 0);
+                $judge = false;
+            }
+            while ($result_row = $result->fetch_array(MYSQLI_ASSOC)) {
+                $totalcount = $result_row['COUNT(*)'];
+            }
+        }
+
+        //SQL文成形
+        $sql[0] = substr($sql[0], 0, -1);      // 最後の';'削除
+        $sql[0] .= $limit . ";";        // 「LIMIT」追加
+        // クエリ発行(実データ取得)
+        $result_v2 = $con->query($sql[0]) or ( $judge = true);
+        if ($judge) {
+            error_log($con->error, 0);
+            $judge = false;
+        }
+        $listcount = $result_v2->num_rows;      // 検索結果件数取得
+        if ($listcount === 0) {
+            return "該当データが登録されていません。<br>";
+        }
+
+        //フラグがONの場合のみ件数表示
+        if ($page_mode !== PAGE_NONE) {
+            if ($totalcount == $limitstart) {
+                $list_html .= "<div>".$totalcount . "件中 " . ($limitstart) . "件〜" . ($limitstart + $listcount) . "件 表示中</div>"; // 件数表示作成
+            } else {
+                $list_html .= "<div>".$totalcount . "件中 " . ($limitstart + 1) . "件〜" . ($limitstart + $listcount) . "件 表示中</div>"; // 件数表示作成
+            }
+        }
+        
+        
+        //<table>開始
+        $list_html .= "<table class ='list'><thead><tr>";
+        //チェックボックス有無
+        if ($isCheckBox != 0) {
+            $list_html .= "<th><a class ='head'>選択</a></th>";
+        }
+        //No.表示有無
+        if ($isNo == 1) {
+            $list_html .= "<th><a class ='head'>No.</a></th>";
+        }
+        $labels_array = explode(',', $this->prContainer->pbPageSetting['column_labels']);
+        //項目名（ここがヘッダの主要構成箇所）
+        for ($i = 0; $i < count($labels_array); $i++) {
+            $label = str_replace('※', '', $labels_array[$i]);
+            $label = str_replace('＊', '', $label);
+            $list_html .= "<th class ='textoverflow' ><a class ='head'>" . $label . "</a></th>";
+        }
+        
+        //ここまでがtableヘッダ部分
+        $list_html .= "</tr></thead>\n";
+
+        //ここからデータ部分
+        $list_html .= "<tbody>";
+        //取得行数分実行
+        while ($result_row = $result_v2->fetch_array(MYSQLI_ASSOC)) {
+            //ループ変数クリア
+            $class = '';
+            $uniqueCount = $limitstart + $counter;
+
+            //行のスプライト表示用に、1行毎にIDを変える
+            if (($counter % 2) == 1) {
+                $class = "stripe_none";
+            } else {
+                $class = "stripe";
+            }
+            
+            // 一行書く
+            $list_html .= '<tr  class="' . $class . '">'; //行開始
+            $list_html .= $this->makeTableTd('', $columns_array, $column_width_array, $herf_link_array, $result_row, $table_id, $uniqueCount);
+            $list_html .= "</tr>\n";
+
+            
+            //カウント++
+            $counter++;
+        }
+        // <tabel>終了
+        $list_html .= "</tbody></table>";
+        //ﾘｽﾄの数をメンバにいれる
+        $this->prListCount = $counter - 1;
+        
+        return $list_html;
+    }
+    
+    /**
+     * ポップアップtable:td作成
+     */
+    function createPopupTableTd($class_origin, &$columns_array, &$column_width_array, &$result_row, $table_id, $rowNo){
+        //戻り値
+        $rowHtml = ''; //行開始
+
+        $isCheckBox = $this->prContainer->pbPageSetting['isCheckBox'];
+        $isNo = $this->prContainer->pbPageSetting['isNo'];
+        $disabled = '';
+
+        //チェックボックス
+        if ($isCheckBox != 0) {
+            if ($isCheckBox == 1) {
+                $code = getCode($this->prFileNameInsert);
+                $rowHtml .= "<td class = 'center'><input type = 'checkbox' class = 'checkBox' name ='check_" . $result_row[$code] . "' id = 'checkid_" . $result_row[$code] . "'";
+                if (isset($post['check_' . $result_row[$code]])) {
+                    $rowHtml .= " checked ";
+                }
+                $rowHtml .= ' onclick="this.blur();this.focus();" ></td>';
+            } else {
+                $code = getCode($this->prFileNameInsert);
+                //ラジオボタン
+                $rowHtml .= "<td class = '" . $class_origin . " center'><input type = 'radio' name ='frmSAIYO' id = 'frmSAIYO' value='" . $result_row[$code] . "'>";
+            }
+        }
+        //No.表示
+        if ($isNo == 1) {
+            $rowHtml .= "<td class='" . $class_origin . " sequence'><a class='body'>" . $rowNo . "</a></td>";
+        }
+
+        //実データ列
+        for ($i = 0; $i < count($columns_array); $i++) {
+            $column = $columns_array[$i];
+            if ($column === '' || $column === 'sp01' || $column === 'sp02') { //ブランクは飛ばす
+                $rowHtml .= '<td class="center">' . $column . '</td>';
+                continue;
+            }
+            //何度も見るので設定値を最初に絞る
+            $column_setting = $this->prContainer->pbParamSetting[$column];
+            //設定ファイルから設定値を取得
+            $field_name = $column_setting['column'];
+            $format = $column_setting['format'];
+            $type = $column_setting['form1_type'];
+            $valigin = $column_setting['list_align'];
+            $value = $result_row[$field_name];
+
+            //フォーマット指定
+            if ($format != 0) {
+                $value = format_change($format, $value, $type);
+            }
+
+            //列幅指定
+            $td_width = "";
+            if (count($column_width_array) > $i) {
+                //列幅の固定？
+                if ($column_width_array[$i] == '1') {
+                    //固定であるなら、サイズ指定を使用して幅を設定
+                    $width = $column_setting['form1_size'] * 4;
+                    $td_width = " style='width:" . $width . "px;'";
+                }
+            }
+
+            //数値の場合は右寄せ
+            switch ($valigin) {
+                case 1:
+                    $class = $class_origin . " center";
+                    break;
+                case 2:
+                    $class = $class_origin . " right";
+                    break;
+                default:
+                    //$class = "";
+                    $class = "textoverflow";
+            }
+            //JS用のid設定
+            $id = "pop".$field_name;
+            
+            //書き込み
+            $rowHtml .= "<td id='".$id."' class='" . $class . "'" . $td_width . " ><a class ='body'>" . $value . "</a></td>";
+        }
+
+        return $rowHtml;
+    }
 }
+
+
+

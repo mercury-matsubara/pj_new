@@ -1,6 +1,7 @@
 
 //反映ID
 var popupKey = '';
+var itemnum = '';
 
 /**
  * ポップアップ画面作成
@@ -10,8 +11,10 @@ $(function(){
     $('input#popup').each(function () {
         // ボタンクリック時イベント
         $(this).on("click", function (event) {
-            // 反映ID取得
+            // 反映id取得
             popupKey = $(this).attr('popup-key');
+            // 行数取得
+            itemnum = $(this).attr('itemnum');
             // URL
             let contentsPath = $(this).attr('data-action');
             // 非同期通信
@@ -52,36 +55,34 @@ $(function(){
     // データを取得して返す関数
     var getkRowsData = function() {
     var data = [];
+    var popupcolumn = $('#pop_column').val();
+    let column = popupcolumn.split(',');
     $('input[name="frmSAIYO"]:checked').each(function(i, elm) {
         
         // 変数定義
         var $input = $(elm),
-            $row = $input.closest('tr'),
-            rowData;
-        // 項目値取得
-        if($row.length) {
-            rowData = {
-                number: $row.find('.center').text(),
-                name: $row.find('.textoverflow').text(),
-                inputValue: $input.val()
-            };
-        // チェックされている項目を配列へ
-        data[i] = rowData;
-      }
+            row = $input.closest('tr');
+        for(var i = 0; i < column.length; i++){
+            data[i] = row.find('#' + column[i] ).text();
+        }
     });
     return data;
 };
 
   // 登録ボタン押下時
   $('#insert').on('click', function() {
-    var rowsData = getkRowsData();
-    // カンマ区切り
-    let key = popupKey.split(',');
-    $('#form_' + key[0] + '_0').val(rowsData[0]['number']);
-    $('#form_' + key[1] + '_0').val(rowsData[0]['name']);
-    $(".modal__content").html("");
-    $('.js-modal').fadeOut();
-    return false;
+        
+
+        var rowsData = getkRowsData();
+        // カンマ区切り
+        let key = popupKey.split(',');
+        // 項目にセット
+        for (var i = 0; i < key.length; i++) {
+            $('#form_' + key[i] + '_' + itemnum).val(rowsData[i]);
+        }
+        $(".modal__content").html("");
+        $('.js-modal').fadeOut();
+        return false;
     });
 });
 
@@ -133,3 +134,4 @@ function ajaxSearch(filename){
     });
     
 }
+

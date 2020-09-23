@@ -12,7 +12,7 @@ class Kousu extends InsertPage
     function makeScriptPart()
     {
         $html = parent::makeScriptPart();
-
+        $html .= '<script src="./customJS/popup.js"></script>';
         $html .= '<script src="./customJS/kousu.js"></script>';
 
         return $html;
@@ -50,10 +50,14 @@ class Kousu extends InsertPage
                 $_SESSION['error'] = "";
             }
             //日付
-            $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
+            // $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
+            $day = "<h3 class='pjday'>".$_GET['KOUSU_1_button?date']."</h3>";
             //登録ボタン、戻るボタン
             $button = '<input type="button" name = "insert" value = "登録" class="free" onClick = "Regist()">';
             $button .= '<a href="main.php?TOP_5_button=&"><input type="button" name = "back" value = "戻る" class="free"></a>';
+            // コピー日付
+            $copydate = '<input type="text" id = "copydate" class="copytime" readonly >';
+            $copydate .= '<input type="button" name = "copy" value = "コピー" class="copybutton" onClick = "">';
             //定時時間、残業時間
             $zangyoTotal = "0.00";
             $teiziTotal = "0.00";
@@ -61,8 +65,11 @@ class Kousu extends InsertPage
 //            {
 //                $zangyoTotal += $this->data[$i]['DETALECHARGE']; 
 //            }
-            $time = '<input type="text" class="top_text time" id="zangyo_total" value="'.$zangyoTotal.'">';
-            $time .= '<input type="text" class="top_text time" id="teizi_total" value="'.$teiziTotal.'">';
+            // $time = '<div class="zangyobox">残業：<span class="top_text time" id="zangyo_total">'.$zangyoTotal.'</span></div>';
+            //$time .= '<div class="teizibox">定時：<input type="text" class="top_text time" id="teizi_total" value="'.$teiziTotal.'"></div>';
+            $time = '<span style="margin-left: 10%;">定時：</span><span class="teizibox">'.$teiziTotal.'</span>';
+            $time .= '<span style="margin-left: 2%;">残業：</span><span class="zangyobox">'.$zangyoTotal.'</span>';
+            
             //テーブル作成
             $filename = $this->prContainer->pbFileName;
             $column = explode(",",$this->prContainer->pbFormIni[$filename]['page_columns']);
@@ -70,6 +77,7 @@ class Kousu extends InsertPage
             {
                 $columnName[] = $this->prContainer->pbParamSetting[$column[$i]]['item_name'];
             }
+            // 入力項目作成
             $table = $this->createTable($columnName,$column);
             
             //出力HTML
@@ -77,12 +85,16 @@ class Kousu extends InsertPage
             $html .= '<form name="form">';
             $html .= '<div class = "pad">';
             $html .= $day;
+            $html .= '<div class = "line">';
             $html .= $button;
+            $html .= $copydate;
             $html .= $time;
+            $html .= '</div>';
             $html .= $table;
             $html .= '</div>';
             $html .= '</form>';
-
+            // ポップアップ作成
+            $html .= $this->createPopUp();
             return $html;
     }
     /**
@@ -97,28 +109,24 @@ class Kousu extends InsertPage
             $html = '';
             if( isPermission($this->prContainer->pbFileName) )
             {
-                    //ダイアログ
-                    $html .= '<div id="dialog" title="入力確認" style="display:none;">
-                                            <p>この内容でよろしいでしょうか？</p>
-                                            </div>';
-                    // 読取指定
-                    if($this->prContainer->pbPageSetting['form_type'] !== '2')
-                    {
+                //ダイアログ
+                $html .= '<div id="dialog" title="入力確認" style="display:none;">
+                                                <p>この内容でよろしいでしょうか？</p>
+                                                </div>';
+                // 読取指定
+                if ($this->prContainer->pbPageSetting['form_type'] !== '2') {
 
-                    }
+                }
 
-                    //遷移ボタン
-                    $linkValue = '';
-                    if( isset( $this->prContainer->pbInputContent['edit_list_id'] ) )
-                    {
-                            $linkValue = 'edit_list_id='.$this->prContainer->pbInputContent['edit_list_id'];
-                    }
-                    else if(isset( $this->prContainer->pbListId))//ステータス更新時GET情報がないため
-                    {
-                            $linkValue = 'edit_list_id='.$this->prContainer->pbListId;
-                    }
-                    $html .= $this->makeButtonV2($this->prContainer->pbFileName, 'bottom', STEP_INSERT, $linkValue);
-            }
+                //遷移ボタン
+                $linkValue = '';
+                if (isset($this->prContainer->pbInputContent['edit_list_id'])) {
+                    $linkValue = 'edit_list_id=' . $this->prContainer->pbInputContent['edit_list_id'];
+                } else if (isset($this->prContainer->pbListId)) {//ステータス更新時GET情報がないため
+                    $linkValue = 'edit_list_id=' . $this->prContainer->pbListId;
+                }
+                $html .= $this->makeButtonV2($this->prContainer->pbFileName, 'bottom', STEP_INSERT, $linkValue);
+        }
             $html .='</div>';
             $html .= '</form>';
             return $html;
@@ -128,40 +136,49 @@ class Kousu extends InsertPage
      */
     function createTable($post,$column)
     {
+        
+        //ポップアップ対象のファイル名取得
+        $progress_link = $this->prContainer->pbParamSetting[$column[8]]['link_to'];
+        $koutei_link = $this->prContainer->pbParamSetting[$column[9]]['link_to'];
+        //ポップアップ登録押下時の反映ID取得
+        $progress_popupKey = $this->prContainer->pbParamSetting[$column[8]]['link_key'];
+        $koutei_popupKey = $this->prContainer->pbParamSetting[$column[9]]['link_key'];
         $html = "<table class='list'>";
         $html .="   <thead>";
         $html .="       <tr>";
-        $html .="           <th >$post[0]</th>";
-        $html .="           <th >$post[1]</th>";
+        $html .="           <th style='width: 10%;'>$post[0]</th>";
+        $html .="           <th style='width: 7%;'>$post[1]</th>";
         $html .="           <th >$post[2]</th>";
-        $html .="           <th ></th>";        
-        $html .="           <th >$post[3]</th>";
-        $html .="           <th >$post[4]</th>";
-        $html .="           <th ></th>";        
-        $html .="           <th >$post[5]</th>";
-        $html .="           <th >$post[6]</th>";
+        $html .="           <th style='width: 5%;'></th>";        
+        $html .="           <th style='width: 6%;'>$post[3]</th>";
+        $html .="           <th style='width: 6%;'>$post[4]</th>";
+        $html .="           <th style='width: 5%;'></th>";        
+        $html .="           <th style='width: 6%;'>$post[5]</th>";
+        $html .="           <th style='width: 6%;'>$post[6]</th>";
         $html .="       </tr>";
         $html .="   </thead>";
         $html .="   <tbody>";
-        for($i=0;$i<9;$i++)
+        for($i=0;$i<10;$i++)
         {
             if($i%2 === 1)
             {
-                $html .="       <tr class='stripe'>";
+                $html .="   <tr class='stripe'>";
             }
             else
             {
-                $html .="       <tr class='stripe_none'>";
+                $html .="   <tr class='stripe_none'>";
             }
-            $html .="           <td ><input type='text' class='pjnum' name='form_".$column[0]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='eda' name='form_".$column[1]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='pjname' name='form_".$column[2]."_".$i."'></td>";
-            $html .="           <td ><input type='button' name='4' value='プロジェクト・枝番選択'></td>";        
-            $html .="           <td ><input type='text' class='kouid' name='form_".$column[3]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='kouname' name='form_".$column[4]."_".$i."'></td>";
-            $html .="           <td ><input type='button' name='7' value='工程選択'></td>";        
-            $html .="           <td ><input type='text' class='teizi' name='form_".$column[5]."_".$i."' onchange='calculateReturnTeizi()'></td>";
-            $html .="           <td ><input type='text' class='zangyo' name='form_".$column[6]."_".$i."' onchange='calculateReturnZangyo()'></td>";
+            $html .="           <td ><input type='text' class='pjnum' id='form_".$column[0]."_".$i."' name='form_".$column[0]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='eda' id='form_".$column[1]."_".$i."' name='form_".$column[1]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='pjname' id='form_".$column[2]."_".$i."' name='form_".$column[2]."_".$i."'></td>";
+            $html .='           <td ><input type="button" id="popup" value="PJ詳細選択" itemnum = '.$i.' popup-key="' . $progress_popupKey . '" data-action="popupAjax.php?id=' . $progress_link . '"></td>'; 
+            $html .="           <td ><input type='text' class='kouid' id='form_".$column[3]."_".$i."' name='form_".$column[3]."_".$i."'></td>";
+            $html .="           <td ><input type='text' class='kouname' id='form_".$column[4]."_".$i."' name='form_".$column[4]."_".$i."'></td>";
+            $html .='           <td ><input type="button" id="popup" value="工程選択" itemnum = '.$i.' popup-key="' . $koutei_popupKey . '" data-action="popupAjax.php?id=' . $koutei_link . '"></td>';        
+            $html .="           <td ><input type='text' class='teizi' id='form_".$column[5]."_".$i."' name='form_".$column[5]."_".$i."' onchange='calculatetime(\"teizi\",\"teizibox\")'></td>";
+            $html .="           <td ><input type='text' class='zangyo' id='form_".$column[6]."_".$i."' name='form_".$column[6]."_".$i."' onchange='calculatetime(\"zangyo\",\"zangyobox\")'></td>";
+//            $html .="           <td ><input type='text' class='teizi' id='form_".$column[5]."_".$i."' name='form_".$column[5]."_".$i."' onchange='calculatetime(teizi,teizibox)'></td>";
+//            $html .="           <td ><input type='text' class='zangyo' id='form_".$column[6]."_".$i."' name='form_".$column[6]."_".$i."' onchange='calculatetime(zangyo,zangyobox)'></td>";
             $html .="       </tr>";
         }
         $html .="   </tbody>";

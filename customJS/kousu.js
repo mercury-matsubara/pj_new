@@ -1,39 +1,35 @@
 
-//定時時間の再計算
-function calculateReturnTeizi()
+$(function(){
+   
+    $("#copydate").datepicker({
+        showOn: 'button',
+        buttonImage: './image/icon.gif',
+        buttonImageOnly: true,
+        maxDate: 0
+    });
+});
+
+//時間の計算
+function calculatetime(value,act)
 {
     var time = 0;   
     var total = 0;
-    $('.teizi').each(function() {
-            time = ($(this).val());
-            
-            if(time === "")
-            {
-                time = 0;
-            }
-            
-            //計算
-            total += parseInt(time) ;
-        });
-        //合計セット
-        $('#teizi_total').val(total);
+    $('.' + value).each(function () {
+        time = ($(this).val());
+
+        if (time === "")
+        {
+            time = 0;
+        }
+
+        //計算
+        total += parseFloat(time);
+    });
+    if (value === 'teizi' && total > 7.75) {
+        alert("7.75を超えています。");
+    }
+    //合計セット
+    $('.' + act).text(total.toFixed(2));
+    return;
 }
-//残業時間の再計算
-function calculateReturnZangyo()
-{
-    var time = 0;   
-    var total = 0;
-    $('.zangyo').each(function() {
-            time = ($(this).val());
-            
-            if(time === "")
-            {
-                time = 0;
-            }
-            
-            //計算
-            total += parseInt(time) ;
-        });
-        //合計セット
-        $('#zangyo_total').val(total);
-}
+
