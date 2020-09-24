@@ -14,22 +14,23 @@ const PAGE_ALL = 1;
 const PAGE_COUNT_ONLY = 2;
 
 
-function start(){
-//	if ((isset($_SESSION['userName']) == false) || (isset($_SESSION['pre_post'] ) == false))
-//	{
-//		header("location:".(empty($_SERVER['HTTPS'])? "http://" : "https://").
-//							$_SERVER['HTTP_HOST'].dirname($_SERVER["REQUEST_URI"])."/retry.php");
-//		exit();
-//	}
-}
-function startJump($post){
-//	$judge = false;
-//	if (isset($_SESSION['userName']) == false || count($post) == 0)
-//	{
-//		header("location:".(empty($_SERVER['HTTPS'])? "http://" : "https://").
-//							$_SERVER['HTTP_HOST'].dirname($_SERVER["REQUEST_URI"])."/retry.php");
-//		exit();
-//	}
+function kousuSQL($syain,$day){
+    
+    $searchday = str_replace("/","-",$day);
+    $sql = "SELECT PROJECTNUM,EDABAN,PJNAME,KOUTEIID,KOUTEINAME,TEIZITIME,ZANGYOUTIME
+            FROM progressinfo 
+            LEFT JOIN kouteiinfo USING (3CODE ) 
+            LEFT JOIN projectditealinfo USING (6CODE ) 
+            LEFT JOIN syaininfo USING (4CODE ) 
+            LEFT JOIN projectinfo USING (5CODE ) 
+            LEFT JOIN projectnuminfo USING (1CODE ) 
+            LEFT JOIN edabaninfo USING (2CODE ) 
+            WHERE 7PJSTAT = 1 
+            AND convert(replace(replace(syaininfo.STAFFID,' ',''),'　','') using utf8) COLLATE utf8_unicode_ci LIKE '$syain' 
+            AND  SAGYOUDATE Like '$searchday'";
+    return $sql;
+    
+    
 }
 
 function convertGet2Post()

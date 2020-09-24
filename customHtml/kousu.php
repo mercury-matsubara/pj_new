@@ -1,4 +1,11 @@
 <?php
+
+require_once("classesPageContainer.php");
+require_once("classesBase.php");
+require_once("classesHtml.php");
+require_once("classesPageFactory.php");
+require_once("classesExecute.php");
+
 class Kousu extends InsertPage
 {
     /**
@@ -78,7 +85,7 @@ class Kousu extends InsertPage
                 $columnName[] = $this->prContainer->pbParamSetting[$column[$i]]['item_name'];
             }
             // 入力項目作成
-            $table = $this->createTable($columnName,$column);
+            $table = $this->createTable($columnName,$column,$_GET['KOUSU_1_button?date']);
             
             //出力HTML
             $html = '<br>';
@@ -90,7 +97,9 @@ class Kousu extends InsertPage
             $html .= $copydate;
             $html .= $time;
             $html .= '</div>';
+            $html .= "<table class='list'>";
             $html .= $table;
+            $html .="</table>";
             $html .= '</div>';
             $html .= '</form>';
             // ポップアップ作成
@@ -134,8 +143,30 @@ class Kousu extends InsertPage
     /*
      * テーブル作成
      */
-    function createTable($post,$column)
+    function createTable($post,$column,$day)
     {
+        
+        $sql = kousuSQL($_SESSION['STAFFID'], $day);
+        // db接続関数実行
+        $con = dbconect();
+        $result = $con->query($sql);// クエリ発行
+	if (!$result) {
+            error_log($con->error, 0);
+            exit();
+        }
+        $count = 0;
+        $workData = array();
+        while($result_row = $result->fetch_array(MYSQLI_ASSOC))
+        {
+            $workData[$count]['PROJECTNUM'] = $result_row['PROJECTNUM'];
+            $workData[$count]['EDABAN'] = $result_row['EDABAN'];
+            $workData[$count]['PJNAME'] = $result_row['PJNAME'];
+            $workData[$count]['KOUTEIID'] = $result_row['KOUTEIID'];
+            $workData[$count]['KOUTEINAME'] = $result_row['KOUTEINAME'];
+            $workData[$count]['TEIZITIME'] = $result_row['TEIZITIME'];
+            $workData[$count]['ZANGYOUTIME'] = $result_row['ZANGYOUTIME'];
+            $count++;
+        }
         
         //ポップアップ対象のファイル名取得
         $progress_link = $this->prContainer->pbParamSetting[$column[8]]['link_to'];
@@ -143,11 +174,11 @@ class Kousu extends InsertPage
         //ポップアップ登録押下時の反映ID取得
         $progress_popupKey = $this->prContainer->pbParamSetting[$column[8]]['link_key'];
         $koutei_popupKey = $this->prContainer->pbParamSetting[$column[9]]['link_key'];
-        $html = "<table class='list'>";
-        $html .="   <thead>";
+        
+        $html ="   <thead>";
         $html .="       <tr>";
-        $html .="           <th style='width: 10%;'>$post[0]</th>";
-        $html .="           <th style='width: 7%;'>$post[1]</th>";
+        $html .="           <th style='width: 8%;'>$post[0]</th>";
+        $html .="           <th style='width: 8%;'>$post[1]</th>";
         $html .="           <th >$post[2]</th>";
         $html .="           <th style='width: 5%;'></th>";        
         $html .="           <th style='width: 6%;'>$post[3]</th>";
@@ -168,21 +199,44 @@ class Kousu extends InsertPage
             {
                 $html .="   <tr class='stripe_none'>";
             }
-            $html .="           <td ><input type='text' class='pjnum' id='form_".$column[0]."_".$i."' name='form_".$column[0]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='eda' id='form_".$column[1]."_".$i."' name='form_".$column[1]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='pjname' id='form_".$column[2]."_".$i."' name='form_".$column[2]."_".$i."'></td>";
+            $project = isset($workData[$i]["PROJECTNUM"]) ? $workData[$i]["PROJECTNUM"] : "";
+            $edaban = isset($workData[$i]["EDABAN"]) ? $workData[$i]["EDABAN"] : "";
+            $pjname = isset($workData[$i]["PJNAME"]) ? $workData[$i]["PJNAME"] : "";
+            $kouteid = isset($workData[$i]["KOUTEIID"]) ? $workData[$i]["KOUTEIID"] : "";
+            $kouteiname = isset($workData[$i]["KOUTEINAME"]) ? $workData[$i]["KOUTEINAME"] : "";
+            $teizitime = isset($workData[$i]["TEIZITIME"]) ? $workData[$i]["TEIZITIME"] : '';
+            $zangyoutime = isset($workData[$i]["ZANGYOUTIME"]) ? $workData[$i]["ZANGYOUTIME"] : "";
+            
+            // PJナンバ
+            $html .="           <td ><input type='text' value='".$project."' class='pjnum' "
+                    . "id='form_".$column[0]."_".$i."' name='form_".$column[0]."_".$i."'></td>";
+            // 枝番
+            $html .="           <td ><input type='text' value='".$edaban."' class='eda' "
+                    . "id='form_".$column[1]."_".$i."' name='form_".$column[1]."_".$i."'></td>";
+            // 作業名
+            $html .="           <td ><input type='text' value='".$pjname."' class='pjname' "
+                    . "id='form_".$column[2]."_".$i."' name='form_".$column[2]."_".$i."'></td>";
+            // ポップアップ
             $html .='           <td ><input type="button" id="popup" value="PJ詳細選択" itemnum = '.$i.' popup-key="' . $progress_popupKey . '" data-action="popupAjax.php?id=' . $progress_link . '"></td>'; 
-            $html .="           <td ><input type='text' class='kouid' id='form_".$column[3]."_".$i."' name='form_".$column[3]."_".$i."'></td>";
-            $html .="           <td ><input type='text' class='kouname' id='form_".$column[4]."_".$i."' name='form_".$column[4]."_".$i."'></td>";
-            $html .='           <td ><input type="button" id="popup" value="工程選択" itemnum = '.$i.' popup-key="' . $koutei_popupKey . '" data-action="popupAjax.php?id=' . $koutei_link . '"></td>';        
-            $html .="           <td ><input type='text' class='teizi' id='form_".$column[5]."_".$i."' name='form_".$column[5]."_".$i."' onchange='calculatetime(\"teizi\",\"teizibox\")'></td>";
-            $html .="           <td ><input type='text' class='zangyo' id='form_".$column[6]."_".$i."' name='form_".$column[6]."_".$i."' onchange='calculatetime(\"zangyo\",\"zangyobox\")'></td>";
-//            $html .="           <td ><input type='text' class='teizi' id='form_".$column[5]."_".$i."' name='form_".$column[5]."_".$i."' onchange='calculatetime(teizi,teizibox)'></td>";
-//            $html .="           <td ><input type='text' class='zangyo' id='form_".$column[6]."_".$i."' name='form_".$column[6]."_".$i."' onchange='calculatetime(zangyo,zangyobox)'></td>";
+            // 工程ID
+            $html .="           <td ><input type='text' value='".$kouteid."' class='kouid' "
+                    . "id='form_".$column[3]."_".$i."' name='form_".$column[3]."_".$i."'></td>";
+            // 工程名
+            $html .="           <td ><input type='text' value='".$kouteiname."' class='kouname' "
+                    . "id='form_".$column[4]."_".$i."' name='form_".$column[4]."_".$i."'></td>";
+            // ポップアップ
+            $html .='           <td ><input type="button" id="popup" value="工程選択" itemnum = '.$i.' popup-key="' . $koutei_popupKey . '" data-action="popupAjax.php?id=' . $koutei_link . '"></td>';  
+            // 定時時間
+            $html .="           <td ><input type='text' value='".$teizitime."' class='teizi' "
+                    . "id='form_".$column[5]."_".$i."' name='form_".$column[5]."_".$i."' onchange='calculatetime(\"teizi\",\"teizibox\")'></td>";
+            // 残業時間
+            $html .="           <td ><input type='text' value='".$zangyoutime."' class='zangyo' "
+                    . "id='form_".$column[6]."_".$i."' name='form_".$column[6]."_".$i."' onchange='calculatetime(\"zangyo\",\"zangyobox\")'></td>";
+            
             $html .="       </tr>";
         }
         $html .="   </tbody>";
-        $html .="</table>";
+        
         return $html;
     }
 }
