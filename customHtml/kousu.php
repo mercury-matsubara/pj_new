@@ -79,7 +79,8 @@ class Kousu extends InsertPage
             
             //テーブル作成
             $filename = $this->prContainer->pbFileName;
-            $column = explode(",",$this->prContainer->pbFormIni[$filename]['page_columns']);
+            $columnRaw = $this->prContainer->pbFormIni[$filename]['page_columns'];
+            $column = explode(",",$columnRaw);
             for($i=0;$i<count($column);$i++)
             {
                 $columnName[] = $this->prContainer->pbParamSetting[$column[$i]]['item_name'];
@@ -97,6 +98,7 @@ class Kousu extends InsertPage
             $html .= $copydate;
             $html .= $time;
             $html .= '</div>';
+            $html .='<input type="hidden" id="columnRaw" value = "'.$columnRaw.'" >';
             $html .= "<table class='list'>";
             $html .= $table;
             $html .="</table>";
