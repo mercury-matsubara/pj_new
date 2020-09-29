@@ -188,6 +188,10 @@ class PageFactory
                         {
                                 $executer = new StaffMoneySetExecuteSQL($container);
                         }
+                        else if($filename === 'KOUSU_1')
+                        {
+                                $executer = new kousuExecute($container);
+                        }
                         if($executer !== null)
 			{
 				return $executer;

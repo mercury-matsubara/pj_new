@@ -20,6 +20,7 @@ function readRequire()
     $php[] = "./customExecuter/pjtourokuExecute.php";
     $php[] = "./customExecuter/progressExecute.php";
     $php[] = "./customExecuter/staffMoneySetExecute.php";
+    $php[] = "./customExecuter/kousuExecute.php";
     $php[] = "./customHtml/getsuzi.php";
     $php[] = "./customHtml/nenzi.php";
     $php[] = "./customHtml/pjend.php";

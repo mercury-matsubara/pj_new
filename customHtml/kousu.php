@@ -60,7 +60,7 @@ class Kousu extends InsertPage
             // $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
             $day = "<h3 class='pjday'>".$_GET['KOUSU_1_button?date']."</h3>";
             //登録ボタン、戻るボタン
-            $button = '<input type="button" name = "insert" value = "登録" class="free" onClick = "Regist()">';
+            $button = '<input type="button" id="regist" name = "comp" value = "登録" class="free">';
             $button .= '<a href="main.php?TOP_5_button=&"><input type="button" name = "back" value = "戻る" class="free"></a>';
             // コピー日付
             $copydate = '<input type="text" id = "copydate" class="copytime" readonly >';
@@ -90,8 +90,10 @@ class Kousu extends InsertPage
             
             //出力HTML
             $html = '<br>';
-            $html .= '<form name="form">';
+            $html .= '<form method="post" name="Comp" action="main.php?'.$this->prContainer->pbFileName.'" id="send" enctype="multipart/form-data" >';
             $html .= '<div class = "pad">';
+            $html .='<input type="hidden" name="step" value = "'.STEP_COMP.'" >';
+            $html .='<input type="hidden" name="date" value = "'.$_GET['KOUSU_1_button?date'].'" >';
             $html .= $day;
             $html .= '<div class = "line">';
             $html .= $button;
@@ -142,6 +144,7 @@ class Kousu extends InsertPage
             $html .= '</form>';
             return $html;
     }
+
     /*
      * テーブル作成
      */

@@ -24,42 +24,67 @@ $(function(){
         }
         var contentsPath = "kousuAjax.php?id=KOUSU_1";
         // 非同期通信
-            $.ajax(contentsPath,
-            {
-                type: 'get',
-                dataType: 'json',
-                data: {
-                    date: searchdate
-                }
-            })
-            .done(function (data)
-            {
-                // すべてクリア
-                $(".list").find(':text').val("");
-                var dataArray = data.results;
-                var dataCount = dataArray.length;
-                // データセット
-                for(var i = 0; i < dataCount; i++){
-                    $("#form_topPROJECTNUM_" + i).val(dataArray[i]['PROJECTNUM']);
-                    $("#form_topEDABAN_" + i).val(dataArray[i]['EDABAN']);
-                    $("#form_topPJNAME_" + i).val(dataArray[i]['PJNAME']);
-                    $("#form_topKOUTEIID_" + i).val(dataArray[i]['KOUTEIID']);
-                    $("#form_topKOUTEINAME_" + i).val(dataArray[i]['KOUTEINAME']);
-                    $("#form_topTEIZITIME_" + i).val(dataArray[i]['TEIZITIME']);
-                    $("#form_topZANGYOUTIME_" + i).val(dataArray[i]['ZANGYOUTIME']); 
-                }
+        $.ajax(contentsPath,
+        {
+            type: 'get',
+            dataType: 'json',
+            data: {
+                date: searchdate
+            }
+        })
+        .done(function (data)
+        {
+            // すべてクリア
+            $(".list").find(':text').val("");
+            var dataArray = data.results;
+            var dataCount = dataArray.length;
+            // データセット
+            for(var i = 0; i < dataCount; i++){
+                $("#form_topPROJECTNUM_" + i).val(dataArray[i]['PROJECTNUM']);
+                $("#form_topEDABAN_" + i).val(dataArray[i]['EDABAN']);
+                $("#form_topPJNAME_" + i).val(dataArray[i]['PJNAME']);
+                $("#form_topKOUTEIID_" + i).val(dataArray[i]['KOUTEIID']);
+                $("#form_topKOUTEINAME_" + i).val(dataArray[i]['KOUTEINAME']);
+                $("#form_topTEIZITIME_" + i).val(dataArray[i]['TEIZITIME']);
+                $("#form_topZANGYOUTIME_" + i).val(dataArray[i]['ZANGYOUTIME']); 
+            }
                 
-                // 時間再計算
-                calculatetime("teizi", "teizibox");
-                calculatetime("zangyo", "zangyobox");
-                return false;
-            })
-            .fail(function() {
-                // データ取得失敗
-                alert('データの取得に失敗しました。');
-                return false;
-            });
-        
+            // 時間再計算
+            calculatetime("teizi", "teizibox");
+            calculatetime("zangyo", "zangyobox");
+            return false;
+        })
+        .fail(function() {
+            // データ取得失敗
+            alert('データの取得に失敗しました。');
+            return false;
+        });
+    });
+    
+    // 登録ボタン押下時
+    $('#regist').on('click',function(){
+        // 時間計算
+        calculatetime("teizi","teizibox");
+        var teizi;
+        teizi = $('.teizibox').text();
+        if (teizi > 7.75 ) {
+            alert("7.75を超えています。");
+            return false;
+        }
+        else if(teizi < 7.75){
+            alert("7.75以下です。");
+            return false;
+        }
+        //エレメント作成
+        var ele = document.createElement("input");
+        //データを設定
+        ele.setAttribute("type", "hidden");
+        ele.setAttribute("name", "Comp");
+        ele.setAttribute("value", "");
+        // 要素を追加
+        $("#send").append(ele);
+        $("#send").submit();
+        return;
     });
 });
 
@@ -87,12 +112,7 @@ function calculatetime(value,act)
     }
     //合計セット
     $('.' + act).text(total.toFixed(2));
-//    if (value === 'teizi' && total > 7.75 ) {
-//        alert("7.75を超えています。");
-//    }
-//    else if(value === 'teizi' && total < 7.75){
-//        alert("7.75以下です。");
-//    }
+
     
     return;
 }

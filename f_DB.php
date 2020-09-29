@@ -1647,11 +1647,8 @@ function getCode($filename,$post="")
 {
     $code = "";
     
-    if($filename === "SYAINMASTER_1")           //社員マスタ
-    {
-        $code = "4CODE";
-    }
-    else if($filename === "PJNUMMASTER_1" || $filename === "PJNUMPOPUP_1" || $filename === "PJICHIRAN_1")          //ＰＪナンバマスタ
+
+    if($filename === "PJNUMMASTER_1" || $filename === "PJNUMPOPUP_1" )          //ＰＪナンバマスタ
     {
         $code = "1CODE";
     }
@@ -1663,18 +1660,23 @@ function getCode($filename,$post="")
     {
         $code = "3CODE";
     }
-    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1"  || $filename === "STAFFMONEYSET_2")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
+    else if($filename === "SYAINMASTER_1")           //社員マスタ
+    {
+        $code = "4CODE";
+    }
+    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1"  || $filename === "STAFFMONEYSET_2" || $filename === "PJICHIRAN_1")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
     {
         $code = "5CODE";
-    }
-    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3")  //PJ進捗
-    {
-        $code = "7CODE";
     }
     else if($filename === "PROGRESSPOPUP_1" || $filename === "TOPPOPUP_1")
     {
         $code = "6CODE";
     }
+    else if($filename === "PROGRESSINFO_1" || $filename === "PROGRESSINFO_3")  //PJ進捗
+    {
+        $code = "7CODE";
+    }
+    
 
     return $code;
 }

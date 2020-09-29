@@ -14,24 +14,6 @@ const PAGE_ALL = 1;
 const PAGE_COUNT_ONLY = 2;
 
 
-function kousuSQL($syain,$day){
-    
-    $searchday = str_replace("/","-",$day);
-    $sql = "SELECT PROJECTNUM,EDABAN,PJNAME,KOUTEIID,KOUTEINAME,TEIZITIME,ZANGYOUTIME
-            FROM progressinfo 
-            LEFT JOIN kouteiinfo USING (3CODE ) 
-            LEFT JOIN projectditealinfo USING (6CODE ) 
-            LEFT JOIN syaininfo USING (4CODE ) 
-            LEFT JOIN projectinfo USING (5CODE ) 
-            LEFT JOIN projectnuminfo USING (1CODE ) 
-            LEFT JOIN edabaninfo USING (2CODE ) 
-            WHERE 7PJSTAT = 1 
-            AND convert(replace(replace(syaininfo.STAFFID,' ',''),'　','') using utf8) COLLATE utf8_unicode_ci LIKE '$syain' 
-            AND  SAGYOUDATE Like '$searchday'";
-    return $sql;
-    
-    
-}
 
 function convertGet2Post()
 {
@@ -372,3 +354,71 @@ function loadDBRecord($table,$id)
 
 	return $values;
 }
+
+// 工数取得SQL
+function kousuSQL($syain,$day){
+    
+    $searchday = str_replace("/","-",$day);
+    $sql = "SELECT PROJECTNUM,EDABAN,PJNAME,KOUTEIID,KOUTEINAME,TEIZITIME,ZANGYOUTIME
+            FROM progressinfo 
+            LEFT JOIN kouteiinfo USING (3CODE ) 
+            LEFT JOIN projectditealinfo USING (6CODE ) 
+            LEFT JOIN syaininfo USING (4CODE ) 
+            LEFT JOIN projectinfo USING (5CODE ) 
+            LEFT JOIN projectnuminfo USING (1CODE ) 
+            LEFT JOIN edabaninfo USING (2CODE ) 
+            WHERE 7PJSTAT = 1 
+            AND convert(replace(replace(syaininfo.STAFFID,' ',''),'　','') using utf8) COLLATE utf8_unicode_ci LIKE '$syain' 
+            AND  SAGYOUDATE Like '$searchday'";
+    return $sql;
+
+}
+
+// 工数存在チェックSQL
+function kousuExistSQL($pronum,$eda,$syain){
+    
+    $sql = "select 6CODE from projectditealinfo 
+            inner join (select 5CODE from projectinfo 
+			left join projectnuminfo on projectinfo.1CODE = projectnuminfo.1CODE 
+			left join edabaninfo on projectinfo.2CODE = edabaninfo.2CODE 
+			where PROJECTNUM = '@01' 
+			AND EDABAN = '@02' ) as projectinfo on projectditealinfo.5CODE = projectinfo.5CODE 
+            where 4CODE = '@03'";
+    
+    $sql = str_replace("@01",$pronum,$sql);
+    $sql = str_replace("@02",$eda,$sql);
+    $sql = str_replace("@03",$syain,$sql);
+    
+    return $sql;
+
+}
+
+// 工程存在チェックSQL
+function kouteiExistSQL($id,$name){
+    
+    $sql = "select 3CODE from kouteiinfo 
+            where KOUTEIID = '@01' 
+            AND KOUTEINAME = '@02' ";
+    
+    $sql = str_replace("@01",$id,$sql);
+    $sql = str_replace("@02",$name,$sql);
+    
+    return $sql;
+
+}
+
+/*
+ * 工数削除SQL
+ */
+function kousuDeleteSQL($koutei,$kousu,$date){
+    
+    $sql = "DELETE FROM progressinfo WHERE 3CODE = '@01' AND 6CODE = '@02' AND SAGYOUDATE = '@03'";
+    
+    $sql = str_replace("@01",$koutei,$sql);
+    $sql = str_replace("@02",$kousu,$sql);
+    $sql = str_replace("@03",$date,$sql);
+    
+    return $sql;
+}
+
+
