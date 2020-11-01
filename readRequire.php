@@ -30,5 +30,6 @@ function readRequire()
     $php[] = "./customHtml/progress.php";
     $php[] = "./customHtml/staffMoneySet.php";
     $php[] = "./customHtml/kousu.php";
+    $php[] = "./customHtml/progressEdit.php";
     return $php;
 }

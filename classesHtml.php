@@ -437,7 +437,8 @@ class InsertPage extends BasePage
 		$html .= $header;
 		$html .= '</div>';
 		$html .= $tab;
-		
+                // ポップアップ作成
+                $html .= $this->createPopUp();
 		return $html;
 	}
 
@@ -607,11 +608,12 @@ class EditPage extends InsertPage
 			$html .= $form;
 			$html .= $header;
 			$html .= '</div>';
-			
+                        // ポップアップ作成
+                        $html .= $this->createPopUp();
 			//--↓tab追加--//
-			$tabarray = $this->makeTabHtml($this->prContainer->pbFileName, $this->prContainer->pbFormIni, $this->prContainer->pbInputContent);
-			$html .= $tabarray[0];
-			$this->prInitScript .= $tabarray[1];
+			//$tabarray = $this->makeTabHtml($this->prContainer->pbFileName, $this->prContainer->pbFormIni, $this->prContainer->pbInputContent);
+			//$html .= $tabarray[0];
+			//$this->prInitScript .= $tabarray[1];
 			//--↑tab追加--//
 			
 		}

@@ -66,8 +66,10 @@ class StaffMoneySet extends ListPage
             $data_sql = "";
             $judge = false;
             $count = 0;
+//            $data_sql = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
+//                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjd5CODE_0'].";";
             $data_sql = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
-                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjd5CODE_0'].";";
+                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['5CODE'].";";
             $data_reply = $con->query($data_sql) or ($judge = true);																		// クエリ発行
             if($judge)
             {
@@ -107,8 +109,8 @@ class StaffMoneySet extends ListPage
             $html .='<form name ="form" action="main.php?STAFFMONEYSET_1=" method="post"id="staffMoneySet" onsubmit = "return check(\''.$checkList.'\');">';
             $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
             $html .= $form;								//検索項目表示
-            $html .='<input type=hidden name="5CODE" value="'.$this->prContainer->pbInputContent["form_pjd5CODE_0"].'">';
-            
+            //$html .='<input type=hidden name="5CODE" value="'.$this->prContainer->pbInputContent["form_pjd5CODE_0"].'">';
+            $html .='<input type=hidden name="5CODE" value="'.$this->prContainer->pbInputContent["5CODE"].'">';
             $html .= '</table>';
             
             //合計金額計算
@@ -168,7 +170,8 @@ class StaffMoneySet extends ListPage
         $judge = false;
         $result = true;
         
-        $project_sql = "SELECT 1CODE, 2CODE FROM projectinfo WHERE 5CODE = ".$post['form_pjd5CODE_0'].";" ;
+//        $project_sql = "SELECT 1CODE, 2CODE FROM projectinfo WHERE 5CODE = ".$post['form_pjd5CODE_0'].";" ;
+        $project_sql = "SELECT 1CODE, 2CODE FROM projectinfo WHERE 5CODE = ".$post['5CODE'].";" ;
         $project_reply = $con->query($project_sql) or ($judge = true);																		// クエリ発行
         if($judge)
         {
@@ -204,7 +207,12 @@ class StaffMoneySet extends ListPage
             $this->prContainer->pbInputContent['form_pjdEDABAN_0'] = $result_row['EDABAN'] ;
             $this->prContainer->pbInputContent['form_pjdPJNAME_0'] = $result_row['PJNAME'] ;
         }
-        $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'] ;
+        if(isset($this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'])){
+            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'] ;
+        }else{
+            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = "0" ;
+        }
+        
     }    
     /*
      * function makeTableTd($sql,$post)

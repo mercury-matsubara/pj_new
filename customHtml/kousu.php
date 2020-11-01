@@ -108,6 +108,7 @@ class Kousu extends InsertPage
             $html .= '</form>';
             // ポップアップ作成
             $html .= $this->createPopUp();
+            $this->prInitScript = $this->createAfterScript();
             return $html;
     }
     /**
@@ -244,4 +245,22 @@ class Kousu extends InsertPage
         
         return $html;
     }
+    
+    /**
+     * javasc作成
+     */
+    function createAfterScript(){
+        
+        $script = "";
+        for($i=0;$i<10;$i++){
+            $script .= "updateAutocompleteValue('#form_topPROJECTNUM_".$i."','TOP');";
+            $script .= "updateAutocompleteValue('#form_topEDABAN_".$i."','ETOP');";
+            $script .= "updateAutocompleteByID('#form_topPJNAME_".$i."','#form_topEDABAN_".$i."','ETOP2');";
+            $script .= "updateAutocompleteValue('#form_topKOUTEIID_".$i."','KOUTOP');";
+            $script .= "updateAutocompleteByID('#form_topKOUTEINAME_".$i."','#form_topKOUTEIID_".$i."','KOUTOP2');";
+        }
+        
+        return $script;
+    }
+    
 }

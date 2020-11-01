@@ -70,6 +70,10 @@ class PageFactory
                 {
                     $page = new Progress($container);
                 }
+                else if($filename === 'PROGRESSINFO_3')
+                {
+                    $page = new ProgressEdit($container);
+                }
                 else if($filename === 'STAFFMONEYSET_2')
                 {
                     $page = new StaffMoneySet($container);

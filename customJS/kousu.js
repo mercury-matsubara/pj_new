@@ -64,16 +64,16 @@ $(function(){
     // 登録ボタン押下時
     $('#regist').on('click',function(){
         // 時間計算
-        calculatetime("teizi","teizibox");
+        var judge = calculatetime("teizi","teizibox");
         var teizi;
         teizi = $('.teizibox').text();
-        if (teizi > 7.75 ) {
-            alert("7.75を超えています。");
-            return false;
+        if (judge === false ) {
+            return;
         }
-        else if(teizi < 7.75){
+
+        if(0.00 < teizi && teizi < 7.75) {
             alert("7.75以下です。");
-            return false;
+            return;
         }
         //エレメント作成
         var ele = document.createElement("input");
@@ -100,20 +100,16 @@ function calculatetime(value,act)
         {
             time = 0;
         }
-
         //計算
         total += parseFloat(time);
     });
-    
-    
+
     if (value === 'teizi' && total > 7.75) {
         alert("7.75を超えています。");
         return false;
     }
     //合計セット
     $('.' + act).text(total.toFixed(2));
-
-    
-    return;
+    return true;
 }
 

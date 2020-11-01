@@ -16,7 +16,14 @@ class kousuExecute extends BaseLogicExecuter
         $con = beginTransaction();
         // 登録日付
         $date = $this->prContainer->pbInputContent['date'];
-        // 存在値チェック
+        $result = true;
+        // 対象日付のデータ削除
+        $delete = $this->kousuDelete($con,$date);
+        // 失敗時抜ける
+        if($delete === false){
+            $result = false;
+        }
+        // 10行処理
         for ($i = 0; $i < 10; $i++){
             $pronum = $this->prContainer->pbInputContent['form_topPROJECTNUM_'.$i];
             $eda = $this->prContainer->pbInputContent['form_topEDABAN_'.$i];
@@ -24,26 +31,29 @@ class kousuExecute extends BaseLogicExecuter
             $name = $this->prContainer->pbInputContent['form_topKOUTEINAME_'.$i];
             $teizi = $this->prContainer->pbInputContent['form_topTEIZITIME_'.$i];
             $zangyo = $this->prContainer->pbInputContent['form_topZANGYOUTIME_'.$i];
-            // 工数チェック
+            // 工数存在チェック
             $kousu = $this->kousuExistCheck($con,$pronum,$eda);
             if($kousu !== false){
                 $progresscode[$i] = $kousu;
             }
-            // 工程チェック
+            // 工程存在チェック
             $koutei = $this->kouteiExistCheck($con,$id,$name);
             if($koutei !== false){
                 $kouteicode[$i] = $koutei;
             }
             
-            $result = $this->kousuDelete($progresscode[$i],$kouteicode[$i]);
-            
+            // 対象日付のデータ削除
+            $insert = $this->kousuInsert($con,$kouteicode[$i],$progresscode[$i],$date,$teizi,$zangyo);
+            // 失敗時抜ける
+            if($insert === false){
+                $result = false;
+                break;
+            }
             
         }
-        
-
-        
         //トランザクションコミットまたはロールバック
-	commitTransaction(false,$con);
+	commitTransaction($result,$con);
+        $this->PageJump("TOP_5", $id, STEP_NONE, "", "");
         
     }
     
@@ -53,7 +63,7 @@ class kousuExecute extends BaseLogicExecuter
      * @param type $con
      * @param type $post
      */
-    function kousuExistCheck($con,$pronum,$eda)
+    public function kousuExistCheck($con,$pronum,$eda)
     {
         $code = "";
         if($pronum === "" || $eda === "")
@@ -77,7 +87,7 @@ class kousuExecute extends BaseLogicExecuter
      * @param type $con
      * @param type $post
      */
-    function kouteiExistCheck($con,$id,$name)
+    public function kouteiExistCheck($con,$id,$name)
     {
         $koutei = "";
         if($id === "" || $name === "")
@@ -100,15 +110,38 @@ class kousuExecute extends BaseLogicExecuter
     /**
      * 工数削除
      */
-    function kousuDelete(){
+    function kousuDelete($con,$date)
+    {
+        $sql = kousuDeleteSQL($date);
+        $result = $con->query($sql);// クエリ発行
+	if (!$result) {
+            error_log($con->error, 0);
+            return false;
+        }
         
+        return $result;
     }
     
     /**
      * 工数登録
      */
-    function kousuInsert(){
+    function kousuInsert($con,$koutei,$kousu,$date,$teizi,$zangyo)
+    {
+        if($koutei === "" || $kousu === "")
+        {
+            return true;
+        }
+        $searchDate = str_replace("/","-",$date);
+        $sql = kousuInsertSQL();
         
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param('sddii',$searchDate, $teizi, $zangyo, $koutei, $kousu);
+        //クエリを実行
+        $result = $stmt->execute();
+        //ステートメントを閉じる
+        $stmt->close();
+
+        return $result;
     }
 }
 

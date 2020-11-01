@@ -410,15 +410,48 @@ function kouteiExistSQL($id,$name){
 /*
  * 工数削除SQL
  */
-function kousuDeleteSQL($koutei,$kousu,$date){
+function kousuDeleteSQL($date){
+    $searchDate = str_replace("/","-",$date);
+    $sql = "DELETE FROM progressinfo WHERE 7CODE IN (
+            SELECT 7CODE
+            FROM (select 7CODE from progressinfo 
+            LEFT JOIN projectditealinfo USING (6CODE ) 
+            LEFT JOIN syaininfo USING (4CODE ) 
+            LEFT JOIN projectinfo USING (5CODE ) 
+            WHERE 7PJSTAT = 1 
+            AND convert(replace(replace(syaininfo.STAFFID,' ',''),'　','') using utf8) COLLATE utf8_unicode_ci LIKE '@01' 
+            AND  SAGYOUDATE Like '@02') as a )";
     
-    $sql = "DELETE FROM progressinfo WHERE 3CODE = '@01' AND 6CODE = '@02' AND SAGYOUDATE = '@03'";
-    
-    $sql = str_replace("@01",$koutei,$sql);
-    $sql = str_replace("@02",$kousu,$sql);
-    $sql = str_replace("@03",$date,$sql);
+    $sql = str_replace("@01",$_SESSION['STAFFID'],$sql);
+    $sql = str_replace("@02",$searchDate,$sql);
     
     return $sql;
 }
 
+/*
+ * 工数登録SQL
+ */
+function kousuInsertSQL(){
+    //$searchDate = str_replace("/","-",$date);
+    $sql = "INSERT INTO progressinfo (SAGYOUDATE,TEIZITIME,ZANGYOUTIME,3CODE,6CODE)VALUES(?,?,?,?,?);";
+    
+    return $sql;
+}
+
+/**
+ * PJ進捗編集取得SQL
+ * 
+ */
+function pjEditSQL($code){
+    
+    $sql = "SELECT PROJECTNUM,PROJECTNAME,EDABAN,PJNAME,STAFFID,STAFFNAME FROM projectditealinfo 
+            LEFT JOIN projectinfo on projectditealinfo.5CODE = projectinfo.5CODE 
+            LEFT JOIN projectnuminfo on projectinfo.1CODE = projectnuminfo.1CODE 
+            LEFT JOIN edabaninfo on projectinfo.2CODE = edabaninfo.2CODE 
+            LEFT JOIN syaininfo on projectditealinfo.4CODE = syaininfo.4CODE 
+            where 6CODE = '@01';";
+    $sql = str_replace("@01",$code,$sql);
+    
+    return $sql;
+}
 

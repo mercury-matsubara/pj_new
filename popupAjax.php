@@ -59,6 +59,7 @@ require_once("./popup/pjinsertPopup.php");
     }
     // スタッフID置換
     $sql[0] = str_replace('@01', $_SESSION['STAFFID'], $sql[0]);
+    $sql[1] = str_replace('@01', $_SESSION['STAFFID'], $sql[1]);
     // 並び順取得
     $sqlv2 = setSQLOrderby($page_id, $form_ini, $sql);
     //指定idのコンテナを作成

@@ -605,19 +605,19 @@ function insert($filename, &$post,&$con){
 	
 	$unique_result->close();
 	
-	$meisaisql = MeisaiInsertSQL($post,"",$filename);
-	if($meisaisql != 0)
-	{
-		for($i = 0; $i < count($meisaisql); $i++)
-		{
-			$result = $con->query($meisaisql[$i]) or ($judge = true);	// クエリ発行
-			if($judge)
-			{
-				error_log($con->error,0);
-				$judge =false;
-			}
-		}
-	}
+//	$meisaisql = MeisaiInsertSQL($post,"",$filename);
+//	if($meisaisql != 0)
+//	{
+//		for($i = 0; $i < count($meisaisql); $i++)
+//		{
+//			$result = $con->query($meisaisql[$i]) or ($judge = true);	// クエリ発行
+//			if($judge)
+//			{
+//				error_log($con->error,0);
+//				$judge =false;
+//			}
+//		}
+//	}
 
 	
 	return $result;

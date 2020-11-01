@@ -2,6 +2,8 @@
 
 class PjtourokuExecuteSQL extends BaseLogicExecuter
 {
+    private $pCode;
+    private $eCode;
     /**
      * executeSQL
      * データ操作の実行
@@ -14,18 +16,60 @@ class PjtourokuExecuteSQL extends BaseLogicExecuter
             $filename = $this->prContainer->pbFileName;
             $main_table = $this->prContainer->pbPageSetting['use_maintable_num'];
             $input = $this->prContainer->pbInputContent;
-            $code = getCode($filename,$input);
-//            $errorinfo = $this->existCheck($code,$main_table,1,$con);
-            if(count($errorinfo) != 1 || $errorinfo[0] != "")
-            {
-                
+            //$code = getCode($filename,$input);
+            $checkcode = $this->selectCode($input,$con);
+            if($checkcode === false){
+                //トランザクションコミットまたはロールバック
+                commitTransaction(false,$con);
             }
-            insert($filename,$_SESSION['insert'],$con);
-            
+//            $errorinfo = $this->existCheck($code,$main_table,1,$con);
+//            if(count($errorinfo) != 1 || $errorinfo[0] != "")
+//            {
+//                
+//            }
+            $sql = "INSERT INTO projectinfo (1CODE,2CODE,CHARGE)VALUES(?,?,?);";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param('iii',$this->pCode, $this->eCode, $input['form_pjtCHARGE_0']);
+            //クエリを実行
+            $result = $stmt->execute();
+            //ステートメントを閉じる
+            $stmt->close();
             //トランザクションコミットまたはロールバック
-            commitTransaction($message,$con);
-            
+            commitTransaction($result,$con);
+            $this->PageJump("TOP_5", "", STEP_NONE, "", "");
     }
+    
+    /**
+     * CODE取得
+     */
+    function selectCode($input,$con){
+ 
+        $pSql = "SELECT 1CODE FROM projectnuminfo where PROJECTNUM ='".$input['form_pjtPROJECTNUM_0']."'  AND PROJECTNAME ='" .$input['form_pjtPROJECTNAME_0']."' ";
+        $eSql = "SELECT 2CODE FROM edabaninfo where EDABAN ='".$input['form_pjtEDABAN_0']."'  AND PJNAME ='" .$input['form_pjtPJNAME_0']."' ";
+        
+        $result = $con->query($pSql);// クエリ発行
+	if (!$result) {
+            error_log($con->error, 0);
+            return false;
+        }
+        while($result_row = $result->fetch_array(MYSQLI_ASSOC))
+        {
+            $this->pCode = $result_row['1CODE'];
+        }
+        $result2 = $con->query($eSql);// クエリ発行
+	if (!$result2) {
+            error_log($con->error, 0);
+            return false;
+        }
+        while($result_row = $result2->fetch_array(MYSQLI_ASSOC))
+        {
+            $this->eCode = $result_row['2CODE'];
+        }
+        
+        
+        return true;
+    }
+    
     /*
      * function existCheck($post,$tablenum,$type)
      * 
