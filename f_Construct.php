@@ -455,3 +455,24 @@ function pjEditSQL($code){
     return $sql;
 }
 
+/**
+ * PJ進捗CODE取得SQL
+ * 
+ */
+function pjSelectSQL($num,$eda,$id){
+    
+    $sql = "SELECT 6CODE FROM projectditealinfo 
+            LEFT JOIN projectinfo on projectditealinfo.5CODE = projectinfo.5CODE 
+            LEFT JOIN projectnuminfo on projectinfo.1CODE = projectnuminfo.1CODE 
+            LEFT JOIN edabaninfo on projectinfo.2CODE = edabaninfo.2CODE 
+            LEFT JOIN syaininfo on projectditealinfo.4CODE = syaininfo.4CODE 
+            WHERE PROJECTNUM = '@01' 
+            AND EDABAN = '@02'  
+            AND STAFFID = '@03' ;";
+    $sql = str_replace("@01",$num,$sql);
+    $sql = str_replace("@02",$eda,$sql);
+    $sql = str_replace("@03",$id,$sql);
+    
+    return $sql;
+}
+

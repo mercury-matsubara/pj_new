@@ -181,7 +181,7 @@ class PageContainer
 				{
 					$this->pbPageCheck = 'DeleteCheck';
 				}
-				else if($key == 'Comp' || strstr($key, 'pjend0') || strstr($key, '_Del') || strstr($key, 'pjcancel0'))
+				else if($key == 'Comp' || $key == 'CompDel' || strstr($key, 'pjend0') || strstr($key, '_Del') || strstr($key, 'pjcancel0'))
 				{
 					$this->pbPageCheck = 'Execute';
 				}

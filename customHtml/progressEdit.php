@@ -80,4 +80,53 @@ class ProgressEdit extends EditPage
         return $html;
     }
 
+    /**
+     * 関数名: makeBoxContentBottom
+     *   メインの機能提供部分下部のHTML文字列を作成する
+     *   他ページへの遷移ボタンなどを作成
+     * 
+     * @retrun HTML文字列
+     */
+    function makeBoxContentBottom() {
+        $html = '';
+        $is_permission = isPermission($this->prContainer->pbFileName);
+        //ユーザーマスタで権限がない
+        if ($is_permission === false && $this->prContainer->pbFileName === 'USERMASTER_1') {
+            //自分のIDのみ許可する
+            $is_permission = ( $this->prContainer->pbListId == $_SESSION['userid'] );
+        }
+        if ($is_permission) {
+            //ダイアログ
+            $html .= '<div id="dialog" title="入力確認" style="display:none;">
+						<p>この内容でよろしいでしょうか？</p>
+						</div>';
+            // 読取指定
+            if ($this->prContainer->pbPageSetting['form_type'] !== '2') {
+                if ($this->prContainer->pbFileName === "JISYAMASTER_3") {
+                    $html .= '<div class = "pad">
+					<input type="submit" name = "kousinn" value = "更新" class="free" onclick="document.getElementByName(\'edit\').action=\'main.php?' . $this->prContainer->pbFileName . '_button=\'" >';
+                } else {
+                    $html .= '<div class = "pad">
+                                            <input type="button" name = "kousinn" value = "更新" class="free" onClick="Regist()" >';
+                    $html .= '<input type="button" name = "delete" value = "削除" class="free" onClick = "Delete();">';
+                }
+
+                
+
+                $html .= '</div>';
+            }
+
+            //遷移ボタン
+            $linkValue = '';
+            if (isset($this->prContainer->pbInputContent['edit_list_id'])) {
+                $linkValue = 'edit_list_id=' . $this->prContainer->pbInputContent['edit_list_id'];
+            } else if (isset($this->prContainer->pbListId)) {//ステータス更新時GET情報がないため
+                $linkValue = 'edit_list_id=' . $this->prContainer->pbListId;
+            }
+            $html .= $this->makeButtonV2($this->prContainer->pbFileName, 'bottom', STEP_EDIT, $linkValue);
+        }
+        $html .= '</form>';
+        return $html;
+    }
+
 }
