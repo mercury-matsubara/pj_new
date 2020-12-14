@@ -33,8 +33,7 @@ require_once("./customHtml/kousu.php");
         $columnName[] = $container->pbParamSetting[$column[$i]]['item_name'];
     }
     //データリスト作成
-    //$list = $page->createTable($columnName,$column,$date);
-    $sql = kousuSQL($_SESSION['STAFFID'], $date);
+    $sql = kousuCopySQL($_SESSION['STAFFID'], $date);
     $con = dbconect();
     $result = $con->query($sql);
     if (!$result) {

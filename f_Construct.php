@@ -324,6 +324,25 @@ function kousuSQL($syain,$day){
 
 }
 
+// 工数取得コピー時SQL
+function kousuCopySQL($syain,$day){
+    
+    $searchday = str_replace("/","-",$day);
+    $sql = "SELECT PROJECTNUM,EDABAN,PJNAME,KOUTEIID,KOUTEINAME,TEIZITIME,ZANGYOUTIME,7PJSTAT 
+            FROM progressinfo 
+            LEFT JOIN kouteiinfo USING (3CODE ) 
+            LEFT JOIN projectditealinfo USING (6CODE ) 
+            LEFT JOIN syaininfo USING (4CODE ) 
+            LEFT JOIN projectinfo USING (5CODE ) 
+            LEFT JOIN projectnuminfo USING (1CODE ) 
+            LEFT JOIN edabaninfo USING (2CODE ) 
+            WHERE 7PJSTAT = 1 
+            AND  convert(replace(replace(syaininfo.STAFFID,' ',''),'　','') using utf8) COLLATE utf8_unicode_ci LIKE '$syain' 
+            AND  SAGYOUDATE Like '$searchday'";
+    return $sql;
+
+}
+
 // 工数存在チェックSQL
 function kousuExistSQL($pronum,$eda,$syain){
     
