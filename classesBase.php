@@ -2435,11 +2435,11 @@ class BasePage extends BaseObject
         date_default_timezone_set('Asia/Tokyo');
 
         // 前月・次月リンクが押された場合は、GETパラメーターから年月を取得
-        if (isset($_GET['ym'])) {
+        if (isset($_GET['TOP_5'])) {
 //            $ym = $_GET['ym'];
-            $ym = rtrim($_GET['ym'], ';');
-        } else {
-            // 今月の年月を表示
+            $ym = rtrim($_GET['TOP_5'], ';');
+        } 
+        if($ym === ""){
             $ym = date('Y-m');
         }
 
@@ -2457,21 +2457,15 @@ class BasePage extends BaseObject
         $this->month = date('Y年n月', $timestamp);
 
         // 前月・次月の年月を取得
-        // 方法１：mktimeを使う mktime(hour,minute,second,month,day,year)
         $this->prev = date('Y-m', mktime(0, 0, 0, date('m', $timestamp) - 1, 1, date('Y', $timestamp)));
         $this->next = date('Y-m', mktime(0, 0, 0, date('m', $timestamp) + 1, 1, date('Y', $timestamp)));
 
-        // 方法２：strtotimeを使う
-        // $prev = date('Y-m', strtotime('-1 month', $timestamp));
-        // $next = date('Y-m', strtotime('+1 month', $timestamp));
         // 該当月の日数を取得
         $day_count = date('t', $timestamp);
 
         // １日が何曜日か　0:日 1:月 2:火 ... 6:土
-        // 方法１：mktimeを使う
         $youbi = date('w', mktime(0, 0, 0, date('m', $timestamp), 1, date('Y', $timestamp)));
-        // 方法２
-        // $youbi = date('w', $timestamp);
+
         // カレンダー作成の準備
         $weeks = [];
         $week = '';

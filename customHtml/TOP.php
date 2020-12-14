@@ -89,7 +89,8 @@ class TopPage extends BasePage
         // カレンダー作成
         $calendar = $this->makeCalendar();
         $html .="<div class='container'>";
-        $html .= "<div class='month'><h3><a href='?ym=$this->prev;'>&lt;</a> $this->month <a href='?ym=$this->next; '>&gt;</a></h3></div>";
+        //$html .= "<div class='month'><h3><a href='?ym=$this->prev;'>&lt;</a> $this->month <a href='?ym=$this->next; '>&gt;</a></h3></div>";
+        $html .= "<div class='month'><h3><a href='?TOP_5=$this->prev;'>&lt;</a> $this->month <a href='?TOP_5=$this->next; '>&gt;</a></h3></div>";
         $html .= "<div class='totaltime'><p>[勤務]".$this->worktimeTotal['TEIZITIME']."　[残業]".$this->worktimeTotal['ZANGYOUTIME']."　[総時間]".$this->worktimeTotal['TOTAL']."</p></div>";
         $html .= "<table class='calendar'>";
         $html .="    <tr class=youbi>";

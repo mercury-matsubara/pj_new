@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * PJ終了画面作成
+ * 
+ */
 class Pjend extends ListPage
 {
     public $errorCode;
