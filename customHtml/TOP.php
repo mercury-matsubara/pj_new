@@ -89,7 +89,6 @@ class TopPage extends BasePage
         // カレンダー作成
         $calendar = $this->makeCalendar();
         $html .="<div class='container'>";
-        //$html .= "<div class='month'><h3><a href='?ym=$this->prev;'>&lt;</a> $this->month <a href='?ym=$this->next; '>&gt;</a></h3></div>";
         $html .= "<div class='month'><h3><a href='?TOP_5=$this->prev;'>&lt;</a> $this->month <a href='?TOP_5=$this->next; '>&gt;</a></h3></div>";
         $html .= "<div class='totaltime'><p>[勤務]".$this->worktimeTotal['TEIZITIME']."　[残業]".$this->worktimeTotal['ZANGYOUTIME']."　[総時間]".$this->worktimeTotal['TOTAL']."</p></div>";
         $html .= "<table class='calendar'>";
@@ -116,7 +115,7 @@ class TopPage extends BasePage
     /**
      * プロジェクト進捗データ取得
      */
-    function getProjectData($month){
+    function getProjectData($month) {
         
         // db接続関数実行
         $con = dbconect();
@@ -145,7 +144,7 @@ class TopPage extends BasePage
         $sql[1] = str_replace('@01', $_SESSION['STAFFID'], $sql[1]);
         $sql[1] = str_replace('@02', $month, $sql[1]);
         // SQL実行
-        $reply = $con->query( $sql[1] );																	// クエリ発行
+        $reply = $con->query( $sql[1] );
 	if(!$reply)
 	{
 		error_log($con->error,0);

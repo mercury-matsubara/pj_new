@@ -8,7 +8,6 @@ const STEP_DELETE = 3;
 const STEP_COMP = 4;
 const STEP_PRINT = 5;
 const STEP_NONE = 0;
-
 const PAGE_NONE = 0;
 const PAGE_ALL = 1;
 const PAGE_COUNT_ONLY = 2;

@@ -2363,7 +2363,7 @@ class BasePage extends BaseObject
                         {
                             if($post['form_syaSTAFFID_0'] === $colum)
                             {
-                                break;
+                                continue;
                             }
                         }
                     }
