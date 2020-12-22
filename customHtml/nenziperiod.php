@@ -1,0 +1,184 @@
+<?php
+
+/**
+ * 年次処理(期またぎ)画面作成
+ * 
+ */
+class Nenziperiod extends ListPage
+{
+    public $errorCode;
+    
+    /**
+     * 関数名: makeScriptPart
+     *   JavaScript文字列(HTML)を作成する関数
+     *   HEADタグ内に入る
+     *   使用するスクリプトへのリンクや、スクリプトの直接記述文字列を作成
+     * 
+     * @retrun HTML文字列
+     */
+    function makeScriptPart()
+    {
+        $html = parent::makeScriptPart();
+
+        $html .= '<script src="./customJS/nenziperiod.js"></script>';
+
+        return $html;
+
+    }
+    
+    /**
+     * 関数名: makeBoxContentMain
+     *   メインの機能提供部分の上部に表示されるHTML文字列を作成する
+     *   機能名の表示など
+     * 
+     * @retrun HTML文字列
+     */
+    function makeBoxContentMain()
+    {
+        if(isset($_SESSION['error']))
+        {
+            $this->errorCode = $_SESSION['error'];
+            $_SESSION['error'] = "";
+        }
+        if(!isset($_SESSION['list']))
+        {
+                $_SESSION['list'] = array();
+        }
+        //検索フォーム作成,日付フォーム作成
+        if(isset($_SESSION['search']['flg']))
+        {
+            if($_SESSION['search']['flg'] === 1)
+            {
+                $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+                $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+                $this->prContainer->pbInputContent = $_SESSION['search']['input'];
+                $_SESSION['search']['flg'] = 0;
+            }
+            else
+            {
+                $this->setSearchSession($this->prContainer->pbInputContent);
+            }
+        }
+        else
+        {
+            $this->setSearchSession($this->prContainer->pbInputContent);
+        }
+        $formStrArray = $this->makeformSearch_setV2( $this->prContainer->pbInputContent, 'form' );
+        $form = $formStrArray[0];			//0はフォーム用HTML
+        $this->prInitScript = $formStrArray[1];	//1は構築用スクリプト
+
+        //検索SQL
+        $sql = array();
+        $sql = joinSelectSQL($this->prContainer->pbInputContent, $this->prMainTable, $this->prContainer->pbFileName, $this->prContainer->pbFormIni);
+        $sql = SQLsetOrderby($this->prContainer->pbInputContent, $this->prContainer->pbFileName, $sql);
+
+        $start_year = $this->getYear('6',filter_input(INPUT_POST,"period_0"));
+        $end_year = $this->getYear('5',filter_input(INPUT_POST,"period_0"));
+
+//            $sql = str_replace("@01","'$start_year-06-01'",$sql);
+//            $sql = str_replace("@02","'$end_year-05-31'",$sql);
+        $sql = str_replace("@01","'2020-06-01'",$sql);
+        $sql = str_replace("@02","'2021-05-31'",$sql);
+
+
+        if(!isset($limit) && !isset($limit_start))
+        {
+            $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
+            $limit_start = $this->prContainer->pbInputContent['list']['limitstart'];	// limit開始位置
+        }
+
+        //リスト表示HTML作成
+        $pagemove = intval( $this->prContainer->pbPageSetting['isPageMove'] );
+        $list =  $this->makeListV2($sql, $_SESSION['list'], $limit, $limit_start, $pagemove);
+
+        $checkList = $_SESSION['check_column'];
+
+        //出力HTML作成
+        $html ='<div class = "pad" >';
+        $html .='<form name ="form" action="main.php?NENZIPERIOD_2" method="post" id="nenziperiod" onsubmit = "return check(\''.$checkList.'\');">';
+        $html .='<table><tr><td><fieldset><legend>検索条件</legend>';
+        $html .= $form;								//検索項目表示
+
+        //--2019/06/06追加　filename取得　
+        $filename = $this->prContainer->pbFileName;
+        $html .='<input type="hidden" id="clear_'.$filename.'" value = "'.$this->prContainer->pbPageSetting['sech_form_num'].'" >';
+        $html .='</fieldset></td><td valign="bottom"><input type="submit" name="serch_'.$filename.'" value = "表示" class="free" ></td>';
+        $html .='</fieldset></td><td valign="bottom"><input type="button" value = "クリア" class="free" onclick="clearSearch(\''.$filename.'\')"></td></tr></table>';
+        $html .= $list;
+        $html .= '</form>';
+
+        return $html;
+    }
+     
+    /**
+     * 関数名: makeBoxContentBottom
+     *   メインの機能提供部分下部のHTML文字列を作成する
+     *   他ページへの遷移ボタンなどを作成
+     * 
+     * @retrun HTML文字列
+     */
+    function makeBoxContentBottom()
+    {
+        //ダイアログ
+        $html = '<div id="dialog" title="入力確認" style="display:none;">
+                                <p>この内容でよろしいでしょうか？</p>
+                                </div>';
+        
+        $html .= '<div class = "left" style = "HEIGHT : 30px">'
+                . '<form action="main.php" method="get">';
+        //終了ボタン作成
+        $html .= '<input type ="button" value = "期またぎ" class = "free" name = "Comp" onclick="nenziperiod()">';
+        $html .= '</form></div>';
+       
+        return $html;
+    } 
+    
+ 
+    
+    /*
+     * 関数名：getNumber
+     * エラーが出たデータのプロジェクトナンバと枝番ナンバを取得する
+     */
+    function getNumber($code)
+    {
+        //DB接続、トランザクション開始
+        $con = beginTransaction();
+        
+        $sql = "SELECT * FROM (select * from projectinfo LEFT JOIN projectnuminfo USING (1CODE) LEFT JOIN edabaninfo USING (2CODE)  WHERE 5PJSTAT = 1 ) as projectinfo where 5CODE = ".$code.";";
+        $result = $con->query($sql) or ($judge = true);
+        
+        foreach($result as $row)
+        {
+            $num[] = $row["PROJECTNUM"];
+            $num[] = $row["EDABAN"];                    
+        }
+        
+        //トランザクションコミットまたはロールバック
+        commitTransaction($result,$con);
+        
+        return $num;
+    }
+    
+    /**
+     * 関数名:getYear
+     * 期またぎ処理の日付取得
+     * 
+     */
+    function getYear($month,$period){
+        // itemini取得
+        $item_ini = parse_ini_file('./ini/item.ini', true);
+        
+        $startyear = $item_ini['period']['startyear'];
+	$startmonth = $item_ini['period']['startmonth'];
+        
+        $year = $period + $startyear  + 1;
+	if($startmonth > $month)
+	{
+            $year = $year + 1 ;
+	}
+	
+	return $year;
+    }
+
+
+}

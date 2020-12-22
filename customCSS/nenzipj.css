@@ -1,0 +1,32 @@
+
+
+.edit_table {
+    position: relative;
+    top: 15px;
+    left: 190px;
+    width: 75%;
+    text-align: left;
+}
+
+.pad {
+    /* float: left; */
+    position: relative;
+    top: 15px;
+    left: 190px;
+    width: 75%;
+}
+
+.message{
+    color: red;
+}
+
+.selection{
+    position: relative;
+    left: 190px;
+    top: 3px;
+}
+
+div.message {
+     margin-left: 0; 
+
+}
