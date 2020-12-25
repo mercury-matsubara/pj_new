@@ -46,33 +46,64 @@ class NenziPj extends InsertPage {
         $html .= $this->prTitle;  //タイトル表示
         $html .= '</a>';
         $html .= '</div>';
-        // 選択項目作成
-        $html .= $this->createSelectionPJ();
-        if ($this->prContainer->pbPageSetting['message'] != "") {
-            $html .= '<div class = "message">';
-            $html .= '<p>';
-            $html .= $this->prContainer->pbPageSetting['message'];
-            $html .= '</p>';
-            $html .= '</div>';
-        }
         return $html;
     }
 
     
     /**
-     * 関数名: makeBoxContentMain
-     * 
-     *   メインの機能提供部分のHTML文字列を作成する
-     *   リストでは一覧表示、入力では各入力フィールドの構築など
-     * 
-     * @retrun HTML文字列
-     */
-    function makeBoxContentMain() {
-        
-        $html = parent::makeBoxContentMain();
-        $html .= $this->createPopUp();
-        return $html;
-    }
+	 * 関数名: makeBoxContentMain
+	 *   メインの機能提供部分の上部に表示されるHTML文字列を作成する
+	 *   機能名の表示など
+	 * 
+	 * @retrun HTML文字列
+	 */
+	function makeBoxContentMain()
+	{
+            $_SESSION['pre_post'] = null;
+            $errorinfo ='';
+
+            if(isset($_SESSION['error']))
+            {
+                $errorinfo = $_SESSION['error'];
+                $_SESSION['error'] = "";
+            }
+            $_SESSION['filename'] = $this->prContainer->pbFileName;
+            //入力項目作成
+            $form_array = $this->makeformInsert_setV2($this->prContainer->pbInputContent, $errorinfo, '', "insert", $this->prContainer);
+            $form = $form_array[0];
+            $this->prInitScript =  $form_array[1];
+
+            $checkList = $_SESSION['check_column'];
+            $notnullcolumns = $_SESSION['notnullcolumns'];
+            $notnulltype = $_SESSION['notnulltype'];
+
+            //2019/03/25パラメーター追加
+            //hidden作成
+            $hidden = $this->makeHiddenParam($this->prContainer->pbListId,$this->prContainer->pbStep, $this->prContainer->pbFileName);
+
+            $send = '<form name ="insert" action="main.php?'.$this->prContainer->pbFileName.'=" method="post" autocomplete="off" id="send" enctype="multipart/form-data" 
+                            onsubmit = "return check(\''.$checkList.
+                            '\',\''.$notnullcolumns.'\',\''.$notnulltype.'\');">';
+            $html = $send;
+            // 選択項目作成
+            $html .= $this->createSelectionPJ();
+            if ($this->prContainer->pbPageSetting['message'] != "") {
+                $html .= '<div class = "message">';
+                $html .= '<p>';
+                $html .= $this->prContainer->pbPageSetting['message'];
+                $html .= '</p>';
+                $html .= '</div>';
+            }
+            //出力HTML
+            $html .= '<br>';
+            $html .= '<div class = "edit_table">';
+            $html .= $form;
+            $html .= $hidden;
+            $html .= '</div>';
+            // ポップアップ作成
+            $html .= $this->createPopUp();
+            return $html;
+	}
     /**
      * 登録フォーム用のHTMLを返す
      * V2はtableタグで囲まれた文字列として返す
@@ -156,6 +187,7 @@ class NenziPj extends InsertPage {
                                   <td><a class='itemname'>プロジェクトナンバ</a></td>
                                   <td><input type='text' name='bePROJECTNUM' id='bePROJECTNUM' value='$pjnum' size='10' class='readOnly' readonly></td>
                                       <input type='hidden' name='be1CODE' id='be1CODE' value='$pjcode' size='10'  >
+                                          <input type='hidden' name='be5CODE' id='be5CODE' value='$code' size='10'  >
                                 </tr>
                                 <tr>
                                   <td><a class='itemname'>枝番ナンバ</a></td>

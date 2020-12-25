@@ -710,18 +710,21 @@ input[type=checkbox]
     cursor: pointer;
     width: 40%;
 }
+/*ダイアログの背景*/
+.ui-widget-overlay {
+    background: #000000;
+    opacity: .6;
+    filter: Alpha(Opacity=30);
+}
+
+
 /*Datepickerのカレンダーアイコン*/
 .ui-datepicker-trigger{
 /*    width: 4%;*/
     margin-bottom: -1%;
     margin-left: 1%;
 }
-/*Datepickerのカレンダーアイコン（年月）*/
-/*.datecarender
-{
-    width: 9%;
-    margin-bottom: -2%;
-}*/
+
 
 
 .colorChange{

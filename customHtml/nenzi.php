@@ -39,7 +39,7 @@ class Nenzi extends BasePage
 	if(empty($_SESSION['nenzi']['checkmessage']))
 	{
 		$html = "<left>";
-		$html .= "<form action='pageJump.php' method='post'>";
+		$html .= "<form action='main.php' method='post'>";
 		$html .= makebutton($filename,'top');
 		$html .= "<div style='clear:both;'></div>";
 		$html .= "</form>";
@@ -54,7 +54,7 @@ class Nenzi extends BasePage
 		$post['period_0'] = $this->getperiod($today[1],$today[0]) - 1;
 		$html .= '年次処理対象期 '.$this->period_pulldown_set("period","",$post,"","","").'</td></tr></table>';
 		$html .= "<div style='display:inline-flex'>";
-		$html .= "<br><br><input type='submit' name='delete' value = '期またぎ' class='free'>";
+		$html .= "<br><br><input type='submit' name='NENZIPERIOD_2_button' value = '期またぎ' class='free'>";
 //		$html .= "<input type='submit' name='push' value = '年次処理' class='free' onClick = 'return check();'>";
                 $html .= "<input type='submit' name='Comp' value = '年次処理' class='free' onClick = 'return check();'>";
 		$html .= "</form>";
@@ -155,41 +155,32 @@ class Nenzi extends BasePage
     戻り値		$form						モーダルに表示リストhtml
     ************************************************************************************************************/
     function getperiod($month,$year){
+        //------------------------//
+        //        初期設定        //
+        //------------------------//
+        require_once("f_DB.php");																							// DB関数呼び出し準備
+        require_once("f_File.php");																							// DB関数呼び出し準備
+        $form_ini = parse_ini_file('./ini/form.ini', true);
+        $item_ini = parse_ini_file('./ini/item.ini', true);
+        //------------------------//
+        //          定数          //
+        //------------------------//
+        $startyear = $item_ini['period']['startyear'];
+        $startmonth = $item_ini['period']['startmonth'];
+        //------------------------//
+        //          変数          //
+        //------------------------//
+        $period = 0 ;
 
-            //------------------------//
-            //        初期設定        //
-            //------------------------//
-            require_once("f_DB.php");																							// DB関数呼び出し準備
-            require_once("f_File.php");																							// DB関数呼び出し準備
-            $form_ini = parse_ini_file('./ini/form.ini', true);
-            $item_ini = parse_ini_file('./ini/item.ini', true);
-
-
-            //------------------------//
-            //          定数          //
-            //------------------------//
-            $startyear = $item_ini['period']['startyear'];
-            $startmonth = $item_ini['period']['startmonth'];
-
-
-            //------------------------//
-            //          変数          //
-            //------------------------//
-            $period = 0 ;
-
-
-
-            //------------------------//
-            //        検索処理        //
-            //------------------------//
-            $period = $year - $startyear + 1;
-            if($startmonth > $month)
-            {
-                    $period = $period - 1 ;
-            }
-
-            return $period;
-
+        //------------------------//
+        //        検索処理        //
+        //------------------------//
+        $period = $year - $startyear + 1;
+        if($startmonth > $month)
+        {
+                $period = $period - 1 ;
+        }
+        return $period;
     }
     
     /************************************************************************************************************

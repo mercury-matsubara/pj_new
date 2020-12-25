@@ -444,3 +444,61 @@ function pjSelectSQL($num,$eda,$id){
     return $sql;
 }
 
+
+/**
+ * PJコード枝番コード取得SQL
+ * 
+ */
+function ProjectSQL($code){
+    
+    $sql = "SELECT
+        projectinfo.1CODE,PROJECTNUM, projectinfo.2CODE, EDABAN,PJNAME,CHARGE  
+        FROM
+            projectinfo 
+        LEFT JOIN projectnuminfo on projectnuminfo.1CODE = projectinfo.1CODE 
+        LEFT JOIN edabaninfo on edabaninfo.2CODE = projectinfo.2CODE 
+        WHERE
+        projectinfo.5CODE = '@01';";
+    $sql = str_replace("@01",$code,$sql);
+    
+    return $sql;
+}
+
+/**
+ * プロジェクトナンバー取得SQL
+ * 
+ */
+function ProjectNumSQL($con,$num,$pjname){
+    $code = '';
+    $sql = "SELECT 1CODE FROM projectnuminfo where PROJECTNUM = '@01' AND PROJECTNAME = '@02'";
+    $sql = str_replace("@01",$num,$sql);
+    $sql = str_replace("@02",$pjname,$sql);
+    $result = $con->query($sql) or ($judge = true);
+    if($judge)	{
+        error_log($con->error,0);
+        $judge = false;
+    }
+    $result_row = $result->fetch_array(MYSQLI_ASSOC);
+    $code = $result_row['1CODE'];
+    return $code;
+}
+
+/**
+ * 枝番CODE得SQL
+ * 
+ */
+function EdabanCODESQL($con,$eda,$pjname){
+    $code = '';
+    $sql = "SELECT 2CODE FROM projectnuminfo where EDABAN = '@01' AND PJNAME = '@02'";
+    $sql = str_replace("@01",$eda,$sql);
+    $sql = str_replace("@02",$pjname,$sql);
+    $result = $con->query($sql) or ($judge = true);
+    if($judge)	{
+        error_log($con->error,0);
+        $judge = false;
+    }
+    $result_row = $result->fetch_array(MYSQLI_ASSOC);
+    $code = $result_row['2CODE'];
+    return $code;
+}
+

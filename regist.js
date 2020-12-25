@@ -5,6 +5,7 @@ function Regist()
     $("#dialog").dialog({
         //×ボタン隠す
         open: $(".ui-dialog-titlebar-close").hide(),
+        modal:true,
         autoOpen: true,
         buttons:
                 {
@@ -38,6 +39,7 @@ function Delete()
     $("#dialog").dialog({
         //×ボタン隠す
         open: $(".ui-dialog-titlebar-close").hide(),
+        modal:true,
         autoOpen: true,
         buttons:
                 {

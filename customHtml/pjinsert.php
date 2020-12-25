@@ -31,7 +31,7 @@ class Pjinsert extends InsertPage {
     function makeBoxContentMain() {
         
         $html = parent::makeBoxContentMain();
-        $html .= $this->createPopUp();
+        //$html .= $this->createPopUp();
         return $html;
     }
     /**
@@ -60,8 +60,6 @@ class Pjinsert extends InsertPage {
         $td_array = $input_result_v3[0];
         //<TABLE>構築
         $insert_str = '<table name ="formedit" id ="edit">';
-//        $insert_str .= '<tr><td class="space"></td><td class="one"></td>';
-//        $insert_str .= '<td class="two"><input type="button" id="popup" value="プロジェクト・枝番選択" data-action="pjinsertAjax.php?id=PJNUMMASTER_2"></td></tr>';
         foreach ($td_array as $td) {
             $insert_str .= '<tr>' . $td . '</td>';
         }

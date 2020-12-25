@@ -35,6 +35,7 @@ class BaseObject
 		require_once ("f_DB.php");
 		require_once ("f_Form.php");
 		require_once ("f_SQL.php");
+
 		$this->prContainer =  $container;
 		$this->prListCount = 0;
 	}
@@ -1501,14 +1502,19 @@ class BasePage extends BaseObject
 
 		// クエリ発行(カウント文)
 		if($page_mode !== PAGE_NONE){
-			$result = $con->query($sql[1]) or ($judge = true);
-			if($judge)	{
-				error_log($con->error,0);
-				$judge = false;
-			}
-			while($result_row = $result->fetch_array(MYSQLI_ASSOC))		{
-				$totalcount = $result_row['COUNT(*)'];
-			}
+                    $result = $con->query($sql[1]) or ($judge = true);
+                    if($judge)	{
+                        error_log($con->error,0);
+                        $judge = false;
+                    }
+                    while($result_row = $result->fetch_array(MYSQLI_ASSOC)){
+                        if(isset($result_row['COUNT(DISTINCT 5CODE)'])){
+                            $totalcount = $result_row['COUNT(DISTINCT 5CODE)'];
+                        } else {
+                            $totalcount = $result_row['COUNT(*)'];
+                        }
+                        
+                    }
 		}
 
 		//SQL文成形
@@ -2139,6 +2145,7 @@ class BasePage extends BaseObject
 	 */
 	function makeHiddenParam( $list_id, $step )
 	{
+            $hiddenparam = "";
 		if($list_id != "")
 		{
 			$hiddenparam = '<input type="hidden" name = "edit_list_id" value = "'.$list_id.'" class="free">';

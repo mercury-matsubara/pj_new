@@ -87,6 +87,19 @@ class PageFactory
                 {
                     $page = new Kousu($container);
                 }
+                else if($filename === "NENZIPERIOD_2")
+                {
+                    // 期またぎボタン押下時
+                    if(isset($container->pbInputContent['nenziperiod'])){
+                        $container->pbFileName = "NENZIPJ_1";
+                        $container->ReadPage( "NENZIPJ_1", "", $step );
+                        $page = new NenziPj($container);
+                    }
+                    else{
+                        $page = new Nenziperiod($container);
+                    }
+                    
+                }
                 if($page !== null)
 		{
 			return $page;
@@ -96,34 +109,26 @@ class PageFactory
 		//汎用ページ
 		if($pre_url[1] === '1')//登録、編集
 		{
-			if($step == STEP_INSERT)//データ登録
-			{
-                            $page = new InsertPage($container);
-			}
-			else if($step == STEP_EDIT)//データ編集
-			{
-                                $page = new EditPage($container);
-			}
-			else if($step == STEP_DELETE)//データ削除
-			{
-				$page = new DeletePage($container);
-			}
+                    if($step == STEP_INSERT)//データ登録
+                    {
+                        $page = new InsertPage($container);
+                    }
+                    else if($step == STEP_EDIT)//データ編集
+                    {
+                        $page = new EditPage($container);
+                    }
+                    else if($step == STEP_DELETE)//データ削除
+                    {
+                        $page = new DeletePage($container);
+                    }
 		}
 		else if($pre_url[1] === '2')//リスト
 		{
-			$page = new ListPage($container);
+                    $page = new ListPage($container);
 		}
 		else if($pre_url[1] === '3')//編集のみ
 		{
-			/*if($container->pbPageCheck === 'Execute')//データ処理
-			{
-				$page = new BaseLogicExecuter($container);
-			}
-			else
-			{*/
-                     $page = new EditPage($container);
-//}
-			
+                    $page = new EditPage($container);
 		}	
 		else if($pre_url[1] === '5')//印刷
 		{
@@ -131,16 +136,16 @@ class PageFactory
 		}
 		else if($pre_url[1] === '6')//条件指定
 		{
-			$page = new CondisionPage($container);
+                    $page = new CondisionPage($container);
 		}
 		else
 		{
-			$page = new TopPage($container);			
+                    $page = new TopPage($container);			
 		}
 		
                 if($filename === 'TOP_5') 
 		{
-			$page = new TopPage($container);
+                    $page = new TopPage($container);
 		}
                 
 		return $page;
@@ -154,57 +159,61 @@ class PageFactory
     */
 	public function createExecuter($filename,$container)
 	{
-		$executer = null;
-		
-		
-		if($container->pbPageCheck === 'Execute')//データ処理
-		{
-			//--特殊処理--//
-			if($filename === 'EDABANMASTER_1')
-			{
-				$executer = new EdabanInsertExecuteSQL($container);
-			}
-                        else if($filename === 'PJEND_2')
-			{
-				$executer = new PjendExecuteSQL($container);
-			}
-                        else if($filename === 'PJCANCEL_2')
-			{
-				$executer = new PjcancelExecuteSQL($container);
-			}
-                        else if($filename === 'GETSUZI_5')
-                        {
-                                $executer = new GetsuziExecuteSQL($container);
-                        }
-                        else if($filename === 'NENZI_5')
-                        {
-                                $executer = new NenziExecuteSQL($container);
-                        }
-                        else if($filename === 'PJICHIRAN_1')
-                        {
-                                $executer = new PjtourokuExecuteSQL($container);
-                        }
-                        else if($filename === 'PROGRESSINFO_1' || $filename === 'PROGRESSINFO_3')
-                        {
-                                $executer = new ProgressExecuteSQL($container);
-                        }
-                        else if($filename === 'STAFFMONEYSET_2')
-                        {
-                                $executer = new StaffMoneySetExecuteSQL($container);
-                        }
-                        else if($filename === 'KOUSU_1')
-                        {
-                                $executer = new kousuExecute($container);
-                        }
-                        if($executer !== null)
-			{
-				return $executer;
-			}
-			//--特殊処理--//
-			
-			$executer = new BaseLogicExecuter($container);
-		}
-		
-		return $executer;
+            $executer = null;
+
+
+            if($container->pbPageCheck === 'Execute')//データ処理
+            {
+                //--特殊処理--//
+                if($filename === 'EDABANMASTER_1')
+                {
+                    $executer = new EdabanInsertExecuteSQL($container);
+                }
+                else if($filename === 'PJEND_2')
+                {
+                    $executer = new PjendExecuteSQL($container);
+                }
+                else if($filename === 'PJCANCEL_2')
+                {
+                    $executer = new PjcancelExecuteSQL($container);
+                }
+                else if($filename === 'GETSUZI_5')
+                {
+                    $executer = new GetsuziExecuteSQL($container);
+                }
+                else if($filename === 'NENZI_5')
+                {
+                    $executer = new NenziExecuteSQL($container);
+                }
+                else if($filename === 'PJICHIRAN_1')
+                {
+                    $executer = new PjtourokuExecuteSQL($container);
+                }
+                else if($filename === 'PROGRESSINFO_1' || $filename === 'PROGRESSINFO_3')
+                {
+                    $executer = new ProgressExecuteSQL($container);
+                }
+                else if($filename === 'STAFFMONEYSET_2')
+                {
+                    $executer = new StaffMoneySetExecuteSQL($container);
+                }
+                else if($filename === 'KOUSU_1')
+                {
+                    $executer = new kousuExecute($container);
+                }
+                else if($filename === 'NENZIPJ_1')
+                {
+                    $executer = new NenziPjExecute($container);
+                }
+                if($executer !== null)
+                {
+                    return $executer;
+                }
+                //--特殊処理--//
+
+                $executer = new BaseLogicExecuter($container);
+            }
+
+            return $executer;
 	}		
 }

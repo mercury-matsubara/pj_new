@@ -31,5 +31,8 @@ function readRequire()
     $php[] = "./customHtml/staffMoneySet.php";
     $php[] = "./customHtml/kousu.php";
     $php[] = "./customHtml/progressEdit.php";
+    $php[] = "./customHtml/nenziperiod.php";
+    $php[] = "./customHtml/nenzipj.php";
+    $php[] = "./customExecuter/nenzipjExecute.php";
     return $php;
 }

@@ -1664,7 +1664,7 @@ function getCode($filename,$post="")
     {
         $code = "4CODE";
     }
-    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1"  || $filename === "STAFFMONEYSET_2" || $filename === "PJICHIRAN_1")    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
+    else if($filename === "PJEND_1" || $filename === "PJCANCEL_1"  || $filename === "STAFFMONEYSET_2" || $filename === "PJICHIRAN_1" ||$filename === "NENZIPERIOD_1" )    //PJ終了,PJ終了キャンセル,PJ一覧,社員別金額設定
     {
         $code = "5CODE";
     }
