@@ -1,6 +1,20 @@
 <?php
 class Nenzi extends BasePage
 {
+    
+    
+    /**
+     * 関数名: exequtePreHtmlFunc
+     *   ページ用のHTMLを出力する前の処理
+     */
+    public function executePreHtmlFunc()
+    {
+        //親の処理
+        parent::executePreHtmlFunc();
+        //変数をセット
+        $this->prTitle = "年次処理";					//メンバ変数タイトル
+
+    }
     /**
      * 関数名: makeScriptPart
      *   JavaScript文字列(HTML)を作成する関数
@@ -16,70 +30,52 @@ class Nenzi extends BasePage
         $html .= '<script src="./customJS/nenzi.js"></script>';
 
         return $html;
-
     }
     
     function makeBoxContentMain()
     {
         $message = "";
 	$filename = $_SESSION['filename'];
-	if(isset($_SESSION['post']['message']))
+	if(isset($_SESSION['error']))
 	{
-		$message = $_SESSION['post']['message'];
-		$_SESSION['post']['massage'] = null;
+            $message = $_SESSION['error'];
+            $_SESSION['error'] = null;
 	}
 	if(isset($_SESSION['post']['item']))
 	{
-		$post = $_SESSION['post']['item'];
+            $post = $_SESSION['post']['item'];
 	}
 	else
 	{
 		$post = array();
 	}
-	if(empty($_SESSION['nenzi']['checkmessage']))
-	{
-		$html = "<left>";
-		$html .= "<form action='main.php' method='post'>";
-		$html .= makebutton($filename,'top');
-		$html .= "<div style='clear:both;'></div>";
-		$html .= "</form>";
-		$html .= "</left>";
-		$html .= "<center>";
-		$html .= "<a class = 'title'>年次処理</a>";
-		$html .= "<br><a class = 'error'>".$message."</a>";
-		$html .= "<br><br>";
-		$html .= ("前回実施期： ".$this->nenzi_rireki()."<br><br>");
-		$html .= '<table><tr><td><form action="main.php?NENZI_1=" method="post">';
-		$today = explode('/',date("Y/m/d"));
-		$post['period_0'] = $this->getperiod($today[1],$today[0]) - 1;
-		$html .= '年次処理対象期 '.$this->period_pulldown_set("period","",$post,"","","").'</td></tr></table>';
-		$html .= "<div style='display:inline-flex'>";
-		$html .= "<br><br><input type='submit' name='NENZIPERIOD_2_button' value = '期またぎ' class='free'>";
+
+        $html = "<left>";
+        $html .= "<form action='main.php' method='post'>";
+        $html .= makebutton($filename,'top');
+        $html .= "<div style='clear:both;'></div>";
+        $html .= "</form>";
+        $html .= "</left>";
+        $html .= "<center>";
+        $html .= "<a class = 'title'>年次処理</a>";
+        $html .= "<br><a class = 'error'>".$message."</a>";
+        $html .= "<br><br>";
+        $html .= ("前回実施期： ".$this->nenzi_rireki()."<br><br>");
+        $html .= '<table><tr><td><form action="main.php?NENZI_1=" method="post">';
+        $today = explode('/',date("Y/m/d"));
+        $post['period_0'] = $this->getperiod($today[1],$today[0]) - 1;
+        $html .= '年次処理対象期 '.$this->period_pulldown_set("period","",$post,"","","").'</td></tr></table>';
+        $html .= "<div style='display:inline-flex'>";
+        $html .= "<br><br><input type='submit' name='NENZIPERIOD_2_button' value = '期またぎ' class='free'>";
 //		$html .= "<input type='submit' name='push' value = '年次処理' class='free' onClick = 'return check();'>";
-                $html .= "<input type='submit' name='Comp' value = '年次処理' class='free' onClick = 'return check();'>";
-		$html .= "</form>";
-		$html .= "<form action='download_csv.php' method='post'>";
-		$html .= "<input type = 'hidden' name = 'period' id = 'period' value = ''>";
-		$html .= "<input type ='submit' name = 'csv' class='button' value = 'csvファイル生成' style ='height:30px;' onClick = ' set_value(); '>";
-		$html .= "</form>";
-		$html .= "</div>";
-		$html .= "</center>";
-	}
-	else
-	{
-		nenji($_SESSION['nenzi']['period']);
-		$html .= "<form action='pageJump.php' method='post'>";
-		$html .= makebutton($filename,'top');
-		$html .= "<div style='clear:both;'></div>";
-		$html .= "</form>";
-		$html .= "<center>";
-		$html .= "<a class = 'title'>年次処理完了</a>";
-		$html .= "<br><br>";
-		$html .= ("実施期: ".$_SESSION['nenzi']['period']."期<br><br>");
-		$html .= "</center>";
-		unset($_SESSION['nenzi']);
-		unset($_SESSION['list']);
-	}
+        $html .= "<input type='submit' name='Comp' value = '年次処理' class='free' onClick = 'return check();'>";
+        $html .= "</form>";
+        $html .= "<form action='download_csv.php' method='post'>";
+        $html .= "<input type = 'hidden' name = 'period' id = 'period' value = ''>";
+        $html .= "<input type ='submit' name = 'csv' class='button' value = 'csvファイル生成' style ='height:30px;' onClick = ' set_value(); '>";
+        $html .= "</form>";
+        $html .= "</div>";
+        $html .= "</center>";
         
         return $html;
     }

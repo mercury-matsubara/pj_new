@@ -1729,6 +1729,8 @@ function make_getujicsv($period,$month){
 	$syainArray = array();
 	$pj = array();
 	$getuji = array();
+        $teizistring = "[定時]";
+        $zangyostring = "[残業]";
 	//------------------------//
 	//          処理          //
 	//------------------------//
@@ -1918,8 +1920,10 @@ function make_getujicsv($period,$month){
 		{
 			if($i == 1)
 			{
-				$hteizi = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "cp932").",[定時],";
-				$hzangyo = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "cp932").",[残業],";
+//				$hteizi = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "cp932").",[定時],";
+//				$hzangyo = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "cp932").",[残業],";
+                                $hteizi = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($teizistring, "sjis-win", "UTF-8").",";
+				$hzangyo = mb_convert_encoding($getuji[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($zangyostring, "sjis-win", "UTF-8").",";
 			}
 			if(!empty($getuji[$key][$i]))
 			{
@@ -1927,8 +1931,8 @@ function make_getujicsv($period,$month){
 				$value2 = $getuji[$key][$i]['zangyou'];
 				$sum1 += $getuji[$key][$i]['teizi'];
 				$sum2 += $getuji[$key][$i]['zangyou'];
-				$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-				$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+				$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+				$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 				$teizi .= $value1.",";
 				$zangyo .= $value2.",";
 			}
@@ -1955,8 +1959,10 @@ function make_getujicsv($period,$month){
 		{
 			if($i == 1)
 			{
-				$hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[定時],";
-				$hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[残業],";
+//				$hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[定時],";
+//				$hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[残業],";
+                            $hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "UTF-8").",".mb_convert_encoding($teizistring, "sjis-win", "UTF-8").",";
+                            $hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "UTF-8").",".mb_convert_encoding($zangyostring, "sjis-win", "UTF-8").",";
 			}
 			if(!empty($pj[$key][$i]))
 			{
@@ -1964,8 +1970,8 @@ function make_getujicsv($period,$month){
 				$value2 = $pj[$key][$i]['zangyou'];
 				$sum1 += $pj[$key][$i]['teizi'];
 				$sum2 += $pj[$key][$i]['zangyou'];
-				$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-				$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+				$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+				$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 				$teizi .= $value1.",";
 				$zangyo .= $value2.",";
 			}
@@ -1977,6 +1983,8 @@ function make_getujicsv($period,$month){
 		}
 		$value_csv2 .= $hteizi.$sum1.",".$teizi."\r\n".$hzangyo.$sum2.",".$zangyo."\r\n";
 	}
+        $hedder1 = mb_convert_encoding($hedder1, "sjis-win", "UTF-8");
+        $hedder2 = mb_convert_encoding($hedder2, "sjis-win", "UTF-8");
 	$csv = $hedder1."\r\n".$value_csv1."\r\n\r\n".$hedder2."\r\n".$value_csv2;
 	$path = csv_write($csv);
 	return($path);
@@ -2127,6 +2135,9 @@ function make_nenjicsv($period){
 	$syainArray = array();
 	$pj = array();
 	$getuji = array();
+        
+        $teizistring = "[定時]";
+        $zangyostring = "[残業]";
 	//------------------------//
 	//          処理          //
 	//------------------------//
@@ -2310,8 +2321,8 @@ function make_nenjicsv($period){
 		{
 			if($i == 1)
 			{
-				$hteizi = mb_convert_encoding($nenji[$key]['name'], "sjis-win", "cp932").",[定時],";
-				$hzangyo = mb_convert_encoding($nenji[$key]['name'], "sjis-win", "cp932").",[残業],";
+				$hteizi = mb_convert_encoding($nenji[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($teizistring, "sjis-win", "UTF-8").",";
+				$hzangyo = mb_convert_encoding($nenji[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($zangyostring, "sjis-win", "UTF-8").",";
 			}
 			if($i <= 7)
 			{
@@ -2321,8 +2332,8 @@ function make_nenjicsv($period){
 					$value2 = $nenji[$key][($i+5)]['zangyou'];
 					$sum1 += $nenji[$key][($i+5)]['teizi'];
 					$sum2 += $nenji[$key][($i+5)]['zangyou'];
-					$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-					$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+					$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+					$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 					$teizi .= $value1.",";
 					$zangyo .= $value2.",";
 				}
@@ -2340,8 +2351,8 @@ function make_nenjicsv($period){
 					$value2 = $nenji[$key][($i-7)]['zangyou'];
 					$sum1 += $nenji[$key][($i-7)]['teizi'];
 					$sum2 += $nenji[$key][($i-7)]['zangyou'];
-					$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-					$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+					$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+					$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 					$teizi .= $value1.",";
 					$zangyo .= $value2.",";
 				}
@@ -2369,8 +2380,10 @@ function make_nenjicsv($period){
 		{
 			if($i == 1)
 			{
-				$hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[定時],";
-				$hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "cp932").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "cp932").",[残業],";
+//                            $hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($teizistring, "sjis-win", "UTF-8").",";
+//                            $hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($zangyostring, "sjis-win", "UTF-8").",";
+                            $hteizi = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "UTF-8").",".mb_convert_encoding($teizistring, "sjis-win", "UTF-8").",";
+                            $hzangyo = mb_convert_encoding($pj[$key]['name'], "sjis-win", "UTF-8").",".mb_convert_encoding($pj[$key]['pjname'], "sjis-win", "UTF-8").",".mb_convert_encoding($zangyostring, "sjis-win", "UTF-8").",";
 			}
 			if($i <= 7)
 			{
@@ -2380,8 +2393,8 @@ function make_nenjicsv($period){
 					$value2 = $pj[$key][($i+5)]['zangyou'];
 					$sum1 += $pj[$key][($i+5)]['teizi'];
 					$sum2 += $pj[$key][($i+5)]['zangyou'];
-					$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-					$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+					$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+					$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 					$teizi .= $value1.",";
 					$zangyo .= $value2.",";
 				}
@@ -2399,8 +2412,8 @@ function make_nenjicsv($period){
 					$value2 = $pj[$key][($i-7)]['zangyou'];
 					$sum1 += $pj[$key][($i-7)]['teizi'];
 					$sum2 += $pj[$key][($i-7)]['zangyou'];
-					$value1 = mb_convert_encoding($value1, "sjis-win", "cp932");
-					$value2 = mb_convert_encoding($value2, "sjis-win", "cp932");
+					$value1 = mb_convert_encoding($value1, "sjis-win", "UTF-8");
+					$value2 = mb_convert_encoding($value2, "sjis-win", "UTF-8");
 					$teizi .= $value1.",";
 					$zangyo .= $value2.",";
 				}
@@ -2411,8 +2424,12 @@ function make_nenjicsv($period){
 				}
 			}
 		}
+//                $hteizi = mb_convert_encoding($hteizi, "sjis-win", "UTF-8");
+//                $hzangyo = mb_convert_encoding($hzangyo, "sjis-win", "UTF-8");
 		$value_csv2 .= $hteizi.$sum1.",".$teizi."\r\n".$hzangyo.$sum2.",".$zangyo."\r\n";
 	}
+        $hedder1 = mb_convert_encoding($hedder1, "sjis-win", "UTF-8");
+        $hedder2 = mb_convert_encoding($hedder2, "sjis-win", "UTF-8");
 	$csv = $hedder1."\r\n".$value_csv1."\r\n\r\n".$hedder2."\r\n".$value_csv2;
 	$path = csv_write($csv);
 	return($path);

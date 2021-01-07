@@ -2,7 +2,17 @@
 class Getsuzi extends BasePage
 {
     public $errorCode;
-    
+    /**
+     * 関数名: exequtePreHtmlFunc
+     *   ページ用のHTMLを出力する前の処理
+     */
+    public function executePreHtmlFunc()
+    {
+        //親の処理
+        parent::executePreHtmlFunc();
+        //変数をセット
+        $this->prTitle = "月次処理";					//メンバ変数タイトル
+    }
     /**
      * 関数名: makeScriptPart
      *   JavaScript文字列(HTML)を作成する関数
@@ -33,9 +43,9 @@ class Getsuzi extends BasePage
         if(isset($_SESSION['error']))
         {
             $this->errorCode = $_SESSION['error'];
-            $_SESSION['error'] = "";
+            $_SESSION['error'] = null;
         }
-        
+        $this->prTitle = "月次処理";
         $message = "";
 	$filename = $_SESSION['filename'];
 	if(isset($_SESSION['post']['message']))

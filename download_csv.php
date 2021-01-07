@@ -28,11 +28,11 @@ session_start();
 require_once("f_Construct.php");
 require_once("f_DB.php");
 $form_ini = parse_ini_file('./ini/form.ini', true);
-startJump($_POST);
+//startJump($_POST);
 $filename = $_SESSION['filename'];
 if($filename == 'NENZI_5')
 {
-	$period = mb_convert_encoding($_POST['period'],'sjis-win','SJIS');
+	$period = mb_convert_encoding($_POST['period'],'sjis-win','UTF-8');
 	$path = make_nenjicsv($period);
 }
 else if($filename == 'GETSUZI_5')
@@ -41,10 +41,7 @@ else if($filename == 'GETSUZI_5')
 	$month = mb_convert_encoding($_POST['month'],'sjis-win','SJIS');
 	$path = make_getujicsv($period,$month);
 }
-else
-{
-	$path = make_csv($_SESSION['list']);
-}
+
 $date = date_create("NOW");
 $date = date_format($date, "Ymd");
 if($filename == 'NENZI_5')

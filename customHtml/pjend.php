@@ -38,7 +38,7 @@ class Pjend extends ListPage
         if(isset($_SESSION['error']))
         {
             $this->errorCode = $_SESSION['error'];
-            $_SESSION['error'] = "";
+            $_SESSION['error'] = null;
         }
             if(!isset($_SESSION['list']))
             {

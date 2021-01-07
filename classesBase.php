@@ -2849,6 +2849,115 @@ class BasePage extends BaseObject
 
         return $rowHtml;
     }
+    
+    /************************************************************************************************************
+    年次処理(プロジェクト管理システム)
+    function nenjiCheck($period)
+
+    引数1		$month						処理対象月
+    引数2		$period 					期
+    引数3		$kubun						0:通常処理	1:年次処理
+
+    戻り値		$form						モーダルに表示リストhtml
+    ************************************************************************************************************/
+    function nenjiCheck($period){
+
+            //------------------------//
+            //        初期設定        //
+            //------------------------//
+            require_once("f_DB.php");																							// DB関数呼び出し準備
+            require_once("f_File.php");																							// DB関数呼び出し準備
+            $form_ini = parse_ini_file('./ini/form.ini', true);
+            $item_ini = parse_ini_file('./ini/item.ini', true);
+
+            //------------------------//
+            //          定数          //
+            //------------------------//
+            $filename = $_SESSION['filename'];
+            $teijitime = (float)$item_ini['settime']['teijitime'];
+            $nowdate = date_create("NOW");
+            $nowdate = date_format($nowdate, 'Y-n-j');
+
+            //------------------------//
+            //          変数          //
+            //------------------------//
+            $judge = false;
+            $monthjudge = false;
+            $error_month = "";
+            $error_pj = array();
+            $endmonth = array();
+            $Month = "6,7,8,9,10,11,12,1,2,3,4,5";
+            $arrayMonth = explode(',',$Month);
+            $checkflgmessage = '';
+            $count = 0;
+
+            //------------------------//
+            //        検索処理        //
+            //------------------------//
+
+            $con = dbconect();	
+
+            //年次チェック
+            $sql = "SELECT * FROM endperiodinfo WHERE PERIOD = '".$period."';";
+            $result = $con->query($sql);
+            $rows = $result->num_rows;
+            if($rows == 0)
+            {
+                    //月次チェック
+                    $sql = "SELECT * FROM endmonthinfo WHERE PERIOD = '".$period."';";
+                    $result = $con->query($sql);
+                    $rows = $result->num_rows;
+                    while($result_row = $result->fetch_array(MYSQLI_ASSOC))
+                    {
+                            $endmonth[$count] = $result_row['MONTH'];
+                            $count++;
+                    }
+                    for($i = 0; $i < 12; $i++)
+                    {
+                            for($j = 0; $j < count($endmonth); $j++)
+                            {
+                                    if($arrayMonth[$i] == $endmonth[$j])
+                                    {
+                                            $monthjudge = true;
+                                    }
+                            }
+                            if(!$monthjudge)
+                            {
+                                    //月次を行っていない月を集計
+                                    $error_month .= $arrayMonth[$i].',';
+                            }
+                            $monthjudge = false;
+                    }
+                    $_SESSION['errormonth'] = rtrim($error_month,',');
+                    $count = 0;
+                    //PJチェック
+                    $start_year = getyear('6',$period);
+                    $end_year = $start_year + 1;
+                    $sql = "SELECT DISTINCT(EDABAN),PROJECTNUM,PJNAME FROM progressinfo LEFT JOIN projectditealinfo USING(6CODE) LEFT JOIN projectinfo USING(5CODE) LEFT JOIN projectnuminfo USING(1CODE) "
+                            ."LEFT JOIN syaininfo USING(4CODE) LEFT JOIN edabaninfo USING(2CODE) LEFT JOIN kouteiinfo USING(3CODE) WHERE projectinfo.5PJSTAT = 1 AND "
+                            ."progressinfo.SAGYOUDATE BETWEEN '".$start_year."-06-01' AND '".$end_year."-05-31' order by PROJECTNUM,EDABAN ;";
+                    $result = $con->query($sql);
+                    $rows = $result->num_rows;
+                    if($rows > 0)
+                    {
+                            while($result_row = $result->fetch_array(MYSQLI_ASSOC))
+                            {
+                                    $error_pj[$count]['PROJECTNUM'] = $result_row['PROJECTNUM'];
+                                    $error_pj[$count]['EDABAN'] = $result_row['EDABAN'];
+                                    $error_pj[$count]['PJNAME'] = $result_row['PJNAME'];
+                                    $count++;
+                            }
+                    }
+                    return ($error_pj);
+            }
+            else
+            {
+                    $_SESSION['error'] = $period."期は既に年次処理済です。";
+            }
+    }
+    
+    
+
 }
 
 

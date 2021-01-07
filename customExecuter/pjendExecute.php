@@ -19,7 +19,7 @@ class PjendExecuteSQL extends BaseLogicExecuter
             }
             $message = $this->pjend($code,$con);
             //トランザクションコミットまたはロールバック
-            commitTransaction($message,$con);
+            commitTransaction($message[0],$con);
             
             $id = 0;
             $step = 0;

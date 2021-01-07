@@ -379,7 +379,7 @@ class BaseLogicExecuter extends BasePage
                         if($judge)
                         {
                                 error_log($con->error,0);
-                                $judge = false;
+                                $checkflg = true;
                         }
                         while($result_row = $result->fetch_array(MYSQLI_ASSOC))
                         {
@@ -416,11 +416,11 @@ class BaseLogicExecuter extends BasePage
                                 $performance = round($charge/$total,3);
                                 $sql_end = "INSERT INTO endpjinfo (6CODE,TEIJITIME,ZANGYOTIME,TOTALTIME,PERFORMANCE,8ENDDATE,PROJECTNUM,EDABAN,PJNAME) VALUES "
                                                         ."(".$key.",".$teizi.",".$zangyou.",".$total.",".$performance.","."'".$nowdate."'".","."'".$pjnum."'".","."'".$pjeda."'".","."'".$pjname."'".") ;";
-                                $result = $con->query($sql_end) or ($judge = true);																		// クエリ発行
+                                $result = $con->query($sql_end) or ($judge = true);// クエリ発行
                                 if($judge)
                                 {
                                         error_log($con->error,0);
-                                        $judge = false;
+                                        $checkflg = true;
                                 }
                                 if(!empty($upcode6))
                                 {
@@ -437,7 +437,7 @@ class BaseLogicExecuter extends BasePage
                         if($judge)
                         {
                                 error_log($con->error,0);
-                                $judge = false;
+                                $checkflg = true;
                         }
 
                         $upcode6 = substr($upcode6, 0, -1);
@@ -446,30 +446,104 @@ class BaseLogicExecuter extends BasePage
                         if($judge)
                         {
                                 error_log($con->error,0);
-                                $judge = false;
+                                $checkflg = true;
                         }
                         $sql_update = "UPDATE progressinfo SET 7ENDDATE = '".$nowdate."' , 7PJSTAT = '2' WHERE 6CODE IN (".$upcode6.");";
                         $result = $con->query($sql_update) or ($judge = true);																		// クエリ発行
                         if($judge)
                         {
                                 error_log($con->error,0);
-                                $judge = false;
+                                $checkflg = true;
                         }
                 }
                 if(!$checkflg)
                 {
-                        $message[] = true;
-                        $message[] = $pjid[$i];
+                        $message[0] = true;
+                        $message[1] = $pjid[$i];
                 }
                 else
                 {
-                        $message[] = false;
-                        $message[] = $pjid[$i];
+                        $message[0] = false;
+                        $message[1] = $pjid[$i];
                         return($message);
                 }
             }
             return($message);
     }
+    
+    /****************************************************************************************
+    function deletedate_change()
+
+
+    引数	なし
+
+    戻り値	なし
+    ****************************************************************************************/
+    function deletedate_change(){
+
+
+
+            //------------------------//
+            //        初期設定        //
+            //------------------------//
+            $file_ini = parse_ini_file('./ini/file.ini', true);
+
+            //------------------------//
+            //          定数          //
+            //------------------------//
+            $filename = $_SESSION['filename'];
+            $check_path = $file_ini[$filename]['file_path'];																				// 送信確認ファイル
+            $date = date_create('NOW');
+            $date = date_format($date, "Y-m-d");
+            if($filename == 'getuzi_5')
+            {
+                    $period = $_SESSION['getuji']['period'];
+                    $month = $_SESSION['getuji']['month'];
+                    $date = $period."期 ".$month."月 ( 実行日： ".$date." )";
+            }
+            if($filename == 'nenzi_5')
+            {
+                    $period = $_SESSION['nenzi']['period'];
+                    $date = $period."期 ( 実行日 ：".$date." )";
+            }
+
+            //------------------------//
+            //          変数          //
+            //------------------------//
+            $buffer = "";
+
+            //--------------------------//
+            //  CSVファイルの追記処理  //
+            //--------------------------//
+
+            if(!file_exists($check_path))
+            {
+                    $fp = fopen($check_path, 'ab');																							// 送信確認ファイルを追記書き込みで開く
+                    fclose($fp);				
+            }
+
+            $fp = fopen($check_path, 'a+b');																							// 送信確認ファイルを追記書き込みで開く
+            // ファイルが開けたか //
+            if ($fp)
+            {
+                    // ファイルのロックができたか //
+                    if (flock($fp, LOCK_EX))																								// ロック
+                    {
+                            ftruncate( $fp,0);
+                            // ログの書き込みを失敗したか //
+                            if (fwrite($fp ,$date) === FALSE)																		// check_mail追記書き込み
+                            {
+                                    // 書き込み失敗時の処理
+                            }
+                            flock($fp, LOCK_UN);																								// ロックの解除
+                    }
+                    else
+                    {
+                            // ロック失敗時の処理
+                    }
+            }
+            fclose($fp);																												// ファイルを閉じる
+    }	
 }
 
 /**
