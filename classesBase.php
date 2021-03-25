@@ -2372,6 +2372,10 @@ class BasePage extends BaseObject
                             {
                                 continue;
                             }
+                            if($post['form_syaSTAFFVALUE_0'] === $colum)
+                            {
+                                continue;
+                            }
                         }
                     }
                     if(explode('_',$this->prContainer->pbFileName)[0] === 'USERMASTER' || explode('_',$this->prContainer->pbFileName)[0] === 'KOKYAKUMASTER')
@@ -2385,12 +2389,12 @@ class BasePage extends BaseObject
                             $result = $con->query($sql) or ($judge = true);																// クエリ発行
                             if($judge)
                             {
-                                    error_log($con->error,0);
-                                    $judge = false;
+                                error_log($con->error,0);
+                                $judge = false;
                             }
                             if($result->num_rows != 0 )
                             {
-                                    $errorinfo[0] .= $uniquecolumn_array[$j].",";
+                                $errorinfo[0] .= $uniquecolumn_array[$j].",";
                             }
                     }
             }
