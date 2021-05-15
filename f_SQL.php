@@ -981,7 +981,7 @@ function DeleteSQL($codeValue,$tablenum,$code,$filename){
 	//------------------------//
 	
 	//顧客マスタ、ログインの削除はDELETEFLAGに1を立てる
-	if($tableName == 'kokyakumaster' || $tableName == 'loginuserinfo' )
+	if($tableName == 'kokyakumaster' || $tableName == 'loginuserinfo' || $tableName == 'syaininfo' )
 	{	
 		//削除時DELETEFLAGに1を立てる
 		$delete_SQL[0] = "UPDATE ".$tableName." ";
@@ -996,14 +996,14 @@ function DeleteSQL($codeValue,$tablenum,$code,$filename){
 		$delete_SQL[0] .= ";";
 	}
 	//ヘッダ明細削除
-	if(isset($form_ini[$headerFileName]))
-	{
-		$headernum = $form_ini[$headerFileName]['use_maintable_num'];
-		$headerTableName = $form_ini[$headernum]['table_name'];
-		$delete_SQL[1] = "DELETE FROM ".$headerTableName." ";
-		$delete_SQL[1] .= " WHERE ".$code." = ".$codeValue;
-		$delete_SQL[1] .= ";";
-	}	
+//	if(isset($form_ini[$headerFileName]))
+//	{
+//		$headernum = $form_ini[$headerFileName]['use_maintable_num'];
+//		$headerTableName = $form_ini[$headernum]['table_name'];
+//		$delete_SQL[1] = "DELETE FROM ".$headerTableName." ";
+//		$delete_SQL[1] .= " WHERE ".$code." = ".$codeValue;
+//		$delete_SQL[1] .= ";";
+//	}	
 	
 	
 	return($delete_SQL);

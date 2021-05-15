@@ -201,14 +201,17 @@ error_reporting(E_ALL);
 			}
 			else if(strstr($key, 'print'))//印刷画面
 			{
-
+                                
 				//$_SESSION['step'] = 5;
 				$step = STEP_PRINT;
 			}
 			else if($key == 'Comp')//データ処理
 			{
                             $execute = $key;
-                            $step = $_GET['step'];
+                            if(isset($_GET['step'])){
+                                $step = $_GET['step'];
+                            }
+                            
                         }
                         else if($key == 'CompDel')
                         {
@@ -221,18 +224,6 @@ error_reporting(E_ALL);
 		if(isset($_SESSION['filename']))
 		{
 			$filename = $_SESSION['filename'];
-			//検索保持20200814
-                        if(isset($_SESSION['search']['flg']))
-                        {
-                            if(strpos($key,"serch") === false)
-                            {
-                                $_SESSION['search']['flg'] = 1;
-                            }
-                            if(strpos($key,'button') !== false)
-                            {
-                                $_SESSION['search']['flg'] = "";
-                            }
-                        }
 		}
                 else
                 {

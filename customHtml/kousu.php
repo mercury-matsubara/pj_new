@@ -53,15 +53,23 @@ class Kousu extends InsertPage
 
             if(isset($_SESSION['error']))
             {
-                $errorinfo = $_SESSION['error'];
+                $this->errorCode = $_SESSION['error'];
+                //$errorinfo = $_SESSION['error'];
                 $_SESSION['error'] = "";
             }
             //日付
             // $day = '<input type="text" name="day" class="top_text day" value='.$_GET['KOUSU_1_button?date'].'>';
-            $day = "<h3 class='pjday'>".$_GET['KOUSU_1_button?date']."</h3>";
+            if(isset($_GET['KOUSU_1_button?date'])){
+                $day = "<h3 class='pjday'>".$_GET['KOUSU_1_button?date']."</h3>";
+                $date = $_GET['KOUSU_1_button?date'];
+            }else{
+                $day = "<h3 class='pjday'>".$this->prContainer->pbInputContent."</h3>";
+                $date = $this->prContainer->pbInputContent;
+            }
+            
             //登録ボタン、戻るボタン
             $button = '<input type="button" id="regist" name = "comp" value = "登録" class="free">';
-            $button .= '<a href="main.php?TOP_5='.str_replace("/","-",substr($_GET['KOUSU_1_button?date'],0,7)).'"><input type="button" name = "back" value = "戻る" class="free"></a>';
+            $button .= '<a href="main.php?TOP_5='.str_replace("/","-",substr($date,0,7)).'"><input type="button" name = "back" value = "戻る" class="free"></a>';
             // コピー日付
             $copydate = '<input type="text" id = "copydate" class="copytime" readonly >';
             $copydate .= '<input type="button" name = "copy" value = "コピー" class="copybutton" onClick = "">';
@@ -81,14 +89,14 @@ class Kousu extends InsertPage
                 $columnName[] = $this->prContainer->pbParamSetting[$column[$i]]['item_name'];
             }
             // 入力項目作成
-            $table = $this->createTable($columnName,$column,$_GET['KOUSU_1_button?date']);
+            $table = $this->createTable($columnName,$column,$date);
             
             //出力HTML
             $html = '<br>';
             $html .= '<form method="post" name="Comp" action="main.php?'.$this->prContainer->pbFileName.'" id="send" enctype="multipart/form-data" >';
             $html .= '<div class = "pad">';
             $html .='<input type="hidden" name="step" value = "'.STEP_COMP.'" >';
-            $html .='<input type="hidden" name="date" value = "'.$_GET['KOUSU_1_button?date'].'" >';
+            $html .='<input type="hidden" name="date" value = "'.$date.'" >';
             $html .= $day;
             $html .= '<div class = "line">';
             $html .= $button;
@@ -115,30 +123,30 @@ class Kousu extends InsertPage
      */
     function makeBoxContentBottom()
     {
-            $html = '';
-            if( isPermission($this->prContainer->pbFileName) )
-            {
-                //ダイアログ
-                $html .= '<div id="dialog" title="入力確認" style="display:none;">
-                                                <p>この内容でよろしいでしょうか？</p>
-                                                </div>';
-                // 読取指定
-                if ($this->prContainer->pbPageSetting['form_type'] !== '2') {
+        $html = '';
+        if( isPermission($this->prContainer->pbFileName) )
+        {
+            //ダイアログ
+            $html .= '<div id="dialog" title="入力確認" style="display:none;">
+                                            <p>この内容でよろしいでしょうか？</p>
+                                            </div>';
+            // 読取指定
+            if ($this->prContainer->pbPageSetting['form_type'] !== '2') {
 
-                }
+            }
 
-                //遷移ボタン
-                $linkValue = '';
-                if (isset($this->prContainer->pbInputContent['edit_list_id'])) {
-                    $linkValue = 'edit_list_id=' . $this->prContainer->pbInputContent['edit_list_id'];
-                } else if (isset($this->prContainer->pbListId)) {//ステータス更新時GET情報がないため
-                    $linkValue = 'edit_list_id=' . $this->prContainer->pbListId;
-                }
-                $html .= $this->makeButtonV2($this->prContainer->pbFileName, 'bottom', STEP_INSERT, $linkValue);
+            //遷移ボタン
+            $linkValue = '';
+            if (isset($this->prContainer->pbInputContent['edit_list_id'])) {
+                $linkValue = 'edit_list_id=' . $this->prContainer->pbInputContent['edit_list_id'];
+            } else if (isset($this->prContainer->pbListId)) {//ステータス更新時GET情報がないため
+                $linkValue = 'edit_list_id=' . $this->prContainer->pbListId;
+            }
+            $html .= $this->makeButtonV2($this->prContainer->pbFileName, 'bottom', STEP_INSERT, $linkValue);
         }
-            $html .='</div>';
-            $html .= '</form>';
-            return $html;
+        $html .='</div>';
+        $html .= '</form>';
+        return $html;
     }
 
     /*
@@ -266,6 +274,35 @@ class Kousu extends InsertPage
         }
         
         return $script;
+    }
+        /**
+     * 関数名: makeAfterScript
+     *   BODYタグの後ろに埋め込むJavaScript文字列を作成する
+     * 
+     * @retrun HTML文字列
+     */
+    function makeAfterScript()
+    {	    
+        $html = '<script language="JavaScript">';
+
+        $html.= ' $("#contents .sub-menu > a").click(function (e) {
+                                $("#contents ul ul").slideUp(), $(this).next().is(":visible") || $(this).next().slideDown(),
+                                e.stopPropagation();
+                        });';
+
+        $html .= 'function makeDatepicker()
+                {' ;
+        $html.= $this->prInitScript;
+        $html.= '}';
+
+        if(isset($this->errorCode))
+        {
+            $code = $this->errorCode;
+            $html .= 'alert("'.$code.');';
+        }
+
+        $html .= '</script>';
+        return $html;
     }
     
 }

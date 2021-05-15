@@ -187,22 +187,24 @@ class BaseLogicExecuter extends BasePage
 	   //見積の入力値
 	   if($Content != "")
 	   {
-		   $_SESSION['Content'] = $Content;
+                $_SESSION['Content'] = $Content;
 	   }
 	   if($secondContent != "")
 	   {
-		   $_SESSION['SecondContent'] = $secondContent;
+                $_SESSION['SecondContent'] = $secondContent;
 	   }
            if($error != "")
            {
-                    $_SESSION['error'] = $error;
+                $_SESSION['error'] = $error;
            }
 	   //指定IDが入力されていたらURLに追加
 	   if(isset($id) && isset($filename))
 	   {
-			$url = "?".$filename."&edit_list_id=".$id;
-	
+                $url = "?".$filename."&edit_list_id=".$id;
 	   }
+           if($filename == "KOUSU_1"){
+               $url = "?".$filename."&edit_list_id=".$id;
+           }
 
 	   header("location:".(empty($_SERVER['HTTPS'])? "http://" : "https://")
 			   .$_SERVER['HTTP_HOST'].dirname($_SERVER["REQUEST_URI"])."/main.php$url");

@@ -658,7 +658,11 @@ class EditPage extends InsertPage
                                 {
                                     $html .= '<div class = "pad">
                                             <input type="button" name = "kousinn" value = "更新" class="free" onClick="Regist()" >';
-                                    $html .='<input type="submit" name = "delete" value = "削除" class="free" onClick = "ischeckpass = false;">';
+                                    if($this->prContainer->pbPageSetting['delete_type'] <> "2"){
+                                        //$html .='<input type="submit" name = "delete" value = "削除" class="free" onClick = "ischeckpass = false;">';
+                                        $html .='<input type="button" name = "delete" value = "削除" class="free" onClick="Delete()">';
+                                    }
+
                                 }
                                 
 				if($this->prContainer->pbFileName == 'MITSUMORIINFO_1' || $this->prContainer->pbFileName == 'SEIKYUINFO_1')

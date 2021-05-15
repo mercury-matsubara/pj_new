@@ -21,7 +21,8 @@ function calculateReturn()
 function setMoney()
 {
     var id = "";
-    if($('#total').val() === $('#form_pjtCHARGE_0').val())
+
+    if($('#total').val() === $('#form_pjdCHARGE_0').val())
     {
         id = "#set_dialog_1";
     }
@@ -33,6 +34,7 @@ function setMoney()
     $(id).dialog({
         //×ボタン隠す
         open: $(".ui-dialog-titlebar-close").hide(),
+        modal:true,
         autoOpen: true,
         buttons:
         {
@@ -83,6 +85,7 @@ function deletePj(code)
     $("#delete_dialog").dialog({
         //×ボタン隠す
         open: $(".ui-dialog-titlebar-close").hide(),
+        modal:true,
         autoOpen: true,
         buttons:
                 {

@@ -43,6 +43,7 @@ class NenziExecuteSQL extends BaseLogicExecuter
                 error_log($con->error,0);
                 $judge = false;
             }
+            deletedate_change();
 	}
 	else
 	{

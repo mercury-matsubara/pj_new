@@ -36,7 +36,8 @@ class PjtourokuExecuteSQL extends BaseLogicExecuter
             $stmt->close();
             //トランザクションコミットまたはロールバック
             commitTransaction($result,$con);
-            $this->PageJump("TOP_5", "", STEP_NONE, "", "");
+            $this->PageJump("PJICHIRAN_2", "", STEP_NONE, "", "");
+            //$this->PageJump("TOP_5", "", STEP_NONE, "", "");
     }
     
     /**

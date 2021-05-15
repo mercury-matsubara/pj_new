@@ -2328,6 +2328,11 @@ class BasePage extends BaseObject
                             $counter++;
                     }
             }
+            // 無理やり
+            if($type == 3){
+                $table_title = $form_ini[$tablenum]['table_title'];
+                $code = getCode($filename);
+            }
             for( $j = 0 ; $j < count($uniquecolumn_array) ; $j++)
             {
                     if($uniquecolumn_array[$j] == "")

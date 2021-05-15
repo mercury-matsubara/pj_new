@@ -611,10 +611,19 @@ table.list th
 
 table.list td
 {
-    border-width: 0px 1px; /* 上下だけ引く */
-    border-color: lightgrey;   /* 線色：緑 */
-    border-style: solid;   /* 線種：実線 */
+/*    border-width: 0px 1px;  上下だけ引く 
+    border-color: lightgrey;    線色：緑 
+    border-style: solid;    線種：実線 
+    height: 25px;*/
+    border-width: 0px 1px;
+    border-color: lightgrey;
+    border-style: solid;
     height: 25px;
+    max-width: 25vw;
+    /*text-overflow: ellipsis;*/
+    white-space: nowrap;
+    /*overflow: hidden;*/
+/*    overflow: auto;*/
 }
 
 div.print 

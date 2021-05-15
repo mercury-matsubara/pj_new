@@ -64,7 +64,7 @@ span.dayof {
 span.worktime,span.overtime{
     display: block;
     border-bottom: 1px solid #b8b8b8;
-    height: 30%;
+    height: 25%;
     text-align: right;
     margin: 0% 4% 0% 4%;
     padding-top: 4%;

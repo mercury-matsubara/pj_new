@@ -63,7 +63,7 @@ table.list{
     margin-left: 0.3vw;
 }
 
-table.list td{
+/*table.list td{
     border-width: 0px 1px;
     border-color: lightgrey;
     border-style: solid;
@@ -72,5 +72,22 @@ table.list td{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    overflow: auto;
+}*/
+.textoverflow{
+    overflow: auto;
+}
+.textoverflow::-webkit-scrollbar {
+    width: 10px;
+    height: 5px;
+}
+.textoverflow::-webkit--webkit-scrollbar-track {
+    border-radius: 5px;
+  box-shadow: 0 0 4px #aaa inset;
+
+}
+.textoverflow::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #AAA;
 }
 

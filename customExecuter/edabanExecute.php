@@ -37,7 +37,7 @@ class EdabanInsertExecuteSQL extends BaseLogicExecuter
                         $code2 = $result_row['MAX(2CODE)'] ;
                 }
 
-                $pjnum = $this->prContainer->pbInputContent['form_pjnPROJECT_0'];
+                $pjnum = $this->prContainer->pbInputContent['form_edaPROJECTNUM_0'];
 
                 //PJナンバ抽出
                 $sql2 = "SELECT * FROM projectnuminfo WHERE PROJECTNUM = '".$pjnum."';";
@@ -71,13 +71,15 @@ class EdabanInsertExecuteSQL extends BaseLogicExecuter
                 //指定ページへ遷移
                 if($_SESSION['history'][0] === "PJICHIRAN_2" || $_SESSION['history'][1] === "PJICHIRAN_2")
                 {
+                    //$_SESSION['search']['input']['form_pjtEDABAN_0'] = $this->prContainer->pbInputContent['form_edaEDABAN_0'];
                     $_SESSION['search']['input']['form_pjtEDABAN_0'] = $this->prContainer->pbInputContent['form_edaEDABAN_0'];
                     $_SESSION['search']['flg'] = 1;
-                    $this->PageJump("PJICHIRAN_2", $edit['edit_list_id'], 2,"","");
+//                    $this->PageJump("PJICHIRAN_2", $edit['edit_list_id'], 2,"","");
+                    $this->PageJump("PJICHIRAN_2", "", 0,"","");
                 }
                 else
                 {
-                    $this->PageJump("EDABANMASTER_2", $edit['edit_list_id'], 2,"","");
+                    $this->PageJump("EDABANMASTER_2", "", 0,"","");
                 }
         }
     }

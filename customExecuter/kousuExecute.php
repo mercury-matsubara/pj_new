@@ -12,6 +12,7 @@ class kousuExecute extends BaseLogicExecuter
     {
         $progresscode = array();
         $kouteicode = array();
+        $error = "";
         // トランザクション開始
         $con = beginTransaction();
         // 登録日付
@@ -35,26 +36,41 @@ class kousuExecute extends BaseLogicExecuter
             $kousu = $this->kousuExistCheck($con,$pronum,$eda);
             if($kousu !== false){
                 $progresscode[$i] = $kousu;
+            }else{
+                $error = "PJに誤りがあります。";
+                $result = false;
+                break;
             }
             // 工程存在チェック
             $koutei = $this->kouteiExistCheck($con,$id,$name);
             if($koutei !== false){
                 $kouteicode[$i] = $koutei;
-            }
-            
-            // 対象日付のデータ削除
-            $insert = $this->kousuInsert($con,$kouteicode[$i],$progresscode[$i],$date,$teizi,$zangyo);
-            // 失敗時抜ける
-            if($insert === false){
+            }else{
+                $error = "工程に誤りがあります。";
                 $result = false;
                 break;
             }
-            
+            if($result != false){
+                // 対象日付のデータ登録
+                $insert = $this->kousuInsert($con,$kouteicode[$i],$progresscode[$i],$date,$teizi,$zangyo);
+                // 失敗時抜ける
+                if($insert === false){
+                    $result = false;
+                    break;
+                }
+            }
+
         }
         //トランザクションコミットまたはロールバック
 	commitTransaction($result,$con);
-        $this->PageJump("TOP_5", $id, STEP_NONE, "", "");
-        
+        //ページジャンプ
+        if($error == "")
+        {
+            $this->PageJump("TOP_5", $id, STEP_NONE, "", "",$error);
+        }else
+        {
+            $this->KousuPageJump("KOUSU_1", $id, STEP_NONE, $date, "",$error);
+        }
     }
     
 
@@ -80,6 +96,9 @@ class kousuExecute extends BaseLogicExecuter
         {
             $code = $result_row['6CODE'];
         }
+        if($code == null || $code == ""){
+            return false;
+        }
         return $code;
     }
     /**
@@ -103,6 +122,9 @@ class kousuExecute extends BaseLogicExecuter
         while($result_row = $result->fetch_array(MYSQLI_ASSOC))
         {
             $koutei = $result_row['3CODE'];
+        }
+        if($koutei == null || $koutei == ""){
+            return false;
         }
         return $koutei;
     }
@@ -143,6 +165,37 @@ class kousuExecute extends BaseLogicExecuter
 
         return $result;
     }
+    
+    
+   /*
+    *指定のページへ呼ばせる関数
+    *  
+   */
+   function KousuPageJump($filename,$id,$step,$Content,$secondContent,$error="")
+   {
+	   //item.iniから保存すべきSESSIONの項目を抽出し変数keepに保存
+	   $this->refreshSession($filename, $id, $step);
+
+	   $url = "";
+	   if($Content != "")
+	   {
+                $_SESSION['Content'] = $Content;
+	   }
+
+           if($error != "")
+           {
+                $_SESSION['error'] = $error;
+           }
+
+           if($filename == "KOUSU_1"){
+               $url = "?".$filename."&date=".$Content;
+           }
+
+	   header("location:".(empty($_SERVER['HTTPS'])? "http://" : "https://")
+			   .$_SERVER['HTTP_HOST'].dirname($_SERVER["REQUEST_URI"])."/main.php$url");
+
+	   exit();	
+   }
 }
 
 

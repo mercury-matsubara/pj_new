@@ -137,7 +137,7 @@ class Nenzi extends BasePage
                             // ロック失敗時の処理
                     }
             }
-            fclose($fp);																												// ファイルを閉じる
+            fclose($fp);	// ファイルを閉じる
             return($buffer);
     }
     

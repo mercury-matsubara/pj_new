@@ -69,7 +69,7 @@ class StaffMoneySet extends ListPage
 //            $data_sql = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
 //                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['form_pjd5CODE_0'].";";
             $data_sql = "SELECT * FROM (SELECT syaininfo.STAFFID,syaininfo.STAFFNAME,projectditealinfo.DETALECHARGE,projectditealinfo.4CODE,projectditealinfo.5CODE FROM projectditealinfo "
-                    . "LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['5CODE'].";";
+                    . "Right JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE ) AS syaininfo WHERE 5CODE = ".$this->prContainer->pbInputContent['5CODE'].";";
             $data_reply = $con->query($data_sql) or ($judge = true);																		// クエリ発行
             if($judge)
             {
@@ -90,9 +90,9 @@ class StaffMoneySet extends ListPage
                         FROM (SELECT syaininfo.STAFFID,
                         syaininfo.STAFFNAME,
                         projectditealinfo.DETALECHARGE,
-                        projectditealinfo.4CODE,
+                        syaininfo.4CODE,
                         projectditealinfo.5CODE  FROM projectditealinfo  
-                        LEFT JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE WHERE DELETEFLG <> '1') AS syaininfo 
+                        right JOIN syaininfo ON projectditealinfo.4CODE = syaininfo.4CODE WHERE DELETEFLG <> '1') AS syaininfo 
                         GROUP BY STAFFID;";
             $sql[] = "SELECT COUNT(*) FROM syaininfo WHERE DELETEFLG <> '1';";
             $limit = $this->prContainer->pbInputContent['list']['limit'];				// limit
@@ -171,7 +171,7 @@ class StaffMoneySet extends ListPage
         $result = true;
         
 //        $project_sql = "SELECT 1CODE, 2CODE FROM projectinfo WHERE 5CODE = ".$post['form_pjd5CODE_0'].";" ;
-        $project_sql = "SELECT 1CODE, 2CODE FROM projectinfo WHERE 5CODE = ".$post['5CODE'].";" ;
+        $project_sql = "SELECT 1CODE, 2CODE,CHARGE FROM projectinfo WHERE 5CODE = ".$post['5CODE'].";" ;
         $project_reply = $con->query($project_sql) or ($judge = true);																		// クエリ発行
         if($judge)
         {
@@ -182,6 +182,7 @@ class StaffMoneySet extends ListPage
         {
             $pjnum = $result_row['1CODE'] ;
             $eda = $result_row['2CODE'] ;
+            $charge = $result_row['CHARGE'] ;
         }
         $pjnum_sql = "SELECT PROJECTNUM FROM projectnuminfo WHERE 1CODE = ".$pjnum.";";
         $pjnum_reply = $con->query($pjnum_sql) or ($judge = true);																		// クエリ発行
@@ -208,9 +209,10 @@ class StaffMoneySet extends ListPage
             $this->prContainer->pbInputContent['form_pjdPJNAME_0'] = $result_row['PJNAME'] ;
         }
         if(isset($this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'])){
-            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'] ;
+            //$this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $this->prContainer->pbInputContent['form_pjdDETALECHARGE_0'] ;
+            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $charge ;
         }else{
-            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = "0" ;
+            $this->prContainer->pbInputContent['form_pjdCHARGE_0'] = $charge ;
         }
         
     }    
