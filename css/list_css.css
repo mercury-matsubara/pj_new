@@ -739,3 +739,19 @@ input[type=checkbox]
 .colorChange{
     background-color: #F00 !important;
 }
+
+/*
+ログイン画面の文字
+*/
+h2.title{
+    position: relative;
+    letter-spacing: 8px;
+    font-family: 'arial';
+}
+
+h2.title:after{
+    content: "";
+    display: block;
+    height: 9px;
+    background: radial-gradient(rgb(230, 90, 90), transparent 35%);
+}
